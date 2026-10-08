@@ -208,6 +208,26 @@
 - 簡易ヘッダー・フッターの `AppDocLayout` を使い、サイトのグローバルナビは出さない（design.md 12.6）。
 - 日英ページを `hreflang` で対応付け、`x-default` は英語版にする。
 
+### D-031 開発用の依存パッケージ（2026-10-08、Phase 4）
+
+design.md 2.2 の構成で導入した。バージョン固有の判断は以下。
+
+- TypeScript は **6.0 系**。最新の 7.0 は `@astrojs/check`（`^5 || ^6`）と typescript-eslint（`<6.1`）が未対応のため。
+- アクセシビリティの lint は `eslint-plugin-jsx-a11y` ではなく **`eslint-plugin-jsx-a11y-x`**（MIT、es-tooling の後継版）。元のパッケージは ESLint 10 に未対応で、`eslint-plugin-astro` 3.x が後継版を正式にサポートしているため。
+- `@types/node` を追加。`astro.config.ts` で `process` を使うため（型のみ。出力には含まれない）。
+- `@astrojs/sitemap`・`@astrojs/rss` は Phase 6 で導入する。
+- `eslint-plugin-astro` 3.x は Node 24.16 以上を要求する（現在のローカルは 24.7。警告は出るが動作は確認済み）。オーナーが Node を最新の 24 LTS に更新する。CI は Phase 8 で 24 LTS を指定する。
+
+すべて無料のオープンソース。
+
+### D-032 インラインのスクリプト・スタイルを出力しない（2026-10-08、Phase 4）
+
+- `vite.build.assetsInlineLimit: 0` で、Astro が小さなスクリプトや画像を HTML にインライン化しないようにする。
+- JS が無効なときのメニュー表示は、インラインの `<style>` ではなく `public/noscript.css` を `<noscript>` で読み込む。
+- 例外：JSON-LD（`application/ld+json`）はデータで実行されないため CSP の対象外。
+
+**理由**：Phase 8 の CSP（design.md 7.3）で `script-src`・`style-src` に `'unsafe-inline'` やハッシュを使わずに済ませるため。
+
 ## TODO（未確定）
 
 - [ ] 料金の目安金額（D-010）

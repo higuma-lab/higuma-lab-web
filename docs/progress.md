@@ -5,10 +5,17 @@
 
 ## 現在地
 
-- **次の作業：Phase 4（基本実装）**
-  - Astro の初期化、ESLint・Prettier、`tokens.css`（design.md 12.1〜12.3）、BaseLayout・Header・Footer・SkipLink、SeoHead、コンテンツのスキーマ（design.md 5章）、`AppDocLayout`（12.6）
-  - UI の見本：`docs/design-preview.html`（画像を表示するにはリポジトリのルートをローカルサーバーで配信して開く）
-  - 依存パッケージを追加するときは理由を説明する（CLAUDE.md）
+- **次の作業：Phase 5（コンテンツ実装）**
+  - 全ページ（design.md 4章・12.3）、サービス・Works・ブログのデータ（未確定部分は `TODO:`）、NoteFlip のアプリ用ページ（`docs/content/apps/noteflip/` → `src/content/apps/noteflip/{doc}.{lang}.md`、Jekyll の変数を設定値に置き換え）
+  - 終わったら `content-reviewer` で点検する
+- Phase 4 で作ったもの：
+  - 設定：`astro.config.ts`（`trailingSlash: 'always'`、インライン化なし D-032、`astro:env`）、ESLint・Prettier、`.env.example`
+  - `src/styles/tokens.css`・`global.css`、`src/config/site.ts`・`social.ts`
+  - レイアウト：`BaseLayout`、`AppDocLayout`（`ArticleLayout` は Phase 5 で記事の形に合わせて作る）
+  - 部品：`Header`（モバイルメニュー）、`Footer`、`SkipLink`、`Breadcrumbs`、`PageHeader`、`SeoHead`、`JsonLd`、`Analytics`、`Button`、`Card`、`Badge`、`SectionHeading`、`Prose`、`SocialLinks`、`LangSwitch`
+  - コンテンツのスキーマ：`services`・`works`・`blog`・`apps`（`src/content.config.ts`）
+  - トップページは仮（Hero のみ）
+- ローカル確認：`.claude/launch.json` の `astro-preview`（`npm run build` の後に使う）
 
 ## 素材の場所
 
@@ -23,6 +30,7 @@
 - [ ] Zoho Mail の登録と `support@` の別名作成（Route 53 構築後、D-004・D-025）
 - [ ] NoteFlip リポジトリの更新（指示文は渡し済み、D-024）
 - [ ] 素材の用意（`docs/content/README.md` のチェックリスト）
+- [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
 
 ## 完了したフェーズ
 
@@ -33,3 +41,4 @@
 | ロゴ・ブランド | 2026-10-08 | シンボル・ロゴ一式・マスコット（D-019〜D-021） |
 | NoteFlip のページ方針 | 2026-10-08 | D-024、D-025、原稿の取り込み |
 | Phase 3 | 2026-10-08 | `docs/design.md` 12章、見本 HTML、D-026〜D-030（配色・フォント・コピー・ラベル・アプリ用ページ） |
+| Phase 4 | 2026-10-08 | Astro 7 の初期化、Lint・Formatter、トークン CSS、共通レイアウト・部品、コンテンツのスキーマ（D-031、D-032） |

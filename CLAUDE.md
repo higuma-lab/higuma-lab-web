@@ -78,4 +78,13 @@
 
 ## コマンド
 
-<!-- TODO: Phase 4 で確定後に記載（dev / build / lint / typecheck / test） -->
+| コマンド | 内容 |
+|---|---|
+| `npm run dev` | 開発サーバー（http://localhost:4321） |
+| `npm run build` | 静的サイトを `dist/` に出力 |
+| `npm run preview` | ビルド結果を配信して確認 |
+| `npm run check` | 型チェック（`astro check`、.astro を含む） |
+| `npm run lint` | ESLint（TypeScript・Astro・アクセシビリティ） |
+| `npm run format` / `format:check` | Prettier（`docs/` は対象外） |
+
+<!-- TODO: Phase 7 でテストのコマンドを追加 -->
