@@ -14,7 +14,10 @@ const kinds: { kind: WorkKind; note: string }[] = [
   { kind: 'own-product', note: 'ひぐま開発室が自分で企画・開発したもの' },
   { kind: 'sample', note: '実際のご依頼ではなく、見本として作ったもの' },
   { kind: 'experiment', note: '新しい技術を試すために作ったもの' },
-  { kind: 'client', note: 'お客様のご依頼で作り、掲載の許可をいただいたもの' },
+  {
+    kind: 'client',
+    note: 'お客様のご依頼で作り、掲載の許可をいただいたもの（現在、掲載しているものはありません）',
+  },
 ];
 const description =
   'ひぐま開発室の制作物・取り組み。自社のアプリやこのサイトについて、課題・設計・技術・工夫した点を紹介します。';
