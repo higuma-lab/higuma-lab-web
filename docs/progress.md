@@ -8,6 +8,7 @@
 - **次の作業：Phase 5（コンテンツ実装）**
   - 全ページ（design.md 4章・12.3）、サービス・Works・ブログのデータ（未確定部分は `TODO:`）、NoteFlip のアプリ用ページ（`docs/content/apps/noteflip/` → `src/content/apps/noteflip/{doc}.{lang}.md`、Jekyll の変数を設定値に置き換え）
   - 終わったら `content-reviewer` で点検する
+  - ブランチ `phase-5-content` で作業し、終わったら PR で `main` に取り込む（D-033）
 - Phase 4 で作ったもの：
   - 設定：`astro.config.ts`（`trailingSlash: 'always'`、インライン化なし D-032、`astro:env`）、ESLint・Prettier、`.env.example`
   - `src/styles/tokens.css`・`global.css`、`src/config/site.ts`・`social.ts`
