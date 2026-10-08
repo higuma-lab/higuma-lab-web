@@ -1,0 +1,173 @@
+---
+/** サービス（docs/design.md 4.1・12.3、D-014）。6サービスを3グループに分けて1ページで説明する */
+import { getCollection } from 'astro:content';
+import PageHeader from '../components/layout/PageHeader.astro';
+import Section from '../components/layout/Section.astro';
+import CtaBanner from '../components/sections/CtaBanner.astro';
+import Todo from '../components/ui/Todo.astro';
+import { SERVICE_GROUPS } from '../data/services';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const groups = SERVICE_GROUPS.map((group) => ({
+  ...group,
+  services: services.filter((service) => service.data.group === group.id),
+}));
+const description =
+  'Webサイト制作、アプリ開発、IT・AI のご相談。ひぐま開発室のサービスを3つに分けてご案内します。';
+---
+
+<BaseLayout title="サービス" description={description}>
+  <PageHeader
+    title="サービス"
+    lead="Webサイト、アプリ開発、IT・AI のご相談の3つに分けてご案内します。どれに当てはまるか分からない場合も、そのままご相談ください。"
+  >
+    <nav class="toc" aria-label="このページの内容">
+      <ul>
+        {groups.map((group) => (
+          <li>
+            <a href={`#${group.id}`}>{group.title}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </PageHeader>
+
+  {groups.map((group, index) => (
+    <Section id={group.id} alt={index % 2 === 0} labelledby={`${group.id}-heading`}>
+      <h2 id={`${group.id}-heading`}>{group.title}</h2>
+      <p class="group-summary">{group.summary}</p>
+      <div class="services">
+        {group.services.map((service) => (
+          <article class="service">
+            <h3>{service.data.title}</h3>
+            <p class="summary">{service.data.summary}</p>
+            <p>{service.data.description}</p>
+            {service.data.examples.length > 0 && (
+              <>
+                <p class="examples-title">こんなときに</p>
+                <ul class="examples">
+                  {service.data.examples.map((example) => (
+                    <li>{example}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {service.data.priceNote && (
+              <p class="price">
+                <span>料金の目安：</span>
+                {service.data.priceNote}
+              </p>
+            )}
+          </article>
+        ))}
+      </div>
+    </Section>
+  ))}
+
+  <Section narrow labelledby="price-heading">
+    <h2 id="price-heading">料金について</h2>
+    <p class="price-note">ご相談の内容をうかがってから、お見積もりします。</p>
+    <Todo>料金の目安と、お見積もりの費用についての案内文を確定する（D-010）</Todo>
+  </Section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  .toc ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    padding: 0 var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    color: var(--color-brand);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    border-color: var(--color-brand);
+  }
+
+  h2 {
+    color: var(--color-brand);
+  }
+
+  .group-summary {
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+  }
+
+  .services {
+    display: grid;
+    gap: 20px;
+    margin-top: var(--space-8);
+  }
+
+  @media (min-width: 960px) {
+    .services {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .service {
+    padding: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+
+  .service h3::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: var(--space-2);
+    border-radius: 50%;
+    background: var(--color-accent);
+    vertical-align: 0.1em;
+  }
+
+  .summary {
+    margin: var(--space-2) 0 var(--space-3);
+    font-weight: 700;
+  }
+
+  .examples-title {
+    margin-top: var(--space-4);
+    color: var(--color-accent-text);
+    font-size: var(--text-small);
+    font-weight: 700;
+  }
+
+  .examples {
+    margin: var(--space-1) 0 0;
+    padding-left: 1.25em;
+    font-size: 0.9375rem;
+  }
+
+  .examples li::marker {
+    color: var(--color-accent);
+  }
+
+  .price {
+    margin-top: var(--space-4);
+    font-size: var(--text-small);
+  }
+
+  .price-note {
+    margin: var(--space-3) 0;
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+/**
+ * ブログの一覧（/blog/）と記事（/blog/{slug}/）。
+ * 公開する記事が1本もない間は、一覧ページも作らない（空の一覧は逆効果。docs/design.md 4.1）。
+ */
+import { render, type CollectionEntry } from 'astro:content';
+import PageHeader from '../../components/layout/PageHeader.astro';
+import Section from '../../components/layout/Section.astro';
+import PostList from '../../components/sections/PostList.astro';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, isoDate } from '../../lib/date';
+import { getPublishedPosts } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  if (posts.length === 0) return [];
+  return [
+    { params: { slug: undefined }, props: { posts } },
+    ...posts.map((post) => ({ params: { slug: post.id }, props: { post } })),
+  ];
+}
+
+type Props = { posts: CollectionEntry<'blog'>[] } | { post: CollectionEntry<'blog'> };
+
+const props = Astro.props;
+const rendered = 'post' in props ? await render(props.post) : undefined;
+---
+
+{'post' in props && rendered ? (
+  <ArticleLayout
+    title={props.post.data.title}
+    description={props.post.data.description}
+    breadcrumbs={[{ label: 'ブログ', href: '/blog/' }, { label: props.post.data.title }]}
+    image={props.post.data.cover?.src}
+  >
+    <p slot="meta" class="dates">
+      <span>
+        公開日：
+        <time datetime={isoDate(props.post.data.publishedAt)}>
+          {formatDate(props.post.data.publishedAt)}
+        </time>
+      </span>
+      {props.post.data.updatedAt && (
+        <span>
+          更新日：
+          <time datetime={isoDate(props.post.data.updatedAt)}>
+            {formatDate(props.post.data.updatedAt)}
+          </time>
+        </span>
+      )}
+    </p>
+    <rendered.Content />
+    <p slot="after" class="back">
+      <a href="/blog/">記事の一覧に戻る</a>
+    </p>
+  </ArticleLayout>
+) : (
+  'posts' in props && (
+    <BaseLayout
+      title="ブログ"
+      description="ひぐま開発室のブログ。Web制作・アプリ開発・AI 活用の取り組みや技術メモを書いています。"
+    >
+      <PageHeader
+        title="ブログ"
+        lead="Web制作・アプリ開発・AI 活用の取り組みや、技術メモを書いています。"
+      />
+      <Section narrow>
+        <PostList posts={props.posts} withDescription />
+      </Section>
+    </BaseLayout>
+  )
+)}
+
+<style>
+  .dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-6);
+    margin-top: var(--space-4);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .back {
+    margin-top: var(--space-12);
+    font-weight: 700;
+  }
+</style>

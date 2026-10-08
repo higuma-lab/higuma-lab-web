@@ -1,0 +1,110 @@
+---
+/** 制作物の詳細。本文がある項目だけページを作る（docs/design.md 5.2） */
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Badge from '../../components/ui/Badge.astro';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { hasWorkDetail, WORK_KIND_LABELS, WORK_STATUS_LABELS } from '../../lib/works';
+
+export async function getStaticPaths() {
+  const works = await getCollection('works');
+  return works
+    .filter(hasWorkDetail)
+    .map((work) => ({ params: { slug: work.id }, props: { work } }));
+}
+
+interface Props {
+  work: CollectionEntry<'works'>;
+}
+
+const { work } = Astro.props;
+const { title, summary, kind, status, tech, links, cover } = work.data;
+const { Content } = await render(work);
+---
+
+<ArticleLayout
+  title={title}
+  description={summary}
+  breadcrumbs={[{ label: '制作物・取り組み', href: '/works/' }, { label: title }]}
+  image={cover?.src}
+  size="body"
+>
+  <div slot="meta" class="meta">
+    <p class="badges">
+      <Badge tone={kind}>{WORK_KIND_LABELS[kind]}</Badge>
+      <Badge tone="status">{WORK_STATUS_LABELS[status]}</Badge>
+    </p>
+    <p class="summary">{summary}</p>
+    {tech.length > 0 && (
+      <dl class="tech">
+        <dt>使用技術</dt>
+        <dd>{tech.join(' / ')}</dd>
+      </dl>
+    )}
+    {links.length > 0 && (
+      <ul class="links">
+        {links.map((link) => (
+          <li>
+            <a href={link.url} rel="noopener" target="_blank">
+              {link.label}
+              <span class="visually-hidden">（新しいタブで開きます）</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+  <Content />
+  <p slot="after" class="back">
+    <a href="/works/">制作物の一覧に戻る</a>
+  </p>
+</ArticleLayout>
+
+<style>
+  .meta {
+    max-width: 42rem;
+    margin-top: var(--space-4);
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .summary {
+    margin-top: var(--space-4);
+    font-size: 1.0625rem;
+  }
+
+  .tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    margin: var(--space-4) 0 0;
+    font-size: var(--text-small);
+  }
+
+  .tech dt {
+    color: var(--color-text-muted);
+  }
+
+  .tech dd {
+    margin: 0;
+    font-family: var(--font-mono);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+    font-weight: 700;
+  }
+
+  .back {
+    margin-top: var(--space-12);
+    font-weight: 700;
+  }
+</style>

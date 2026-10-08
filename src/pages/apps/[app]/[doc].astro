@@ -1,0 +1,24 @@
+---
+/** アプリ用ページ（日本語）：/apps/{app}/{privacy|support}/（D-024） */
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import AppDocLayout from '../../../layouts/AppDocLayout.astro';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('apps', ({ data }) => data.lang === 'ja');
+  return docs.map((entry) => ({
+    params: { app: entry.data.app, doc: entry.data.doc },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'apps'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<AppDocLayout data={entry.data}>
+  <Content />
+</AppDocLayout>

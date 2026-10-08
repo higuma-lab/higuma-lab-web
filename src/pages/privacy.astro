@@ -1,0 +1,61 @@
+---
+/** サイトのプライバシーポリシー（D-006、D-009、D-022）。本文は src/content/pages/privacy.md */
+import { getEntry, render } from 'astro:content';
+import PageHeader from '../components/layout/PageHeader.astro';
+import Section from '../components/layout/Section.astro';
+import Prose from '../components/ui/Prose.astro';
+import Todo from '../components/ui/Todo.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { formatDate, isoDate } from '../lib/date';
+
+const entry = await getEntry('pages', 'privacy');
+if (!entry) throw new Error('src/content/pages/privacy.md が見つかりません');
+const { Content } = await render(entry);
+const { title, description, establishedAt, updatedAt } = entry.data;
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title} />
+  <Section narrow>
+    <Prose>
+      <Content />
+    </Prose>
+    <dl class="dates">
+      <div>
+        <dt>制定日</dt>
+        <dd>
+          {establishedAt ? (
+            <time datetime={isoDate(establishedAt)}>{formatDate(establishedAt)}</time>
+          ) : (
+            <Todo as="span">公開日を入れる</Todo>
+          )}
+        </dd>
+      </div>
+      {updatedAt && (
+        <div>
+          <dt>最終更新日</dt>
+          <dd>
+            <time datetime={isoDate(updatedAt)}>{formatDate(updatedAt)}</time>
+          </dd>
+        </div>
+      )}
+    </dl>
+  </Section>
+</BaseLayout>
+
+<style>
+  .dates {
+    margin: var(--space-12) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .dates div {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  dd {
+    margin: 0;
+  }
+</style>

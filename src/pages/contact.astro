@@ -1,0 +1,90 @@
+---
+/** お問い合わせ（D-005、D-015）：メール → ご相談の流れ → よくある質問 */
+import PageHeader from '../components/layout/PageHeader.astro';
+import Section from '../components/layout/Section.astro';
+import Button from '../components/ui/Button.astro';
+import Faq from '../components/ui/Faq.astro';
+import Steps from '../components/ui/Steps.astro';
+import { SITE } from '../config/site';
+import { FAQ, FLOW } from '../data/home';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const description =
+  'ひぐま開発室へのお問い合わせ。メールでのご相談の方法、ご相談の流れ、よくある質問をご案内します。';
+---
+
+<BaseLayout title="お問い合わせ" description={description}>
+  <PageHeader
+    title="お問い合わせ"
+    lead="ご相談はメールで受け付けています。まとまっていない段階でも、お気軽にお送りください。"
+  />
+
+  <Section narrow labelledby="mail-heading">
+    <div class="mail">
+      <h2 id="mail-heading">メールでのご相談</h2>
+      <p class="address">
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </p>
+      <Button href={`mailto:${SITE.email}`}>メールを作成する</Button>
+      <p class="hint">
+        次のことを書いていただけると、お返事がスムーズです（分かる範囲で構いません）。
+      </p>
+      <ul class="hint-list">
+        <li>お困りのこと、実現したいこと</li>
+        <li>希望の時期</li>
+        <li>お名前（屋号・会社名があれば）</li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section alt narrow labelledby="flow-heading">
+    <h2 id="flow-heading">ご相談の流れ</h2>
+    <div class="body">
+      <Steps steps={FLOW} />
+    </div>
+  </Section>
+
+  <Section narrow labelledby="faq-heading">
+    <h2 id="faq-heading">よくある質問</h2>
+    <div class="body">
+      <Faq items={FAQ} />
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  h2 {
+    color: var(--color-brand);
+  }
+
+  .mail {
+    padding: var(--space-8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+
+  .address {
+    margin: var(--space-3) 0 var(--space-6);
+    font-size: 1.25rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  .hint {
+    margin-top: var(--space-6);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .hint-list {
+    margin: var(--space-2) 0 0;
+    padding-left: 1.25em;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .body {
+    margin-top: var(--space-8);
+  }
+</style>
