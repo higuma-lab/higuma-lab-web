@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>デザイン見本（Phase 3）</title>
+<!--
+  Phase 3 の承認用の見本。本番のコードではない（docs/design.md 12章）。
+  ブラウザでこのファイルを直接開く。画像は src/assets/ を相対パスで参照する。
+  文章は見本であり、確定した内容ではない。
+-->
+<style>
+:root {
+  --color-brand: #17325B;
+  --color-brand-strong: #0F2342;
+  --color-brand-tint: #E6ECF5;
+  --color-accent: #AB663C;
+  --color-accent-text: #8E4F2A;
+  --color-accent-tint: #F7E7D8;
+  --color-text: #1C2433;
+  --color-text-muted: #556070;
+  --color-bg: #FBF8F3;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #F4ECE1;
+  --color-border: #E3DACD;
+  --color-on-dark-accent: #F2C9A0;
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Meiryo", system-ui, sans-serif;
+  --radius-card: 16px;
+  --container: 1120px;
+  --gutter: 20px;
+}
+@media (min-width: 640px) { :root { --gutter: 32px; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-sans); font-size: 16px; line-height: 1.85; letter-spacing: .02em; }
+h1, h2, h3 { line-height: 1.45; letter-spacing: .04em; font-feature-settings: "palt"; margin: 0; }
+a { color: var(--color-brand); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; border-radius: 4px; }
+.container { max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
+.note { background: var(--color-accent-tint); color: var(--color-accent-text); font-size: 14px; padding: 8px var(--gutter); text-align: center; }
+
+/* header */
+.header { border-bottom: 1px solid var(--color-border); background: var(--color-bg); }
+.header .container { display: flex; align-items: center; justify-content: space-between; min-height: 72px; gap: 16px; }
+.header img { height: 34px; display: block; }
+.nav { display: none; gap: 28px; align-items: center; font-size: 15px; }
+.nav a { text-decoration: none; color: var(--color-text); padding: 8px 0; }
+.nav a:hover { text-decoration: underline; text-underline-offset: 6px; }
+.nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+.menu-btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--color-border); background: var(--color-surface); border-radius: 999px; padding: 10px 16px; font: inherit; font-size: 14px; color: var(--color-text); min-height: 44px; }
+@media (min-width: 960px) { .nav { display: flex; } .menu-btn { display: none; } }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 28px; border-radius: 999px; font-weight: 700; text-decoration: none; transition: background-color .15s, border-color .15s; border: 2px solid transparent; }
+.btn-primary { background: var(--color-brand); color: #fff; }
+.btn-primary:hover { background: var(--color-brand-strong); }
+.btn-secondary { border-color: var(--color-brand); color: var(--color-brand); background: transparent; }
+.btn-secondary:hover { background: var(--color-brand-tint); }
+.btn-inverse { background: #fff; color: var(--color-brand); }
+.btn-inverse:focus-visible { outline-color: var(--color-on-dark-accent); }
+.nav .btn { color: #fff; min-height: 44px; padding: 0 22px; text-decoration: none; }
+
+/* hero */
+.hero { padding: 48px 0 64px; }
+.hero .container { display: grid; gap: 32px; align-items: center; }
+@media (min-width: 960px) { .hero { padding: 80px 0 96px; } .hero .container { grid-template-columns: 1.15fr .85fr; gap: 48px; } }
+.hero h1 { display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: var(--color-accent-text); letter-spacing: .08em; }
+.eyebrow::before { content: ""; width: 24px; height: 3px; border-radius: 2px; background: var(--color-accent); }
+.hero .copy { font-size: clamp(28px, 1.2rem + 2.6vw, 44px); color: var(--color-brand); }
+.hero p { margin: 20px 0 32px; max-width: 34em; font-size: 17px; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-img { justify-self: center; width: min(100%, 420px); }
+.hero-img img { width: 100%; height: auto; display: block; }
+@media (max-width: 959px) { .hero-img { width: min(70%, 320px); } }
+
+/* sections */
+section.block { padding: 64px 0; }
+@media (min-width: 960px) { section.block { padding: 96px 0; } }
+section.alt { background: var(--color-surface-alt); }
+.sh { margin-bottom: 32px; }
+.sh .label { font-size: 13px; font-weight: 700; color: var(--color-accent-text); letter-spacing: .12em; text-transform: uppercase; }
+.sh h2 { font-size: clamp(22px, 1rem + 1.2vw, 28px); margin-top: 4px; }
+.sh p { color: var(--color-text-muted); margin: 8px 0 0; }
+.grid { display: grid; gap: 20px; }
+@media (min-width: 640px) { .grid-2, .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+.card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: 28px; transition: border-color .15s; }
+.card:hover { border-color: var(--color-brand); }
+.card h3 { font-size: 19px; }
+.card h3 a { text-decoration: none; color: var(--color-text); }
+.card h3 a:hover { text-decoration: underline; }
+.card .services { font-size: 14px; color: var(--color-accent-text); font-weight: 700; margin: 6px 0 10px; }
+.card p { margin: 0; color: var(--color-text-muted); font-size: 15px; }
+.icon { width: 44px; height: 44px; border-radius: 12px; background: var(--color-brand-tint); display: grid; place-items: center; margin-bottom: 16px; color: var(--color-brand); }
+
+.features { counter-reset: f; }
+.feature { display: flex; gap: 16px; }
+.feature .num { font-weight: 700; font-size: 22px; color: var(--color-accent-text); line-height: 1.3; min-width: 2em; }
+.feature h3 { font-size: 18px; }
+.feature p { margin: 4px 0 0; color: var(--color-text-muted); font-size: 15px; }
+
+/* works */
+.work { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+.work .cover { aspect-ratio: 16 / 10; background: var(--color-brand-tint); display: grid; place-items: center; }
+.work .cover img { width: 72px; opacity: .9; }
+.work .body { padding: 20px 24px 24px; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.badge { display: inline-flex; align-items: center; font-size: 13px; font-weight: 700; line-height: 1; padding: 6px 12px; border-radius: 999px; }
+.k-own { color: #17325B; background: #E6ECF5; }
+.k-sample { color: #7A4422; background: #F7E7D8; }
+.k-exp { color: #2F5A3E; background: #E3F0E6; }
+.k-client { color: #fff; background: #17325B; }
+.st { color: var(--color-text-muted); border: 1px solid var(--color-border); background: transparent; font-weight: 400; }
+.tech { font-size: 13px; color: var(--color-text-muted); margin-top: 12px !important; }
+
+/* profile */
+.profile { display: grid; gap: 24px; align-items: center; }
+@media (min-width: 640px) { .profile { grid-template-columns: 160px 1fr; gap: 40px; } }
+.profile img { width: 140px; }
+.todo { color: var(--color-accent-text); font-size: 14px; }
+
+/* cta */
+.cta { background: var(--color-brand); color: #fff; padding: 64px 0; }
+.cta h2 { font-size: clamp(22px, 1rem + 1.2vw, 28px); }
+.cta p { color: #DCE3EE; margin: 12px 0 28px; }
+
+/* faq & steps */
+.steps { list-style: none; padding: 0; margin: 0; counter-reset: s; display: grid; gap: 16px; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 16px; }
+.steps li::before { content: counter(s); width: 40px; height: 40px; border-radius: 50%; background: var(--color-brand); color: #fff; display: grid; place-items: center; font-weight: 700; }
+details { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; padding: 0 20px; }
+details + details { margin-top: 12px; }
+summary { cursor: pointer; font-weight: 700; padding: 16px 0; min-height: 44px; }
+details p { margin: 0 0 16px; color: var(--color-text-muted); }
+
+/* footer */
+.footer { background: var(--color-brand-strong); color: #DCE3EE; padding: 48px 0 32px; font-size: 14px; }
+.footer a { color: #fff; }
+.footer a:focus-visible { outline-color: var(--color-on-dark-accent); }
+.footer .row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; }
+.footer nav { display: flex; flex-wrap: wrap; gap: 20px; }
+
+/* palette & app page */
+.swatches { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.sw { border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; background: var(--color-surface); font-size: 13px; }
+.sw div { height: 64px; }
+.sw span { display: block; padding: 8px 12px; line-height: 1.5; }
+.app { border: 1px solid var(--color-border); border-radius: var(--radius-card); overflow: hidden; background: var(--color-surface); }
+.app-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; border-bottom: 1px solid var(--color-border); gap: 12px; flex-wrap: wrap; }
+.app-head .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.app-head img { width: 28px; }
+.lang a { text-decoration: none; padding: 4px; }
+.lang a[aria-current] { font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.app-body { padding: 24px; font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+.app-body h1 { font-size: 28px; }
+.app-body .meta { color: var(--color-text-muted); font-size: 14px; margin: 4px 0 16px; }
+.app-foot { padding: 14px 24px; background: var(--color-bg); font-size: 13px; color: var(--color-text-muted); border-top: 1px solid var(--color-border); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<p class="note">Phase 3 のデザイン見本です（本番のコードではありません）。文章は仮のもので、確定した内容ではありません。</p>
+
+<header class="header">
+  <div class="container">
+    <a href="#"><img src="../src/assets/brand/logo-horizontal.svg" alt="ひぐま開発室 HIGUMA LAB トップへ"></a>
+    <nav class="nav" aria-label="グローバル">
+      <a href="#" aria-current="page">サービス</a>
+      <a href="#">制作物</a>
+      <a href="#">ブログ</a>
+      <a href="#">ひぐま開発室について</a>
+      <a href="#" class="btn btn-primary">お問い合わせ</a>
+    </nav>
+    <button class="menu-btn" type="button" aria-expanded="false">☰ メニュー</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div>
+        <h1><span class="eyebrow">ひぐま開発室</span><span class="copy">小さな困りごとから、<br>開発まで。</span></h1>
+        <p>Webサイト制作、アプリ開発、IT・AI のご相談まで。何から始めればいいか分からない段階から、一緒に整理します。</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#">相談する</a>
+          <a class="btn btn-secondary" href="#">サービスを見る</a>
+        </div>
+      </div>
+      <div class="hero-img"><img src="../src/assets/mascot/mascot-laptop.png" alt="" width="1209" height="900"></div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="container">
+      <div class="sh"><div class="label">Services</div><h2>こんなご相談に対応します</h2><p>（見本）3つのグループでご案内します。</p></div>
+      <div class="grid grid-3">
+        <article class="card"><div class="icon" aria-hidden="true">&lt;/&gt;</div><h3><a href="#">Webサイト</a></h3><div class="services">制作／指導・サポート</div><p>（見本）新しく作る、自分で更新できるようにする。</p></article>
+        <article class="card"><div class="icon" aria-hidden="true">▢</div><h3><a href="#">アプリ開発</a></h3><div class="services">開発／開発支援</div><p>（見本）PC・タブレット・スマートフォン向けのアプリ。</p></article>
+        <article class="card"><div class="icon" aria-hidden="true">?</div><h3><a href="#">IT・AIの相談</a></h3><div class="services">IT相談／AI活用支援</div><p>（見本）道具選びから、AI の使いどころまで。</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="container">
+      <div class="sh"><div class="label">Features</div><h2>ひぐま開発室の特徴</h2></div>
+      <div class="grid grid-2">
+        <div class="feature"><div class="num">01</div><div><h3>個人だから相談しやすい</h3><p>（見本）説明文は Phase 5 で作成します。</p></div></div>
+        <div class="feature"><div class="num">02</div><div><h3>開発経験を活かした技術支援</h3><p>（見本）</p></div></div>
+        <div class="feature"><div class="num">03</div><div><h3>Webからアプリ・AIまで対応</h3><p>（見本）</p></div></div>
+        <div class="feature"><div class="num">04</div><div><h3>必要なものを一緒に整理する</h3><p>（見本）</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="container">
+      <div class="sh"><div class="label">Works</div><h2>制作物・取り組み</h2><p>種別ラベルの見本（4種類すべてを並べています。実際の掲載内容ではありません）。</p></div>
+      <div class="grid grid-3">
+        <article class="card work"><div class="cover"><img src="../src/assets/brand/symbol.svg" alt=""></div><div class="body"><div class="badges"><span class="badge k-own">自社プロダクト</span><span class="badge st">公開予定</span></div><h3><a href="#">NoteFlip</a></h3><p>Windows 向けの楽譜 PDF ビューアー。</p><p class="tech">使用技術（見本）</p></div></article>
+        <article class="card work"><div class="cover"><img src="../src/assets/brand/symbol.svg" alt=""></div><div class="body"><div class="badges"><span class="badge k-sample">サンプル制作</span><span class="badge st">開発中</span></div><h3><a href="#">（ラベルの見本）</a></h3><p>サンプルであることを明記します。</p></div></article>
+        <article class="card work"><div class="cover"><img src="../src/assets/brand/symbol.svg" alt=""></div><div class="body"><div class="badges"><span class="badge k-exp">技術検証</span><span class="badge k-client">お客様案件</span><span class="badge st">公開中</span></div><h3><a href="#">（ラベルの見本）</a></h3><p>技術検証・お客様案件のラベル。</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="container">
+      <div class="sh"><div class="label">About</div><h2>ひぐま開発室について</h2></div>
+      <div class="profile">
+        <img src="../src/assets/brand/symbol.svg" alt="">
+        <div>
+          <p>（見本）医療機器向けソフトウェアの開発に長く携わってきた開発者が運営する、小さな開発室です。本文は Phase 5 で作成します。</p>
+          <p class="todo">TODO: 活動地域・経験年数</p>
+          <a href="#">プロフィールを詳しく見る →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="container">
+      <div class="grid grid-2">
+        <div>
+          <div class="sh"><div class="label">Flow</div><h2>ご相談の流れ</h2></div>
+          <ol class="steps">
+            <li><div><strong>メールでご相談</strong><br><span style="color:var(--color-text-muted)">（見本）</span></div></li>
+            <li><div><strong>内容の整理</strong><br><span style="color:var(--color-text-muted)">（見本）</span></div></li>
+            <li><div><strong>お見積もり・ご提案</strong><br><span style="color:var(--color-text-muted)">（見本）</span></div></li>
+          </ol>
+        </div>
+        <div>
+          <div class="sh"><div class="label">FAQ</div><h2>よくある質問</h2></div>
+          <details><summary>（見本）質問の例</summary><p>（見本）回答は Phase 5 で作成します。</p></details>
+          <details><summary>（見本）質問の例</summary><p>（見本）</p></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>まずは、お気軽にご相談ください</h2>
+      <p>（見本）CTA の文言は Phase 5 で確定します。</p>
+      <a class="btn btn-inverse" href="#">メールで相談する</a>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="container">
+      <div class="sh"><div class="label">Palette</div><h2>配色（デザイントークン）</h2></div>
+      <div class="swatches">
+        <div class="sw"><div style="background:#17325B"></div><span>brand<br>#17325B</span></div>
+        <div class="sw"><div style="background:#0F2342"></div><span>brand-strong<br>#0F2342</span></div>
+        <div class="sw"><div style="background:#E6ECF5"></div><span>brand-tint<br>#E6ECF5</span></div>
+        <div class="sw"><div style="background:#AB663C"></div><span>accent（装飾）<br>#AB663C</span></div>
+        <div class="sw"><div style="background:#8E4F2A"></div><span>accent-text<br>#8E4F2A</span></div>
+        <div class="sw"><div style="background:#F7E7D8"></div><span>accent-tint<br>#F7E7D8</span></div>
+        <div class="sw"><div style="background:#1C2433"></div><span>text<br>#1C2433</span></div>
+        <div class="sw"><div style="background:#556070"></div><span>text-muted<br>#556070</span></div>
+        <div class="sw"><div style="background:#FBF8F3"></div><span>bg<br>#FBF8F3</span></div>
+        <div class="sw"><div style="background:#F4ECE1"></div><span>surface-alt<br>#F4ECE1</span></div>
+        <div class="sw"><div style="background:#E3DACD"></div><span>border<br>#E3DACD</span></div>
+        <div class="sw"><div style="background:#F2C9A0"></div><span>on-dark-accent<br>#F2C9A0</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="container">
+      <div class="sh"><div class="label">App pages</div><h2>アプリ用ページ（英語版の見本）</h2><p>簡易ヘッダー・フッター。サイトのグローバルナビは出さない。</p></div>
+      <div class="app" lang="en">
+        <div class="app-head">
+          <div class="brand"><img src="../src/assets/brand/symbol.svg" alt="">NoteFlip</div>
+          <div class="lang"><a href="#" hreflang="ja" lang="ja">日本語</a> | <a href="#" aria-current="page">English</a></div>
+        </div>
+        <div class="app-body">
+          <h1>Privacy Policy</h1>
+          <p class="meta">Last updated: (sample)</p>
+          <p>(Sample text) The policy text from docs/content/apps/noteflip/ goes here.</p>
+        </div>
+        <div class="app-foot">© 2026 HIGUMA LAB · <a href="#">Support</a> · <a href="#">higuma-lab.jp</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <img src="../src/assets/brand/symbol-white.svg" alt="ひぐま開発室" width="48">
+      <nav aria-label="フッター"><a href="#">サービス</a><a href="#">制作物</a><a href="#">ブログ</a><a href="#">ひぐま開発室について</a><a href="#">お問い合わせ</a><a href="#">プライバシーポリシー</a></nav>
+    </div>
+    <p style="margin:32px 0 0">© 2026 ひぐま開発室（HIGUMA LAB）</p>
+  </div>
+</footer>
+</body>
+</html>
