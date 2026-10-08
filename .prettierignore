@@ -1,0 +1,11 @@
+dist/
+.astro/
+node_modules/
+package-lock.json
+infra/cdk.out/
+sampleimages/
+src/assets/
+# 手書きのドキュメントは整形しない（表の書式が崩れるのを避ける）
+docs/
+.claude/
+CLAUDE.md
