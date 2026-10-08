@@ -1,0 +1,39 @@
+---
+/** 下層ページの上部（docs/design.md 12.3）：パンくず → h1 → リード文 */
+import type { Crumb } from '../../lib/breadcrumbs';
+import Breadcrumbs from './Breadcrumbs.astro';
+
+interface Props {
+  title: string;
+  lead?: string;
+  /** トップを除くパンくず。最後の項目は現在のページ（href なし） */
+  breadcrumbs?: Crumb[];
+}
+
+const { title, lead, breadcrumbs = [{ label: title }] } = Astro.props;
+---
+
+<div class="page-header">
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} />
+    <h1>{title}</h1>
+    {lead && <p class="lead">{lead}</p>}
+  </div>
+</div>
+
+<style>
+  .page-header {
+    padding: var(--space-8) 0 var(--space-12);
+  }
+
+  h1 {
+    margin-top: var(--space-6);
+    color: var(--color-brand);
+  }
+
+  .lead {
+    max-width: 40em;
+    margin-top: var(--space-4);
+    font-size: 1.0625rem;
+  }
+</style>

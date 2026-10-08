@@ -1,0 +1,49 @@
+---
+/** セクション見出し（docs/design.md 12.4）：英字の小見出しラベル＋見出し＋リード文 */
+interface Props {
+  /** 英字の小見出し（例：Services） */
+  label?: string;
+  title: string;
+  lead?: string;
+  level?: 2 | 3;
+  id?: string;
+}
+
+const { label, title, lead, level = 2, id } = Astro.props;
+const Heading = `h${level}` as const;
+---
+
+<div class="section-heading">
+  {label && (
+    <p class="label" lang="en">
+      {label}
+    </p>
+  )}
+  <Heading id={id}>{title}</Heading>
+  {lead && <p class="lead">{lead}</p>}
+</div>
+
+<style>
+  .section-heading {
+    margin-bottom: var(--space-8);
+  }
+
+  .label {
+    color: var(--color-accent-text);
+    font-size: var(--text-label);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h2,
+  h3 {
+    margin-top: var(--space-1);
+  }
+
+  .lead {
+    max-width: 40em;
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+  }
+</style>

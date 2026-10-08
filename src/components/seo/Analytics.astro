@@ -1,0 +1,17 @@
+---
+/** Cloudflare Web Analytics（D-006）。トークンが未設定なら何も出力しない */
+import { PUBLIC_CF_ANALYTICS_TOKEN } from 'astro:env/client';
+
+const beacon = PUBLIC_CF_ANALYTICS_TOKEN
+  ? JSON.stringify({ token: PUBLIC_CF_ANALYTICS_TOKEN })
+  : undefined;
+---
+
+{beacon && (
+  <script
+    is:inline
+    defer
+    src="https://static.cloudflareinsights.com/beacon.min.js"
+    data-cf-beacon={beacon}
+  />
+)}

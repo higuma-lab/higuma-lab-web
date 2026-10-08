@@ -1,0 +1,59 @@
+---
+/** SNS リンク（D-012）。URL が未設定の項目は表示せず、すべて未設定なら何も出力しない */
+import { activeSocialLinks, type SocialIcon } from '../../config/social';
+
+interface Props {
+  class?: string;
+}
+
+const links = activeSocialLinks();
+
+// viewBox 0 0 16 16。Instagram は線画で描くため、ここには含めない
+const paths: Record<Exclude<SocialIcon, 'instagram'>, string> = {
+  github:
+    'M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82a7.6 7.6 0 0 0-4 0c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A8 8 0 0 1 0 8c0-4.42 3.58-8 8-8Z',
+  x: 'M12.6.77h2.45L9.69 6.9 16 15.23h-4.94L7.2 10.17l-4.43 5.06H.32l5.73-6.55L0 .77h5.06l3.5 4.62zm-.86 13h1.36L4.32 2.16H2.86z',
+};
+---
+
+{links.length > 0 && (
+  <ul class:list={['social', Astro.props.class]}>
+    {links.map((link) => (
+      <li>
+        <a href={link.url} rel="me noopener" target="_blank">
+          <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true" focusable="false">
+            {link.icon === 'instagram' ? (
+              <g fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="1.5" y="1.5" width="13" height="13" rx="3.5" />
+                <circle cx="8" cy="8" r="3" />
+                <circle cx="12" cy="4" r="0.4" fill="currentColor" />
+              </g>
+            ) : (
+              <path fill="currentColor" d={paths[link.icon]} />
+            )}
+          </svg>
+          <span class="visually-hidden">{link.label}（新しいタブで開きます）</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .social {
+    display: flex;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .social a {
+    display: grid;
+    place-items: center;
+    width: var(--tap-min);
+    height: var(--tap-min);
+    border-radius: var(--radius-pill);
+    color: inherit;
+  }
+</style>

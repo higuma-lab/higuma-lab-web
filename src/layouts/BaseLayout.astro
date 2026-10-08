@@ -1,0 +1,56 @@
+---
+/** 全ページ共通のレイアウト（docs/design.md 12.4）。アプリ用ページは AppDocLayout を使う */
+import favicon from '../assets/brand/favicon.svg';
+import Footer from '../components/layout/Footer.astro';
+import Header from '../components/layout/Header.astro';
+import SkipLink from '../components/layout/SkipLink.astro';
+import Analytics from '../components/seo/Analytics.astro';
+import SeoHead from '../components/seo/SeoHead.astro';
+import { SITE } from '../config/site';
+import '../styles/global.css';
+
+type SeoProps = Parameters<typeof SeoHead>[0];
+
+type Props = Omit<SeoProps, 'lang' | 'alternates'>;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href={favicon.src} type="image/svg+xml" />
+    <meta name="theme-color" content="#17325b" />
+    <SeoHead {...Astro.props} />
+    <noscript>
+      <link rel="stylesheet" href="/noscript.css" />
+    </noscript>
+    <slot name="head" />
+    <Analytics />
+  </head>
+  <body>
+    <SkipLink />
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  main:focus {
+    outline: none;
+  }
+</style>

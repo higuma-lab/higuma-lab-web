@@ -1,0 +1,58 @@
+---
+/**
+ * title・description・canonical・OGP・Twitter Card を一元生成する（docs/design.md 6.1）。
+ */
+import { SITE } from '../../config/site';
+import { absoluteUrl, buildTitle, siteNameFor, type SeoLang } from '../../lib/seo';
+
+export interface Alternate {
+  hreflang: string;
+  href: string;
+}
+
+interface Props {
+  /** ページ名。省略するとトップページの形式になる */
+  title?: string | undefined;
+  description?: string | undefined;
+  /** OGP 画像のパスまたは URL。TODO: Phase 6 で共通画像（12.8）を既定値にする */
+  image?: string | undefined;
+  type?: 'website' | 'article';
+  lang?: SeoLang;
+  noindex?: boolean;
+  /** hreflang の対応ページ（アプリ用ページの日英など） */
+  alternates?: Alternate[];
+}
+
+const {
+  title,
+  description = SITE.description,
+  image,
+  type = 'website',
+  lang = 'ja',
+  noindex = false,
+  alternates = [],
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://higuma-lab.jp');
+const fullTitle = buildTitle(title, lang);
+const locale = lang === 'ja' ? SITE.locale : 'en_US';
+const canonical = absoluteUrl(Astro.url.pathname, site);
+const imageUrl = image ? absoluteUrl(image, site) : undefined;
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex" />}
+{alternates.map((alt) => (
+  <link rel="alternate" hreflang={alt.hreflang} href={absoluteUrl(alt.href, site)} />
+))}
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={siteNameFor(lang)} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={locale} />
+{imageUrl && <meta property="og:image" content={imageUrl} />}
+<meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />

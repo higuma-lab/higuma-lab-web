@@ -1,0 +1,260 @@
+---
+/**
+ * サイトのヘッダー（docs/design.md 12.3）。
+ * 960px 未満はメニューボタンで開閉する。JS が無効なときはリンクを常に表示する（4.3）。
+ * JS 無効時のスタイルは public/noscript.css（BaseLayout の <noscript> で読み込む）。
+ * インラインの <style> にしないのは、CSP でインラインを許可せずに済ませるため（Phase 8）。
+ */
+import logo from '../../assets/brand/logo-horizontal.svg';
+import { CONTACT_NAV, MAIN_NAV, SITE } from '../../config/site';
+import { isCurrentPath } from '../../lib/nav';
+import { getPublishedPosts } from '../../lib/posts';
+
+const hasPosts = (await getPublishedPosts()).length > 0;
+const items = MAIN_NAV.filter((item) => !item.requiresPosts || hasPosts);
+const pathname = Astro.url.pathname;
+const current = (href: string) => (isCurrentPath(href, pathname) ? 'page' : undefined);
+---
+
+<header class="site-header">
+  <div class="container bar">
+    <a class="logo" href="/" aria-current={pathname === '/' ? 'page' : undefined}>
+      <img
+        src={logo.src}
+        width={logo.width}
+        height={logo.height}
+        alt={`${SITE.name} ${SITE.nameEn}（トップページへ）`}
+      />
+    </a>
+    <button
+      class="menu-button"
+      type="button"
+      aria-expanded="false"
+      aria-controls="global-nav"
+      data-menu-button
+    >
+      <span class="menu-icon" aria-hidden="true"></span>
+      <span>メニュー</span>
+    </button>
+    <nav class="nav" aria-label="グローバル">
+      <ul id="global-nav" class="nav-list" data-menu>
+        {items.map((item) => (
+          <li>
+            <a class="nav-link" href={item.href} aria-current={current(item.href)}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+        <li class="nav-contact">
+          <a
+            class="contact-button"
+            href={CONTACT_NAV.href}
+            aria-current={current(CONTACT_NAV.href)}
+          >
+            {CONTACT_NAV.label}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+
+  if (button && menu) {
+    const isOpen = () => button.getAttribute('aria-expanded') === 'true';
+    const setOpen = (open: boolean) => {
+      button.setAttribute('aria-expanded', String(open));
+      menu.toggleAttribute('data-open', open);
+    };
+
+    button.addEventListener('click', () => setOpen(!isOpen()));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && isOpen()) {
+        setOpen(false);
+        button.focus();
+      }
+    });
+
+    // デスクトップ幅に広げたときは閉じた状態に戻す
+    window.matchMedia('(min-width: 960px)').addEventListener('change', () => setOpen(false));
+  }
+</script>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 var(--space-4);
+    min-height: 72px;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 72px;
+  }
+
+  .logo img {
+    display: block;
+    width: auto;
+    height: 34px;
+  }
+
+  .menu-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: var(--tap-min);
+    padding: 0 var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+    font-size: var(--text-small);
+    cursor: pointer;
+  }
+
+  /* 3本線。開いているときは × にする */
+  .menu-icon,
+  .menu-icon::before,
+  .menu-icon::after {
+    display: block;
+    width: 16px;
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    transition: transform var(--duration);
+  }
+
+  .menu-icon {
+    position: relative;
+  }
+
+  .menu-icon::before,
+  .menu-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+
+  .menu-icon::before {
+    top: -5px;
+  }
+
+  .menu-icon::after {
+    top: 5px;
+  }
+
+  [aria-expanded='true'] .menu-icon {
+    background: transparent;
+  }
+
+  [aria-expanded='true'] .menu-icon::before {
+    transform: translateY(5px) rotate(45deg);
+  }
+
+  [aria-expanded='true'] .menu-icon::after {
+    transform: translateY(-5px) rotate(-45deg);
+  }
+
+  .nav {
+    flex-basis: 100%;
+  }
+
+  .nav-list {
+    display: none;
+    flex-direction: column;
+    margin: 0;
+    padding: 0 0 var(--space-6);
+    list-style: none;
+  }
+
+  .nav-list[data-open] {
+    display: flex;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .nav-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  .nav-link[aria-current='page'] {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 8px;
+  }
+
+  .nav-contact {
+    margin-top: var(--space-4);
+  }
+
+  .contact-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--tap-min);
+    padding: 0 22px;
+    border-radius: var(--radius-pill);
+    background: var(--color-brand);
+    color: var(--color-on-dark);
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color var(--duration);
+  }
+
+  .contact-button:hover {
+    background: var(--color-brand-strong);
+  }
+
+  @media (min-width: 960px) {
+    .menu-button {
+      display: none;
+    }
+
+    .nav {
+      flex-basis: auto;
+    }
+
+    .nav-list,
+    .nav-list[data-open] {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 28px;
+      padding: 0;
+      font-size: 0.9375rem;
+    }
+
+    .nav-link {
+      border-bottom: 0;
+    }
+
+    .nav-contact {
+      margin-top: 0;
+    }
+  }
+</style>

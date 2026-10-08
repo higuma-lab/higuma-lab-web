@@ -1,0 +1,62 @@
+---
+/**
+ * ラベル（docs/design.md 12.5）。種別は色＋文字、状態は枠線のみの控えめな表示。
+ * 色だけに頼らず、必ず文字で区別できるようにする。
+ */
+import type { WorkKind } from '../../lib/works';
+
+interface Props {
+  tone?: WorkKind | 'status' | 'neutral';
+}
+
+const { tone = 'neutral' } = Astro.props;
+---
+
+<span class:list={['badge', `badge-${tone}`]}>
+  <slot />
+</span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-label);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-own-product {
+    background: var(--color-kind-own-bg);
+    color: var(--color-kind-own-fg);
+  }
+
+  .badge-sample {
+    background: var(--color-kind-sample-bg);
+    color: var(--color-kind-sample-fg);
+  }
+
+  .badge-experiment {
+    background: var(--color-kind-experiment-bg);
+    color: var(--color-kind-experiment-fg);
+  }
+
+  .badge-client {
+    background: var(--color-kind-client-bg);
+    color: var(--color-kind-client-fg);
+  }
+
+  .badge-status {
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+    font-weight: 400;
+  }
+
+  .badge-neutral {
+    background: var(--color-brand-tint);
+    color: var(--color-brand);
+  }
+</style>

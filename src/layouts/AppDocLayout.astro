@@ -1,0 +1,183 @@
+---
+/**
+ * アプリ用ページ（プライバシーポリシー・サポート）のレイアウト（docs/design.md 12.6、D-030）。
+ * サイトのグローバルナビは出さず、簡易ヘッダー・フッターと日英の切り替えだけを置く。
+ */
+import type { CollectionEntry } from 'astro:content';
+import favicon from '../assets/brand/favicon.svg';
+import symbol from '../assets/brand/symbol.svg';
+import SkipLink from '../components/layout/SkipLink.astro';
+import Analytics from '../components/seo/Analytics.astro';
+import SeoHead from '../components/seo/SeoHead.astro';
+import LangSwitch from '../components/ui/LangSwitch.astro';
+import Prose from '../components/ui/Prose.astro';
+import { SITE } from '../config/site';
+import { APP_DOC_LABELS, appDocPath, type AppDoc } from '../lib/apps';
+import { copyrightYears, formatDate, isoDate } from '../lib/date';
+import '../styles/global.css';
+
+interface Props {
+  data: CollectionEntry<'apps'>['data'];
+}
+
+const { app, appName, doc, lang, title, description, updatedAt } = Astro.props.data;
+const labels = APP_DOC_LABELS[lang];
+const links = {
+  ja: appDocPath(app, doc, 'ja'),
+  en: appDocPath(app, doc, 'en'),
+};
+// x-default は英語版（Partner Center に登録するのが英語版のため。D-030）
+const alternates = [
+  { hreflang: 'ja', href: links.ja },
+  { hreflang: 'en', href: links.en },
+  { hreflang: 'x-default', href: links.en },
+];
+const docs: AppDoc[] = ['privacy', 'support'];
+const skipLabel = lang === 'ja' ? '本文へスキップ' : 'Skip to content';
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href={favicon.src} type="image/svg+xml" />
+    <meta name="theme-color" content="#17325b" />
+    <SeoHead
+      title={`${title} - ${appName}`}
+      description={description}
+      lang={lang}
+      alternates={alternates}
+    />
+    <Analytics />
+  </head>
+  <body>
+    <SkipLink label={skipLabel} />
+    <header class="app-header">
+      <div class="container container-narrow bar">
+        <p class="app-name">
+          <img src={symbol.src} width="32" height="32" alt="" />
+          <span>{appName}</span>
+        </p>
+        <LangSwitch current={lang} links={links} />
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <div class="container container-narrow">
+        <h1>{title}</h1>
+        <p class="updated">
+          {labels.updated}: <time datetime={isoDate(updatedAt)}>{formatDate(updatedAt, lang)}</time>
+        </p>
+        <Prose>
+          <slot />
+        </Prose>
+      </div>
+    </main>
+    <footer class="app-footer">
+      <div class="container container-narrow">
+        <nav aria-label={appName}>
+          <ul class="links">
+            {docs.map((d) => (
+              <li>
+                <a href={appDocPath(app, d, lang)} aria-current={d === doc ? 'page' : undefined}>
+                  {labels[d]}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a href="/" hreflang="ja">
+                {labels.backToSite}
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <p>
+          <small>
+            © {copyrightYears(SITE.since)} {lang === 'ja' ? SITE.fullName : SITE.nameEn}
+          </small>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .app-header {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: 64px;
+  }
+
+  .app-name {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-weight: 700;
+  }
+
+  .app-name img {
+    width: 32px;
+    height: 32px;
+  }
+
+  main {
+    flex: 1;
+    padding: var(--space-12) 0 var(--space-16);
+  }
+
+  main:focus {
+    outline: none;
+  }
+
+  h1 {
+    color: var(--color-brand);
+  }
+
+  .updated {
+    margin: var(--space-2) 0 var(--space-8);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .app-footer {
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface-alt);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+  }
+
+  .links a[aria-current='page'] {
+    font-weight: 700;
+  }
+</style>

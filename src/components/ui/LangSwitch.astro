@@ -1,0 +1,70 @@
+---
+/**
+ * アプリ用ページの日英切り替え（docs/design.md 12.6）。
+ * 文字リンクのみ（国旗は使わない）。現在の言語は aria-current を付けて太字にする。
+ */
+export type Lang = 'ja' | 'en';
+
+interface Props {
+  current: Lang;
+  links: Record<Lang, string>;
+}
+
+const { current, links } = Astro.props;
+const languages: { lang: Lang; label: string }[] = [
+  { lang: 'ja', label: '日本語' },
+  { lang: 'en', label: 'English' },
+];
+---
+
+<ul class="lang-switch">
+  {languages.map(({ lang, label }) => (
+    <li>
+      <a
+        href={links[lang]}
+        hreflang={lang}
+        lang={lang}
+        aria-current={lang === current ? 'page' : undefined}
+      >
+        {label}
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-small);
+  }
+
+  li + li::before {
+    content: '|';
+    color: var(--color-border);
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    padding: 0 var(--space-2);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  a[aria-current='page'] {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+</style>

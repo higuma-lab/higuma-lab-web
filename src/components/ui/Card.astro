@@ -1,0 +1,30 @@
+---
+/**
+ * カード（docs/design.md 12.4）。枠線＋角丸で区切り、影は使わない。
+ * カード全体をクリックさせたいときも、リンクの実体は見出しの1つだけにする（読み上げの重複を避ける）。
+ */
+interface Props {
+  as?: 'article' | 'div' | 'li';
+  class?: string;
+}
+
+const { as: Tag = 'article', class: className } = Astro.props;
+---
+
+<Tag class:list={['card', className]}>
+  <slot />
+</Tag>
+
+<style>
+  .card {
+    padding: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+    transition: border-color var(--duration);
+  }
+
+  .card:hover {
+    border-color: var(--color-brand);
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+/**
+ * パンくずリスト。トップは自動で先頭に付ける。
+ * 構造化データは同じデータから lib/breadcrumbs.ts の breadcrumbJsonLd で作る（docs/design.md 6.1）。
+ */
+import type { Crumb } from '../../lib/breadcrumbs';
+
+interface Props {
+  items: Crumb[];
+}
+
+const crumbs: Crumb[] = [{ label: 'トップ', href: '/' }, ...Astro.props.items];
+---
+
+<nav class="breadcrumbs" aria-label="パンくずリスト">
+  <ol>
+    {crumbs.map((crumb) => (
+      <li>
+        {crumb.href ? (
+          <a href={crumb.href}>{crumb.label}</a>
+        ) : (
+          <span aria-current="page">{crumb.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+  }
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--color-text-muted);
+  }
+
+  li:not(:last-child)::after {
+    content: '/';
+    margin: 0 var(--space-2);
+    color: var(--color-border);
+  }
+
+  a {
+    color: var(--color-text-muted);
+  }
+</style>

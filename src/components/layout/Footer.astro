@@ -1,0 +1,118 @@
+---
+import symbolWhite from '../../assets/brand/symbol-white.svg';
+import { FOOTER_NAV, SITE } from '../../config/site';
+import { copyrightYears } from '../../lib/date';
+import { getPublishedPosts } from '../../lib/posts';
+import SocialLinks from '../ui/SocialLinks.astro';
+
+const hasPosts = (await getPublishedPosts()).length > 0;
+const items = FOOTER_NAV.filter((item) => !item.requiresPosts || hasPosts);
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="top">
+      <div class="brand">
+        <img src={symbolWhite.src} width="48" height="48" alt="" />
+        <div>
+          <p class="name">{SITE.name}</p>
+          <p class="name-en" lang="en">
+            {SITE.nameEn}
+          </p>
+        </div>
+      </div>
+      <nav aria-label="フッター">
+        <ul class="links">
+          {items.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+    <div class="bottom">
+      <SocialLinks />
+      <p>
+        <small>
+          © {copyrightYears(SITE.since)} {SITE.fullName}
+        </small>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding: var(--space-12) 0 var(--space-8);
+    background: var(--color-brand-strong);
+    color: var(--color-on-dark-muted);
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+  }
+
+  .site-footer a {
+    color: var(--color-on-dark);
+  }
+
+  .site-footer :focus-visible {
+    outline-color: var(--color-on-dark-accent);
+  }
+
+  .top,
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+
+  .bottom {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid rgb(255 255 255 / 0.15);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .brand img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .name {
+    color: var(--color-on-dark);
+    font-weight: 700;
+    font-size: var(--text-body);
+  }
+
+  .name-en {
+    letter-spacing: 0.12em;
+    font-size: var(--text-label);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    text-decoration: underline;
+  }
+</style>

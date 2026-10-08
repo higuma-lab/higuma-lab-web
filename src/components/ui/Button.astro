@@ -1,0 +1,83 @@
+---
+/**
+ * ボタン（docs/design.md 12.4）。href があれば <a>、なければ <button> を出力する。
+ * - primary：紺の塗り / secondary：紺の枠線 / inverse：紺背景の上に置く白
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'secondary' | 'inverse';
+
+type Props = {
+  variant?: Variant;
+  href?: string | undefined;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+} & Omit<HTMLAttributes<'a'>, 'href' | 'class' | 'type'>;
+
+const { variant = 'primary', href, type = 'button', class: className, ...rest } = Astro.props;
+const classes = ['button', `button-${variant}`, className];
+---
+
+{href ? (
+  <a class:list={classes} href={href} {...rest}>
+    <slot />
+  </a>
+) : (
+  <button class:list={classes} type={type}>
+    <slot />
+  </button>
+)}
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 48px;
+    padding: 0 28px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-pill);
+    font: inherit;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--duration),
+      border-color var(--duration);
+  }
+
+  .button-primary {
+    background: var(--color-brand);
+    color: var(--color-on-dark);
+  }
+
+  .button-primary:hover {
+    background: var(--color-brand-strong);
+  }
+
+  .button-secondary {
+    border-color: var(--color-brand);
+    background: transparent;
+    color: var(--color-brand);
+  }
+
+  .button-secondary:hover {
+    background: var(--color-brand-tint);
+  }
+
+  .button-inverse {
+    background: var(--color-surface);
+    color: var(--color-brand);
+  }
+
+  .button-inverse:hover {
+    background: var(--color-brand-tint);
+  }
+
+  .button-inverse:focus-visible {
+    outline-color: var(--color-on-dark-accent);
+  }
+</style>
