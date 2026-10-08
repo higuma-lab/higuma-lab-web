@@ -1,0 +1,43 @@
+---
+/**
+ * ブログ記事・Works の詳細のレイアウト（docs/design.md 12.4）。
+ * 見出しの下の情報（日付・ラベルなど）は "meta" スロット、本文の後は "after" スロットに入れる。
+ */
+import PageHeader from '../components/layout/PageHeader.astro';
+import Prose from '../components/ui/Prose.astro';
+import type { Crumb } from '../lib/breadcrumbs';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  breadcrumbs: Crumb[];
+  image?: string | undefined;
+  type?: 'website' | 'article';
+  /** 本文の文字サイズ（ブログは 17px） */
+  size?: 'body' | 'article';
+}
+
+const { title, description, breadcrumbs, image, type = 'article', size = 'article' } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} image={image} type={type}>
+  <article>
+    <PageHeader title={title} breadcrumbs={breadcrumbs}>
+      <slot name="meta" />
+    </PageHeader>
+    <div class="container content">
+      <Prose size={size}>
+        <slot />
+      </Prose>
+      <slot name="after" />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .content {
+    padding-top: var(--space-12);
+    padding-bottom: var(--section-space);
+  }
+</style>

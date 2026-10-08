@@ -1,0 +1,76 @@
+---
+/** よくある質問。<details> で開閉する（JS 不要。docs/design.md 12.3） */
+import type { FaqItem } from '../../data/home';
+import TextWithTodo from './TextWithTodo.astro';
+
+interface Props {
+  items: readonly FaqItem[];
+}
+---
+
+<div class="faq">
+  {Astro.props.items.map((item) => (
+    <details>
+      <summary>{item.question}</summary>
+      <p>
+        <TextWithTodo text={item.answer} />
+      </p>
+    </details>
+  ))}
+</div>
+
+<style>
+  .faq {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  details {
+    padding: 0 var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background: var(--color-surface);
+  }
+
+  summary {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    padding: var(--space-3) var(--space-8) var(--space-3) 0;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* 開閉の印（＋ / −） */
+  summary::before,
+  summary::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    width: 14px;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--color-accent);
+    transition: transform var(--duration);
+  }
+
+  summary::after {
+    transform: rotate(90deg);
+  }
+
+  details[open] summary::after {
+    transform: rotate(0deg);
+  }
+
+  details p {
+    padding-bottom: var(--space-4);
+    color: var(--color-text-muted);
+  }
+</style>

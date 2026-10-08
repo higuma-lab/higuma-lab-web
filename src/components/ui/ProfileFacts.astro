@@ -1,0 +1,43 @@
+---
+/** 活動地域・経験年数（D-009）。未確定の間は TODO の目印を出す */
+import { PROFILE } from '../../data/profile';
+import Todo from './Todo.astro';
+---
+
+<dl class="facts">
+  <div>
+    <dt>活動地域</dt>
+    <dd>{PROFILE.area ?? <Todo as="span">都道府県を確定する</Todo>}</dd>
+  </div>
+  <div>
+    <dt>開発経験</dt>
+    <dd>
+      {PROFILE.years !== undefined ? `${PROFILE.years}年` : <Todo as="span">年数を確定する</Todo>}
+    </dd>
+  </div>
+</dl>
+
+<style>
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-8);
+    margin: var(--space-4) 0 0;
+    font-size: var(--text-small);
+  }
+
+  .facts div {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  dt {
+    color: var(--color-text-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+  }
+</style>

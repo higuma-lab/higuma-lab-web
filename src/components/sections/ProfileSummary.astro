@@ -1,0 +1,53 @@
+---
+/** トップページのプロフィール要約。顔写真の代わりにシンボルを置く（D-009） */
+import symbol from '../../assets/brand/symbol.svg';
+import { PROFILE } from '../../data/profile';
+import Section from '../layout/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import ProfileFacts from '../ui/ProfileFacts.astro';
+---
+
+<Section alt labelledby="profile-heading">
+  <div class="profile">
+    <img src={symbol.src} width="140" height="140" alt="" />
+    <div>
+      <SectionHeading id="profile-heading" label="About" title="ひぐま開発室について" />
+      <p>{PROFILE.summary}</p>
+      <ProfileFacts />
+      <p class="more">
+        <a href="/about/">プロフィールを詳しく見る</a>
+      </p>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .profile {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  @media (min-width: 640px) {
+    .profile {
+      grid-template-columns: 160px 1fr;
+      gap: 40px;
+    }
+  }
+
+  img {
+    width: 120px;
+    height: auto;
+  }
+
+  @media (min-width: 640px) {
+    img {
+      width: 140px;
+    }
+  }
+
+  .more {
+    margin-top: var(--space-4);
+    font-weight: 700;
+  }
+</style>

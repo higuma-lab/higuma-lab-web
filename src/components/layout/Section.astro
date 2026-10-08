@@ -1,0 +1,29 @@
+---
+/** ページ内のセクション。上下の余白と交互背景（docs/design.md 12.3） */
+interface Props {
+  /** 交互背景（--color-surface-alt）にする */
+  alt?: boolean;
+  id?: string;
+  /** 見出しの id。aria-labelledby に使う */
+  labelledby?: string;
+  narrow?: boolean;
+}
+
+const { alt = false, id, labelledby, narrow = false } = Astro.props;
+---
+
+<section class:list={['section', { alt }]} id={id} aria-labelledby={labelledby}>
+  <div class:list={['container', { 'container-narrow': narrow }]}>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: var(--section-space) 0;
+  }
+
+  .alt {
+    background: var(--color-surface-alt);
+  }
+</style>
