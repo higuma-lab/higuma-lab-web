@@ -3,13 +3,15 @@
  * パンくずリスト。トップは自動で先頭に付ける。
  * 構造化データは同じデータから lib/breadcrumbs.ts の breadcrumbJsonLd で作る（docs/design.md 6.1）。
  */
-import type { Crumb } from '../../lib/breadcrumbs';
+import { breadcrumbJsonLd, type Crumb } from '../../lib/breadcrumbs';
+import JsonLd from '../seo/JsonLd.astro';
 
 interface Props {
   items: Crumb[];
 }
 
 const crumbs: Crumb[] = [{ label: 'トップ', href: '/' }, ...Astro.props.items];
+const site = Astro.site ?? new URL('https://higuma-lab.jp');
 ---
 
 <nav class="breadcrumbs" aria-label="パンくずリスト">
@@ -25,6 +27,7 @@ const crumbs: Crumb[] = [{ label: 'トップ', href: '/' }, ...Astro.props.items
     ))}
   </ol>
 </nav>
+<JsonLd data={breadcrumbJsonLd(crumbs, Astro.url.pathname, site)} />
 
 <style>
   .breadcrumbs {

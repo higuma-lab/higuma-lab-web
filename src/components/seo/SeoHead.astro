@@ -3,7 +3,13 @@
  * title・description・canonical・OGP・Twitter Card を一元生成する（docs/design.md 6.1）。
  */
 import { SITE } from '../../config/site';
-import { absoluteUrl, buildTitle, siteNameFor, type SeoLang } from '../../lib/seo';
+import {
+  DEFAULT_OG_IMAGE,
+  absoluteUrl,
+  buildTitle,
+  siteNameFor,
+  type SeoLang,
+} from '../../lib/seo';
 
 export interface Alternate {
   hreflang: string;
@@ -14,7 +20,7 @@ interface Props {
   /** ページ名。省略するとトップページの形式になる */
   title?: string | undefined;
   description?: string | undefined;
-  /** OGP 画像のパスまたは URL。TODO: Phase 6 で共通画像（12.8）を既定値にする */
+  /** OGP 画像のパスまたは URL。省略すると共通画像（docs/design.md 12.8） */
   image?: string | undefined;
   type?: 'website' | 'article';
   lang?: SeoLang;
@@ -37,7 +43,7 @@ const site = Astro.site ?? new URL('https://higuma-lab.jp');
 const fullTitle = buildTitle(title, lang);
 const locale = lang === 'ja' ? SITE.locale : 'en_US';
 const canonical = absoluteUrl(Astro.url.pathname, site);
-const imageUrl = image ? absoluteUrl(image, site) : undefined;
+const imageUrl = absoluteUrl(image ?? DEFAULT_OG_IMAGE.path, site);
 ---
 
 <title>{fullTitle}</title>
@@ -54,5 +60,12 @@ const imageUrl = image ? absoluteUrl(image, site) : undefined;
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:locale" content={locale} />
-{imageUrl && <meta property="og:image" content={imageUrl} />}
-<meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+<meta property="og:image" content={imageUrl} />
+{!image && (
+  <>
+    <meta property="og:image:width" content={String(DEFAULT_OG_IMAGE.width)} />
+    <meta property="og:image:height" content={String(DEFAULT_OG_IMAGE.height)} />
+    <meta property="og:image:alt" content={DEFAULT_OG_IMAGE.alt} />
+  </>
+)}
+<meta name="twitter:card" content="summary_large_image" />
