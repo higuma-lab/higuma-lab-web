@@ -31,6 +31,7 @@ export function websiteJsonLd(site: URL): JsonLd {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': absoluteUrl('/#website', site),
     name: SITE.fullName,
     url: absoluteUrl('/', site),
     inLanguage: SITE.lang,

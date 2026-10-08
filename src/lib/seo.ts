@@ -30,5 +30,8 @@ export const DEFAULT_OG_IMAGE = {
   path: '/og/default.png',
   width: 1200,
   height: 630,
-  alt: 'ひぐま開発室（HIGUMA LAB）のロゴとマスコット、キャッチコピー「小さな困りごとから、開発まで。」',
+  alt: {
+    ja: 'ひぐま開発室（HIGUMA LAB）のロゴとマスコット、キャッチコピー「小さな困りごとから、開発まで。」',
+    en: 'HIGUMA LAB logo and bear mascot',
+  },
 } as const;

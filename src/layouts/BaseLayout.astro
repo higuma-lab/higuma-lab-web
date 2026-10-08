@@ -26,7 +26,7 @@ const site = Astro.site ?? new URL('https://higuma-lab.jp');
     <noscript>
       <link rel="stylesheet" href="/noscript.css" />
     </noscript>
-    <JsonLd data={[organizationJsonLd(site), websiteJsonLd(site)]} />
+    {!Astro.props.noindex && <JsonLd data={[organizationJsonLd(site), websiteJsonLd(site)]} />}
     <slot name="head" />
     <Analytics />
   </head>

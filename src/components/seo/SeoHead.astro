@@ -48,8 +48,8 @@ const imageUrl = absoluteUrl(image ?? DEFAULT_OG_IMAGE.path, site);
 
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={canonical} />
-{noindex && <meta name="robots" content="noindex" />}
+{/* noindex のページ（404 など）は URL が実在しないため、canonical と og:url を出さない */}
+{noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 {alternates.map((alt) => (
   <link rel="alternate" hreflang={alt.hreflang} href={absoluteUrl(alt.href, site)} />
 ))}
@@ -58,14 +58,14 @@ const imageUrl = absoluteUrl(image ?? DEFAULT_OG_IMAGE.path, site);
 <meta property="og:site_name" content={siteNameFor(lang)} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:url" content={canonical} />
+{!noindex && <meta property="og:url" content={canonical} />}
 <meta property="og:locale" content={locale} />
 <meta property="og:image" content={imageUrl} />
 {!image && (
   <>
     <meta property="og:image:width" content={String(DEFAULT_OG_IMAGE.width)} />
     <meta property="og:image:height" content={String(DEFAULT_OG_IMAGE.height)} />
-    <meta property="og:image:alt" content={DEFAULT_OG_IMAGE.alt} />
+    <meta property="og:image:alt" content={DEFAULT_OG_IMAGE.alt[lang]} />
   </>
 )}
 <meta name="twitter:card" content="summary_large_image" />
