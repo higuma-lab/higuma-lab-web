@@ -152,13 +152,24 @@
 ### D-022 プライバシーポリシー（2026-10-08）
 
 - サイト用 `/privacy/` に加え、Windows アプリ用のプライバシーポリシーページを作る（Microsoft Store に登録する URL として使う）。
-  - URL 案：`/apps/{アプリのスラッグ}/privacy/`。ストアに登録した後は URL を変えない。
+  - URL 案：`/apps/{アプリのスラッグ}/privacy/`。URL は Partner Center で新しい申請を出せば変更できるが、手間がかかるため最初から最終的な URL で登録する。NoteFlip は D-024。
   - アプリが扱うデータ（収集する情報、送信先、保存場所、第三者サービス）はオーナーから情報をもらって記載する。未確定の間は TODO。
 - 事業者の氏名・住所・電話番号は掲載せず、「お問い合わせいただければ遅滞なく回答します」と記載する（D-009）。連絡先は `info@higuma-lab.jp`。
 
 ### D-023 GitHub リポジトリ（2026-10-08）
 
 - `higuma-lab/higuma-lab-web` を非公開で作成した。サイト公開と同時に公開する（D-007）。
+
+### D-024 NoteFlip のストア用ページ（2026-10-08）
+
+- NoteFlip のプライバシーポリシーとサポートページを、このサイトで公開する（GitHub Pages の `noteflip-site` は使わない）。
+  - URL：`/apps/noteflip/privacy/`、`/apps/noteflip/support/`（日本語）、`/apps/noteflip/en/privacy/`、`/apps/noteflip/en/support/`（英語）
+  - Partner Center に登録できるプライバシーポリシーの URL は1つのため、英語版を登録し、英語版から日本語版へリンクする（NoteFlip ADR 0008 の方針を踏襲）。
+  - サイト本体は日本語のみ。英語ページはアプリ用ページに限る（hreflang で日英を対応付ける）。
+- 原本はこのリポジトリ（`docs/content/apps/noteflip/`）。NoteFlip 側には移転先の案内を残す。
+- 事業者名は「ひぐま開発室（HIGUMA LAB）」に、事業者情報は「お問い合わせいただければ遅滞なく回答します」に揃える（D-019、D-022）。
+- 前提：サイトの公開をアプリの公開申請に間に合わせる（D-001）。間に合わない場合は再検討する。
+- サポートの連絡先は検討中（`info@` に一本化するか、`support@` を別名で作るか）。
 
 ## TODO（未確定）
 
