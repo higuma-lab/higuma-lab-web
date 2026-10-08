@@ -187,6 +187,7 @@ higuma-lab-web/
 | ひぐま開発室について | `/about/` | ○ |
 | お問い合わせ | `/contact/` | ○（ボタンとして強調） |
 | プライバシーポリシー | `/privacy/` | フッターのみ |
+| アプリのプライバシーポリシー | `/apps/{slug}/privacy/` | Works の詳細ページからリンク（D-022） |
 | 404 | `/404.html` | — |
 
 - URL は英語のスラッグ、末尾スラッシュあり（`trailingSlash: 'always'`、`build.format: 'directory'`）で統一する。
