@@ -1,0 +1,90 @@
+/*
+ * デザイントークン（docs/design.md 12.1〜12.3、D-026・D-027）
+ * 色・文字・余白はすべてここを経由して指定する。ダークモードを追加するときはここで上書きする。
+ */
+:root {
+  /* 色 */
+  --color-brand: #17325b;
+  --color-brand-strong: #0f2342;
+  --color-brand-tint: #e6ecf5;
+  --color-accent: #ab663c; /* 装飾専用。文字には --color-accent-text を使う */
+  --color-accent-text: #8e4f2a;
+  --color-accent-tint: #f7e7d8;
+  --color-text: #1c2433;
+  --color-text-muted: #556070;
+  --color-bg: #fbf8f3;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f4ece1;
+  --color-border: #e3dacd;
+  --color-on-dark: #ffffff;
+  --color-on-dark-muted: #dce3ee;
+  --color-on-dark-accent: #f2c9a0;
+
+  /* Works の種別ラベル（12.5、D-029） */
+  --color-kind-own-fg: #17325b;
+  --color-kind-own-bg: #e6ecf5;
+  --color-kind-sample-fg: #7a4422;
+  --color-kind-sample-bg: #f7e7d8;
+  --color-kind-experiment-fg: #2f5a3e;
+  --color-kind-experiment-bg: #e3f0e6;
+  --color-kind-client-fg: #ffffff;
+  --color-kind-client-bg: #17325b;
+
+  /* フォント（システムフォントのみ） */
+  --font-sans:
+    'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'BIZ UDPGothic', 'Meiryo', system-ui, sans-serif;
+  --font-en: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', Consolas, 'SFMono-Regular', monospace;
+
+  /* 文字サイズ（モバイル → デスクトップ） */
+  --text-hero: clamp(1.75rem, 1.2rem + 2.6vw, 2.75rem); /* 28 → 44px */
+  --text-h1: clamp(1.625rem, 1.2rem + 1.6vw, 2.25rem); /* 26 → 36px */
+  --text-h2: clamp(1.375rem, 1rem + 1.2vw, 1.75rem); /* 22 → 28px */
+  --text-h3: clamp(1.125rem, 1rem + 0.4vw, 1.25rem); /* 18 → 20px */
+  --text-body: 1rem;
+  --text-article: 1.0625rem; /* 17px */
+  --text-small: 0.875rem; /* 14px */
+  --text-label: 0.8125rem; /* 13px */
+
+  --leading-body: 1.85;
+  --leading-small: 1.7;
+  --tracking-heading: 0.04em;
+  --tracking-body: 0.02em;
+
+  /* 余白（4px 基準） */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  /* レイアウト */
+  --container: 1120px;
+  --container-narrow: 720px;
+  --gutter: 20px;
+  --section-space: var(--space-16);
+
+  /* 形・動き */
+  --radius-card: 16px;
+  --radius-small: 12px;
+  --radius-pill: 999px;
+  --tap-min: 44px;
+  --duration: 150ms;
+  --focus-ring: 3px solid var(--color-accent);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --section-space: var(--space-24);
+  }
+}

@@ -1,0 +1,8 @@
+/* JS が無効なとき：メニューボタンを隠し、ナビのリンクを常に表示する（src/components/layout/Header.astro） */
+.menu-button {
+  display: none !important;
+}
+
+.nav-list {
+  display: flex !important;
+}
