@@ -1,0 +1,16 @@
+---
+/**
+ * データの文字列に含まれる「TODO: ...」を、Todo の目印として表示する。
+ * 例：'お見積もりします。TODO: 料金の目安を記載する' → 本文＋目印
+ */
+import Todo from './Todo.astro';
+
+interface Props {
+  text: string;
+}
+
+const [body = '', todo] = Astro.props.text.split(/\s*TODO:\s*/, 2);
+---
+
+{body}
+{todo && <Todo as="span">{todo}</Todo>}

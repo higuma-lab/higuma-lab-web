@@ -1,0 +1,62 @@
+---
+/** 404（docs/design.md 12.3）：マスコット＋トップ・サービス・お問い合わせへのリンク */
+import { Image } from 'astro:assets';
+import mascot from '../assets/mascot/mascot-laptop.png';
+import Button from '../components/ui/Button.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="ページが見つかりませんでした"
+  description="お探しのページは見つかりませんでした。"
+  noindex
+>
+  <section class="not-found">
+    <div class="container">
+      <Image src={mascot} alt="" widths={[240, 480]} sizes="240px" />
+      <h1>ページが見つかりませんでした</h1>
+      <p>
+        お探しのページは、移動または削除されたか、URL
+        が間違っている可能性があります。下のリンクからお探しください。
+      </p>
+      <div class="actions">
+        <Button href="/">トップページへ</Button>
+        <Button href="/services/" variant="secondary">
+          サービス
+        </Button>
+        <Button href="/contact/" variant="secondary">
+          お問い合わせ
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding: var(--space-16) 0 var(--space-24);
+    text-align: center;
+  }
+
+  .not-found :global(img) {
+    width: 240px;
+    height: auto;
+    margin: 0 auto var(--space-8);
+  }
+
+  h1 {
+    color: var(--color-brand);
+  }
+
+  p {
+    max-width: 32em;
+    margin: var(--space-4) auto var(--space-8);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+/** こんなご相談に対応します：3グループのカード（docs/design.md 4.2、12.3、D-014） */
+import { getCollection } from 'astro:content';
+import { SERVICE_GROUPS } from '../../data/services';
+import Section from '../layout/Section.astro';
+import Card from '../ui/Card.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const icons: Record<string, string> = { web: '</>', app: '▢', consulting: '?' };
+---
+
+<Section alt labelledby="services-heading">
+  <SectionHeading
+    id="services-heading"
+    label="Services"
+    title="こんなご相談に対応します"
+    lead="Webサイト、アプリ開発、IT・AI のご相談の3つに分けてご案内します。"
+  />
+  <ul class="grid">
+    {SERVICE_GROUPS.map((group) => (
+      <Card as="li">
+        <span class="icon" aria-hidden="true">
+          {icons[group.id]}
+        </span>
+        <h3>
+          <a href={`/services/#${group.id}`}>{group.title}</a>
+        </h3>
+        <p class="names">
+          {services
+            .filter((service) => service.data.group === group.id)
+            .map((service) => service.data.title)
+            .join('／')}
+        </p>
+        <p class="summary">{group.summary}</p>
+      </Card>
+    ))}
+  </ul>
+</Section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius-small);
+    background: var(--color-brand-tint);
+    color: var(--color-brand);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  h3 a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  h3 a:hover {
+    text-decoration: underline;
+  }
+
+  .names {
+    margin: 6px 0 10px;
+    color: var(--color-accent-text);
+    font-size: var(--text-small);
+    font-weight: 700;
+    line-height: var(--leading-small);
+  }
+
+  .summary {
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+  }
+</style>

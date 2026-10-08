@@ -35,6 +35,10 @@ const { size = 'body' } = Astro.props;
     margin-top: 2em;
   }
 
+  .prose > :global(:first-child) {
+    margin-top: 0;
+  }
+
   .prose :global(h2 + *),
   .prose :global(h3 + *) {
     margin-top: 0.75em;

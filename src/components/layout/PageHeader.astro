@@ -1,5 +1,5 @@
 ---
-/** 下層ページの上部（docs/design.md 12.3）：パンくず → h1 → リード文 */
+/** 下層ページの上部（docs/design.md 12.3）：パンくず → h1 → リード文 → スロット（日付・ラベルなど） */
 import type { Crumb } from '../../lib/breadcrumbs';
 import Breadcrumbs from './Breadcrumbs.astro';
 
@@ -18,17 +18,26 @@ const { title, lead, breadcrumbs = [{ label: title }] } = Astro.props;
     <Breadcrumbs items={breadcrumbs} />
     <h1>{title}</h1>
     {lead && <p class="lead">{lead}</p>}
+    {Astro.slots.has('default') && (
+      <div class="extra">
+        <slot />
+      </div>
+    )}
   </div>
 </div>
 
 <style>
   .page-header {
-    padding: var(--space-8) 0 var(--space-12);
+    padding: var(--space-8) 0 var(--space-2);
   }
 
   h1 {
     margin-top: var(--space-6);
     color: var(--color-brand);
+  }
+
+  .extra {
+    margin-top: var(--space-4);
   }
 
   .lead {

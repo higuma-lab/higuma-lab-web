@@ -1,0 +1,73 @@
+---
+/** 番号付きの縦のステップ（docs/design.md 12.3：ご相談の流れ） */
+import type { Step } from '../../data/home';
+import TextWithTodo from './TextWithTodo.astro';
+
+interface Props {
+  steps: readonly Step[];
+}
+---
+
+<ol class="steps">
+  {Astro.props.steps.map((step) => (
+    <li>
+      <p class="title">{step.title}</p>
+      <p class="body">
+        <TextWithTodo text={step.body} />
+      </p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .steps {
+    display: grid;
+    gap: var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  li {
+    position: relative;
+    padding-left: 56px;
+    counter-increment: step;
+  }
+
+  /* 番号の丸と、次のステップへの縦線 */
+  li::before {
+    content: counter(step);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-brand);
+    color: var(--color-on-dark);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 48px;
+    bottom: calc(var(--space-6) * -1 + 8px);
+    left: 19px;
+    width: 2px;
+    background: var(--color-border);
+  }
+
+  .title {
+    font-weight: 700;
+    line-height: 40px;
+  }
+
+  .body {
+    color: var(--color-text-muted);
+  }
+</style>

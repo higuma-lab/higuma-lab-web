@@ -1,0 +1,125 @@
+---
+/** トップページの Hero（docs/design.md 12.3・12.7、D-028） */
+import { Image } from 'astro:assets';
+import mascot from '../../assets/mascot/mascot-laptop.png';
+import { CONTACT_NAV, SITE } from '../../config/site';
+import Button from '../ui/Button.astro';
+
+// 「、」の後でだけ改行する（「開/発」のような分かれ方を防ぐ）
+const phrases = SITE.tagline.split(/(?<=、)/);
+---
+
+<section class="hero">
+  <div class="container grid">
+    <div>
+      <h1>
+        <span class="eyebrow">{SITE.name}</span>
+        <span class="copy">
+          {phrases.map((phrase) => (
+            <span class="phrase">{phrase}</span>
+          ))}
+        </span>
+      </h1>
+      <p class="description">{SITE.description}</p>
+      <div class="actions">
+        <Button href={CONTACT_NAV.href}>相談する</Button>
+        <Button href="/services/" variant="secondary">
+          サービスを見る
+        </Button>
+      </div>
+    </div>
+    <div class="visual">
+      <Image
+        src={mascot}
+        alt=""
+        widths={[320, 480, 640, 840]}
+        sizes="(min-width: 960px) 420px, min(70vw, 320px)"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: var(--space-12) 0 var(--space-16);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  h1 {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-accent-text);
+    font-size: var(--text-small);
+    letter-spacing: 0.08em;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--color-accent);
+  }
+
+  .copy {
+    color: var(--color-brand);
+    font-size: var(--text-hero);
+    line-height: 1.4;
+  }
+
+  .phrase {
+    display: inline-block;
+  }
+
+  .description {
+    max-width: 34em;
+    margin: 20px 0 var(--space-8);
+    font-size: 1.0625rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .visual {
+    justify-self: center;
+    width: min(70%, 320px);
+  }
+
+  .visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (min-width: 960px) {
+    .hero {
+      padding: 80px 0 var(--space-24);
+    }
+
+    .grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-12);
+    }
+
+    .visual {
+      width: min(100%, 420px);
+    }
+  }
+</style>

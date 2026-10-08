@@ -2,16 +2,18 @@
 /**
  * カード（docs/design.md 12.4）。枠線＋角丸で区切り、影は使わない。
  * カード全体をクリックさせたいときも、リンクの実体は見出しの1つだけにする（読み上げの重複を避ける）。
+ * 親の scoped スタイルはこの要素に届かないため、見た目の違いは props で切り替える。
  */
 interface Props {
   as?: 'article' | 'div' | 'li';
-  class?: string;
+  /** 余白なし・縦並び（画像を端まで置くカード） */
+  flush?: boolean;
 }
 
-const { as: Tag = 'article', class: className } = Astro.props;
+const { as: Tag = 'article', flush = false } = Astro.props;
 ---
 
-<Tag class:list={['card', className]}>
+<Tag class:list={['card', { flush }]}>
   <slot />
 </Tag>
 
@@ -26,5 +28,12 @@ const { as: Tag = 'article', class: className } = Astro.props;
 
   .card:hover {
     border-color: var(--color-brand);
+  }
+
+  .flush {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
   }
 </style>

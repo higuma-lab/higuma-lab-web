@@ -1,74 +1,55 @@
 ---
-/**
- * トップページ。
- * TODO: Phase 5 で docs/design.md 4.4 の構成（サービス、特徴、制作物、プロフィール、ブログ、CTA）を実装する。
- */
-import Button from '../components/ui/Button.astro';
-import { SITE } from '../config/site';
+/** トップページ（docs/design.md 4.4） */
+import { getCollection } from 'astro:content';
+import Section from '../components/layout/Section.astro';
+import CtaBanner from '../components/sections/CtaBanner.astro';
+import Features from '../components/sections/Features.astro';
+import Hero from '../components/sections/Hero.astro';
+import PostList from '../components/sections/PostList.astro';
+import ProfileSummary from '../components/sections/ProfileSummary.astro';
+import ServiceGroups from '../components/sections/ServiceGroups.astro';
+import WorkList from '../components/sections/WorkList.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedPosts } from '../lib/posts';
+import { sortWorks } from '../lib/works';
+
+const works = sortWorks(await getCollection('works')).slice(0, 3);
+const posts = (await getPublishedPosts()).slice(0, 3);
 ---
 
 <BaseLayout>
-  <section class="hero">
-    <div class="container">
-      <h1>
-        <span class="eyebrow">{SITE.name}</span>
-        <span class="copy">{SITE.tagline}</span>
-      </h1>
-      <p class="description">{SITE.description}</p>
-      <div class="actions">
-        <Button href="/contact/">相談する</Button>
-        <Button href="/services/" variant="secondary">
-          サービスを見る
-        </Button>
-      </div>
-    </div>
-  </section>
+  <Hero />
+  <ServiceGroups />
+  <Features />
+  <Section alt labelledby="works-heading">
+    <SectionHeading
+      id="works-heading"
+      label="Works"
+      title="制作物・取り組み"
+      lead="自社のアプリやこのサイトなど、これまでに作ったもの・取り組んでいることです。"
+    />
+    <WorkList works={works} />
+    <p class="more">
+      <a href="/works/">制作物の一覧を見る</a>
+    </p>
+  </Section>
+  <ProfileSummary />
+  {posts.length > 0 && (
+    <Section labelledby="blog-heading">
+      <SectionHeading id="blog-heading" label="Blog" title="ブログ" />
+      <PostList posts={posts} />
+      <p class="more">
+        <a href="/blog/">記事の一覧を見る</a>
+      </p>
+    </Section>
+  )}
+  <CtaBanner />
 </BaseLayout>
 
 <style>
-  .hero {
-    padding: var(--space-12) 0 var(--space-16);
-  }
-
-  h1 {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--color-accent-text);
-    font-size: var(--text-small);
-    letter-spacing: 0.08em;
-  }
-
-  .eyebrow::before {
-    content: '';
-    width: 24px;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--color-accent);
-  }
-
-  .copy {
-    color: var(--color-brand);
-    font-size: var(--text-hero);
-    line-height: 1.4;
-  }
-
-  .description {
-    max-width: 34em;
-    margin: 20px 0 var(--space-8);
-    font-size: 1.0625rem;
-  }
-
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
+  .more {
+    margin-top: var(--space-8);
+    font-weight: 700;
   }
 </style>

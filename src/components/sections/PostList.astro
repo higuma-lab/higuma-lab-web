@@ -1,0 +1,64 @@
+---
+/** 記事の一覧（日付＋タイトル）。トップの最新記事と /blog/ で使う */
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, isoDate } from '../../lib/date';
+import { postPath } from '../../lib/posts';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+  /** 記事の説明文も出す */
+  withDescription?: boolean;
+}
+
+const { posts, withDescription = false } = Astro.props;
+---
+
+<ul class="posts">
+  {posts.map((post) => (
+    <li>
+      <time datetime={isoDate(post.data.publishedAt)}>{formatDate(post.data.publishedAt)}</time>
+      <a href={postPath(post)}>{post.data.title}</a>
+      {withDescription && <p class="description">{post.data.description}</p>}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .posts {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  li {
+    display: grid;
+    gap: var(--space-1) var(--space-6);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 640px) {
+    li {
+      grid-template-columns: 10em 1fr;
+    }
+
+    .description {
+      grid-column: 2;
+    }
+  }
+
+  time {
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  a {
+    font-weight: 700;
+  }
+
+  .description {
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+</style>

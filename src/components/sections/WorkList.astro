@@ -1,0 +1,40 @@
+---
+/** 制作物のカードの一覧。トップと /works/ で使う。1件でも崩れないよう幅は固定の列で左寄せ */
+import type { CollectionEntry } from 'astro:content';
+import WorkCard from './WorkCard.astro';
+
+interface Props {
+  works: CollectionEntry<'works'>[];
+  headingLevel?: 2 | 3;
+}
+
+const { works, headingLevel = 3 } = Astro.props;
+---
+
+<ul class="works">
+  {works.map((work) => (
+    <WorkCard work={work} headingLevel={headingLevel} />
+  ))}
+</ul>
+
+<style>
+  .works {
+    display: grid;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .works {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 960px) {
+    .works {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

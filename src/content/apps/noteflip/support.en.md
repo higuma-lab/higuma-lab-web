@@ -1,21 +1,22 @@
 ---
-layout: page
+app: noteflip
+appName: NoteFlip
+doc: support
+lang: en
 title: Support
-permalink: /support
+description: Contact and frequently asked questions for NoteFlip, a score PDF viewer for Windows.
 ---
-
-[日本語](ja/support)
 
 ## Contact
 
-Email: [{{ site.support_email }}](mailto:{{ site.support_email }})
+Email: [support@higuma-lab.jp](mailto:support@higuma-lab.jp)
 
 Please include:
 
 - The version of NoteFlip ("…" menu > **About NoteFlip**) and of Windows
 - Your PC and pen (and foot pedal, if the problem is about turning pages)
 - What you did, what you expected, and what happened instead
-- If you like, the log: "…" menu > **Open log folder**, and attach `noteflip.log`. It does not contain the names of your scores ([Privacy Policy](privacy)).
+- If you like, the log: "…" menu > **Open log folder**, and attach `noteflip.log`. It does not contain the names of your scores ([Privacy Policy](/apps/noteflip/en/privacy/)).
 
 We usually reply within a few days.
 
@@ -29,8 +30,8 @@ NoteFlip never stops while it is running because of the trial or the license, an
 
 ### Which keys turn pages? How do I use a foot pedal?
 
-| Next page | Previous page |
-|---|---|
+| Next page              | Previous page              |
+| ---------------------- | -------------------------- |
 | Page Down, →, ↓, Space | Page Up, ←, ↑, Shift+Space |
 
 A Bluetooth foot pedal that works as a keyboard can turn pages if it is set to send one of these keys (for example Page Down and Page Up). Tapping or swiping the screen does not turn pages, so that you do not turn them by accident while playing.

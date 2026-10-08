@@ -65,9 +65,14 @@ const skipLabel = lang === 'ja' ? '本文へスキップ' : 'Skip to content';
     <main id="main" tabindex="-1">
       <div class="container container-narrow">
         <h1>{title}</h1>
-        <p class="updated">
-          {labels.updated}: <time datetime={isoDate(updatedAt)}>{formatDate(updatedAt, lang)}</time>
-        </p>
+        {updatedAt ? (
+          <p class="updated">
+            {labels.updated}:{' '}
+            <time datetime={isoDate(updatedAt)}>{formatDate(updatedAt, lang)}</time>
+          </p>
+        ) : (
+          <div class="spacer" />
+        )}
         <Prose>
           <slot />
         </Prose>
@@ -145,6 +150,10 @@ const skipLabel = lang === 'ja' ? '本文へスキップ' : 'Skip to content';
 
   h1 {
     color: var(--color-brand);
+  }
+
+  .spacer {
+    height: var(--space-8);
   }
 
   .updated {

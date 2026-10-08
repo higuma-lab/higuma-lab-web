@@ -1,0 +1,62 @@
+---
+/** ひぐま開発室の特徴：番号付きの4項目（docs/design.md 12.3） */
+import { FEATURES } from '../../data/home';
+import Section from '../layout/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+---
+
+<Section labelledby="features-heading">
+  <SectionHeading id="features-heading" label="Features" title="ひぐま開発室の特徴" />
+  <ol class="grid">
+    {FEATURES.map((feature, index) => (
+      <li>
+        <span class="num" aria-hidden="true">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <div>
+          <h3>{feature.title}</h3>
+          <p>{feature.body}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</Section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--space-8) var(--space-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  li {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .num {
+    min-width: 2em;
+    color: var(--color-accent-text);
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
+
+  p {
+    margin-top: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+  }
+</style>

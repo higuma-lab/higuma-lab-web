@@ -1,0 +1,198 @@
+---
+/**
+ * ひぐま開発室について（docs/design.md 4.1、requirements.md 5、D-009）。
+ * 本名・顔写真・市区町村以下の住所・勤務先名・製品名は載せない。
+ * TODO: 本文はオーナーの確認待ち（仮の文面）。
+ */
+import { Image } from 'astro:assets';
+import mascot from '../assets/mascot/mascot-laptop.png';
+import PageHeader from '../components/layout/PageHeader.astro';
+import Section from '../components/layout/Section.astro';
+import CtaBanner from '../components/sections/CtaBanner.astro';
+import ProfileFacts from '../components/ui/ProfileFacts.astro';
+import Todo from '../components/ui/Todo.astro';
+import { SITE } from '../config/site';
+import { PROFILE } from '../data/profile';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const values = [
+  {
+    title: '分かる言葉で話す',
+    body: '専門用語に頼らず、何ができて何が難しいのか、どのくらい手間がかかるのかを、判断できる形でお伝えします。',
+  },
+  {
+    title: '必要なものだけを作る',
+    body: '目的に対して作りすぎないこと、すでにある道具で足りるならそれをおすすめすることを大切にしています。',
+  },
+  {
+    title: '長く使えるように作る',
+    body: '動作の確かさと、あとから直しやすいことを重視します。仕組みや更新の方法も、きちんと引き継ぎます。',
+  },
+];
+const description =
+  'ひぐま開発室（HIGUMA LAB）について。医療機器向けソフトウェアの開発経験を持つ開発者が運営する、小さな開発室です。';
+---
+
+<BaseLayout title="ひぐま開発室について" description={description}>
+  <PageHeader title="ひぐま開発室について">
+    <Todo>
+      このページの文面はオーナーの確認待ちの仮の内容（経歴の書き方・掲載するスキルを含む）
+    </Todo>
+  </PageHeader>
+
+  <Section narrow labelledby="profile-heading">
+    <div class="intro">
+      <div>
+        <h2 id="profile-heading">プロフィール</h2>
+        <p class="role">{PROFILE.role}</p>
+        <p>
+          {SITE.fullName}は、Webサイト制作、アプリ開発、IT・AI
+          のご相談を受けている個人の開発室です。
+        </p>
+        <p>
+          運営者は、医療機器向けのソフトウェア開発に長く携わってきました。Windows
+          アプリケーション（C/C++、C#、Python）や、機器と通信して制御するソフトウェア、Web
+          API（アプリ同士がデータをやりとりする仕組み）の開発に加え、ソフトウェアのテストとその自動化にも取り組んできました。開発チームの一員として、設計から確認まで分担しながら進める仕事にも慣れています。
+        </p>
+        <p>
+          高い信頼性が求められる分野で身につけた「確かめながら作る」進め方を、身近な困りごとの解決にも活かしたいと考えています。
+        </p>
+        <ProfileFacts />
+      </div>
+      <Image
+        class="mascot"
+        src={mascot}
+        alt="ノートパソコンで作業する茶色のクマのイラスト（ひぐま開発室のマスコット）"
+        widths={[240, 360, 480]}
+        sizes="240px"
+      />
+    </div>
+  </Section>
+
+  <Section alt narrow labelledby="experience-heading">
+    <h2 id="experience-heading">経験してきたこと</h2>
+    <ul class="list">
+      {PROFILE.experience.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+    <h3>主な技術</h3>
+    <ul class="skills">
+      {PROFILE.skills.map((skill) => (
+        <li>{skill}</li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section narrow labelledby="values-heading">
+    <h2 id="values-heading">大切にしていること</h2>
+    <ol class="values">
+      {values.map((value) => (
+        <li>
+          <h3>{value.title}</h3>
+          <p>{value.body}</p>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <CtaBanner />
+</BaseLayout>
+
+<style>
+  h2 {
+    color: var(--color-brand);
+  }
+
+  .intro {
+    display: grid;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  @media (min-width: 640px) {
+    .intro {
+      grid-template-columns: 1fr 200px;
+    }
+  }
+
+  .intro p + p {
+    margin-top: var(--space-4);
+  }
+
+  .role {
+    margin: var(--space-1) 0 var(--space-6);
+    color: var(--color-accent-text);
+    font-weight: 700;
+  }
+
+  .intro :global(.mascot) {
+    justify-self: center;
+    width: 200px;
+    height: auto;
+  }
+
+  .list {
+    margin: var(--space-6) 0 0;
+    padding-left: 1.25em;
+  }
+
+  .list li + li {
+    margin-top: var(--space-2);
+  }
+
+  .list li::marker {
+    color: var(--color-accent);
+  }
+
+  h3 {
+    margin-top: var(--space-8);
+    font-size: 1.125rem;
+  }
+
+  .skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .skills li {
+    padding: 4px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+  }
+
+  .values {
+    display: grid;
+    gap: var(--space-6);
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .values h3 {
+    margin-top: 0;
+  }
+
+  .values h3::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 3px;
+    margin-right: var(--space-3);
+    border-radius: 2px;
+    background: var(--color-accent);
+    vertical-align: middle;
+  }
+
+  .values p {
+    margin-top: var(--space-1);
+    color: var(--color-text-muted);
+  }
+</style>

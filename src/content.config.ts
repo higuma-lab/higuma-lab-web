@@ -73,8 +73,24 @@ const apps = defineCollection({
     lang: z.enum(['ja', 'en']),
     title: z.string(),
     description: z.string(),
-    updatedAt: z.coerce.date(),
+    /** 最終更新日。サポートページのように日付を出さないページは省略する */
+    updatedAt: z.coerce.date().optional(),
   }),
 });
 
-export const collections = { services, works, blog, apps };
+/**
+ * 文章が中心の固定ページ（プライバシーポリシーなど）。
+ * .astro に長い日本語を直接書くと、Prettier が式やタグの境目で改行し、表示に余分な空白が入るため Markdown で書く。
+ */
+const pages = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    /** 制定日。未設定の間は TODO の目印を出す */
+    establishedAt: z.coerce.date().optional(),
+    updatedAt: z.coerce.date().optional(),
+  }),
+});
+
+export const collections = { services, works, blog, apps, pages };

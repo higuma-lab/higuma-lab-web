@@ -1,22 +1,22 @@
 ---
-layout: page
-title: サポート
-permalink: /ja/support
+app: noteflip
+appName: NoteFlip
+doc: support
 lang: ja
+title: サポート
+description: NoteFlip（Windows 向け楽譜 PDF ビューアー）のお問い合わせ先とよくある質問。
 ---
-
-[English](../support)
 
 ## お問い合わせ
 
-メール: [{{ site.support_email }}](mailto:{{ site.support_email }})
+メール: [support@higuma-lab.jp](mailto:support@higuma-lab.jp)
 
 次のことをお書き添えください。
 
 - NoteFlip のバージョン（「…」メニュー →「**バージョン情報**」）と Windows のバージョン
 - お使いの PC とペン（譜めくりの問題ならフットペダルも）
 - 何をしたか、どうなるはずだったか、実際にどうなったか
-- よろしければログ:「…」メニュー →「**ログのフォルダを開く**」で `noteflip.log` を添付してください。楽譜の名前は含まれません（[プライバシーポリシー](privacy)）。
+- よろしければログ:「…」メニュー →「**ログのフォルダを開く**」で `noteflip.log` を添付してください。楽譜の名前は含まれません（[プライバシーポリシー](/apps/noteflip/privacy/)）。
 
 通常、数日以内にお返事します。
 
@@ -30,8 +30,8 @@ lang: ja
 
 ### どのキーで譜めくりできますか？フットペダルは使えますか？
 
-| 次のページ | 前のページ |
-|---|---|
+| 次のページ             | 前のページ                 |
+| ---------------------- | -------------------------- |
 | Page Down、→、↓、Space | Page Up、←、↑、Shift+Space |
 
 キーボードとして動く Bluetooth のフットペダルは、これらのキー（たとえば Page Down と Page Up）を送るように設定すれば譜めくりに使えます。演奏中にうっかりめくらないよう、画面のタップやスワイプではめくりません。

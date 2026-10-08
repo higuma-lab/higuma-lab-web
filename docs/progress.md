@@ -5,24 +5,18 @@
 
 ## 現在地
 
-- **次の作業：Phase 5（コンテンツ実装）**
-  - 全ページ（design.md 4章・12.3）、サービス・Works・ブログのデータ（未確定部分は `TODO:`）、NoteFlip のアプリ用ページ（`docs/content/apps/noteflip/` → `src/content/apps/noteflip/{doc}.{lang}.md`、Jekyll の変数を設定値に置き換え）
-  - 終わったら `content-reviewer` で点検する
-  - ブランチ `phase-5-content` で作業し、終わったら PR で `main` に取り込む（D-033）
-- Phase 4 で作ったもの：
-  - 設定：`astro.config.ts`（`trailingSlash: 'always'`、インライン化なし D-032、`astro:env`）、ESLint・Prettier、`.env.example`
-  - `src/styles/tokens.css`・`global.css`、`src/config/site.ts`・`social.ts`
-  - レイアウト：`BaseLayout`、`AppDocLayout`（`ArticleLayout` は Phase 5 で記事の形に合わせて作る）
-  - 部品：`Header`（モバイルメニュー）、`Footer`、`SkipLink`、`Breadcrumbs`、`PageHeader`、`SeoHead`、`JsonLd`、`Analytics`、`Button`、`Card`、`Badge`、`SectionHeading`、`Prose`、`SocialLinks`、`LangSwitch`
-  - コンテンツのスキーマ：`services`・`works`・`blog`・`apps`（`src/content.config.ts`）
-  - トップページは仮（Hero のみ）
+- **次の作業：Phase 6（SEO・アクセシビリティ・パフォーマンス対応）**
+  - sitemap（`@astrojs/sitemap`）、robots.txt、RSS（`@astrojs/rss`、記事ができたら）、JSON-LD（Organization・WebSite・BreadcrumbList・BlogPosting）、OGP 共通画像（design.md 12.8）、apple-touch-icon、画像最適化の確認
+  - 終わったら `site-auditor` で点検する。ブランチは `phase-6-seo`（D-033）
+- Phase 5 の PR：`phase-5-content` → `main`（オーナーがマージする）
+- 画面に点線枠の「TODO:」が出ている箇所は、オーナーの確認・情報待ち（下の「オーナー側の未完了作業」）。公開前にすべて解消する
 - ローカル確認：`.claude/launch.json` の `astro-preview`（`npm run build` の後に使う）
 
 ## 素材の場所
 
 - ロゴ：`src/assets/brand/`（生成スクリプトは `scripts/brand/`、SNS 用 PNG は `docs/content/brand/`）
 - マスコット：`src/assets/mascot/`
-- NoteFlip のストア用ページの原稿：`docs/content/apps/noteflip/`
+- NoteFlip のストア用ページ：`src/content/apps/noteflip/`（原本。更新方法は `docs/content/apps/noteflip/README.md`）
 
 ## オーナー側の未完了作業
 
@@ -32,6 +26,10 @@
 - [ ] NoteFlip リポジトリの更新（指示文は渡し済み、D-024）
 - [ ] 素材の用意（`docs/content/README.md` のチェックリスト）
 - [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
+- [ ] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）
+- [ ] 未確定の情報：活動地域・経験年数、相談の費用・料金の目安、打ち合わせの方法、対応地域、対応できるアプリのプラットフォーム、掲載するスキル
+- [ ] プロフィールの「医療機器向け」等の記載が、勤務先の規程・守秘の範囲で問題ないかの確認
+- [ ] NoteFlip のページ：数値（`src/content/works/noteflip.md`）を ADR と突き合わせる。ストア用ページの「販売しています」（未公開との整合）、無料試用 7 日、「数日以内にお返事」、「インターネットに接続しません」と Store・Windows の通信の書き分け、最終更新日
 
 ## 完了したフェーズ
 
@@ -43,3 +41,4 @@
 | NoteFlip のページ方針 | 2026-10-08 | D-024、D-025、原稿の取り込み |
 | Phase 3 | 2026-10-08 | `docs/design.md` 12章、見本 HTML、D-026〜D-030（配色・フォント・コピー・ラベル・アプリ用ページ） |
 | Phase 4 | 2026-10-08 | Astro 7 の初期化、Lint・Formatter、トークン CSS、共通レイアウト・部品、コンテンツのスキーマ（D-031、D-032） |
+| Phase 5 | 2026-10-09 | 全ページ・データ・NoteFlip のアプリ用ページ、content-reviewer の指摘を反映（D-033） |

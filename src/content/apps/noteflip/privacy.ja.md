@@ -1,15 +1,14 @@
 ---
-layout: page
-title: プライバシーポリシー
-permalink: /ja/privacy
+app: noteflip
+appName: NoteFlip
+doc: privacy
 lang: ja
+title: プライバシーポリシー
+description: NoteFlip（Windows 向け楽譜 PDF ビューアー）のプライバシーポリシー。本アプリは個人情報を収集・送信・共有しません。
+updatedAt: 2026-10-07
 ---
 
-[English](../privacy)
-
-最終更新日: 2026 年 10 月 7 日
-
-このポリシーは、{{ site.publisher }} が提供する NoteFlip（以下「本アプリ」）が利用者の情報をどう扱うかを説明します。
+このポリシーは、ひぐま開発室（HIGUMA LAB）が提供する NoteFlip（以下「本アプリ」）が利用者の情報をどう扱うかを説明します。
 
 ## 概要
 
@@ -51,4 +50,4 @@ Windows の設定によっては、Windows がクラッシュなどの診断デ�
 
 ## 連絡先
 
-{{ site.publisher }} — [{{ site.support_email }}](mailto:{{ site.support_email }})
+ひぐま開発室（HIGUMA LAB） — [support@higuma-lab.jp](mailto:support@higuma-lab.jp)

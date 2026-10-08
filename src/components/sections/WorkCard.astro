@@ -1,0 +1,110 @@
+---
+/**
+ * 制作物のカード（docs/design.md 12.5）：カバー → 種別・状態ラベル → タイトル → 概要 → 使用技術。
+ * 本文がない項目は詳細ページを作らないため、タイトルをリンクにしない。
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import symbol from '../../assets/brand/symbol.svg';
+import { hasWorkDetail, workPath, WORK_KIND_LABELS, WORK_STATUS_LABELS } from '../../lib/works';
+import Badge from '../ui/Badge.astro';
+import Card from '../ui/Card.astro';
+
+interface Props {
+  work: CollectionEntry<'works'>;
+  headingLevel?: 2 | 3;
+}
+
+const { work, headingLevel = 3 } = Astro.props;
+const { title, kind, status, summary, tech, cover, coverAlt } = work.data;
+const href = hasWorkDetail(work) ? workPath(work) : undefined;
+const Heading = `h${headingLevel}` as const;
+---
+
+<Card as="li" flush>
+  <div class="cover">
+    {cover ? (
+      <Image
+        src={cover}
+        alt={coverAlt ?? ''}
+        widths={[400, 720]}
+        sizes="(min-width: 960px) 360px, 100vw"
+      />
+    ) : (
+      <img class="placeholder" src={symbol.src} width="72" height="72" alt="" />
+    )}
+  </div>
+  <div class="body">
+    <p class="badges">
+      <Badge tone={kind}>{WORK_KIND_LABELS[kind]}</Badge>
+      <Badge tone="status">{WORK_STATUS_LABELS[status]}</Badge>
+    </p>
+    <Heading class="title">{href ? <a href={href}>{title}</a> : title}</Heading>
+    <p class="summary">{summary}</p>
+    {tech.length > 0 && (
+      <p class="tech">
+        <span class="visually-hidden">使用技術：</span>
+        {tech.join(' / ')}
+      </p>
+    )}
+  </div>
+</Card>
+
+<style>
+  .cover {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    background: var(--color-brand-tint);
+  }
+
+  .cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cover .placeholder {
+    width: 72px;
+    height: 72px;
+    opacity: 0.9;
+  }
+
+  .body {
+    padding: 20px var(--space-6) var(--space-6);
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    font-size: 1.1875rem;
+  }
+
+  .title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .title a:hover {
+    text-decoration: underline;
+  }
+
+  .summary {
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .tech {
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    line-height: var(--leading-small);
+  }
+</style>

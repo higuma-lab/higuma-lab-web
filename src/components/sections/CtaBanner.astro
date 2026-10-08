@@ -1,0 +1,52 @@
+---
+/** 相談の入口（docs/design.md 12.3）。問い合わせ先は設定から（D-005） */
+import { CONTACT_NAV, SITE } from '../../config/site';
+import Button from '../ui/Button.astro';
+---
+
+<section class="cta" aria-labelledby="cta-heading">
+  <div class="container">
+    <h2 id="cta-heading">まずは、お気軽にご相談ください</h2>
+    <p>まとまっていない段階でも大丈夫です。お困りのことを、メールでお送りください。</p>
+    <div class="actions">
+      <Button href={`mailto:${SITE.email}`} variant="inverse">
+        メールで相談する
+      </Button>
+      <a class="link" href={CONTACT_NAV.href}>
+        ご相談の流れ・よくある質問
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding: var(--space-16) 0;
+    background: var(--color-brand);
+    color: var(--color-on-dark);
+  }
+
+  p {
+    max-width: 40em;
+    margin: var(--space-3) 0 28px;
+    color: var(--color-on-dark-muted);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-6);
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    color: var(--color-on-dark);
+  }
+
+  .cta :focus-visible {
+    outline-color: var(--color-on-dark-accent);
+  }
+</style>

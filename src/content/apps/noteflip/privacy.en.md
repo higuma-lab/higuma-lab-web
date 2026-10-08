@@ -1,14 +1,14 @@
 ---
-layout: page
+app: noteflip
+appName: NoteFlip
+doc: privacy
+lang: en
 title: Privacy Policy
-permalink: /privacy
+description: Privacy policy of NoteFlip, a score PDF viewer for Windows. The app does not collect, send or share any personal information.
+updatedAt: 2026-10-07
 ---
 
-[日本語](ja/privacy)
-
-Last updated: October 7, 2026
-
-This policy explains how NoteFlip (the "app"), published by {{ site.publisher }}, handles your information.
+This policy explains how NoteFlip (the "app"), published by HIGUMA LAB, handles your information.
 
 ## Summary
 
@@ -50,4 +50,4 @@ If this policy changes, we will update this page and the date above.
 
 ## Contact
 
-{{ site.publisher }} — [{{ site.support_email }}](mailto:{{ site.support_email }})
+HIGUMA LAB — [support@higuma-lab.jp](mailto:support@higuma-lab.jp)
