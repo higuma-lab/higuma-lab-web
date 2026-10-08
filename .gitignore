@@ -29,3 +29,6 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# logo candidates (local only)
+sampleimages/
