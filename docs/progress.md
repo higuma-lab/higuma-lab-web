@@ -5,10 +5,10 @@
 
 ## 現在地
 
-- **Phase 3（UI/UX 設計）：提案済み、オーナーの承認待ち**
-  - 設計：`docs/design.md` 12章。見本：`docs/design-preview.html`（画像を表示するにはリポジトリのルートをローカルサーバーで配信して開く）
-  - 承認待ちの項目は 12.10（配色、フォント案 A、キャッチコピー案2、種別ラベルの色、アプリ用ページの簡易レイアウトと x-default、ダークモード非対応）
-  - 承認後：決定事項を `docs/decisions.md` に追記し、TODO の「キャッチコピー」「配色」を閉じる → Phase 4 へ
+- **次の作業：Phase 4（基本実装）**
+  - Astro の初期化、ESLint・Prettier、`tokens.css`（design.md 12.1〜12.3）、BaseLayout・Header・Footer・SkipLink、SeoHead、コンテンツのスキーマ（design.md 5章）、`AppDocLayout`（12.6）
+  - UI の見本：`docs/design-preview.html`（画像を表示するにはリポジトリのルートをローカルサーバーで配信して開く）
+  - 依存パッケージを追加するときは理由を説明する（CLAUDE.md）
 
 ## 素材の場所
 
@@ -32,3 +32,4 @@
 | Phase 1〜2 | 2026-10-08 | `docs/design.md`、git 初期化、非公開リポジトリ作成 |
 | ロゴ・ブランド | 2026-10-08 | シンボル・ロゴ一式・マスコット（D-019〜D-021） |
 | NoteFlip のページ方針 | 2026-10-08 | D-024、D-025、原稿の取り込み |
+| Phase 3 | 2026-10-08 | `docs/design.md` 12章、見本 HTML、D-026〜D-030（配色・フォント・コピー・ラベル・アプリ用ページ） |
