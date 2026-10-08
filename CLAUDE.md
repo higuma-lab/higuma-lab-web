@@ -5,18 +5,9 @@
 - 要件：[docs/requirements.md](docs/requirements.md)
 - 決定事項・TODO：[docs/decisions.md](docs/decisions.md)（要件と矛盾する場合はこちらが優先）
 - 素材：[docs/content/](docs/content/)
+- **進捗：[docs/progress.md](docs/progress.md)（作業を始める前に必ず読む）**
 
 あなたはシニアWebエンジニア兼UI/UXデザイナーとして作業する。
-
-## 現在の状況（各フェーズの終わりに更新する）
-
-- 完了：Phase 1〜2（設計は `docs/design.md`）、ロゴ一式（D-019〜D-021）、NoteFlip のストア用ページの方針（D-024、D-025）
-- **次の作業：Phase 3（UI/UX 設計）**
-  - 紺 `#17325B`（シンボル）とマスコットの茶色を軸に配色を提案する
-  - キャッチコピー候補、タイポグラフィ、レイアウト、コンポーネント一覧
-  - Works の種別ラベル、NoteFlip の英語ページ（`/apps/noteflip/en/...`）も設計に含める
-- オーナー側の未完了作業：ドメイン取得、AWS アカウント準備、Zoho Mail（Route 53 構築後）、NoteFlip リポジトリの更新（指示文は渡し済み）
-- 素材：ロゴ `src/assets/brand/`、マスコット `src/assets/mascot/`、NoteFlip の原稿 `docs/content/apps/noteflip/`
 
 ## 進め方
 
@@ -38,7 +29,8 @@
 - 設計が固まるまで大量のファイルを作らない。
 - 方針の決定・変更が生じたら `docs/decisions.md` に追記する。
 - 各フェーズの終わりに `docs/content/build-log.md` に事実（判断と理由、問題と対処、数値）を追記する（D-016）。
-- 各フェーズの終わりに、この文書の「現在の状況」を更新してコミットする。セッションは★の承認後に切り替える想定。
+- 各フェーズの終わりに `docs/progress.md` を更新してコミットする。セッションは★の承認後に切り替える想定。
+- この文書（CLAUDE.md）には変わりにくいルールだけを書き、進捗や一時的な情報は書かない。
 
 ## レビュー用サブエージェント
 
