@@ -32,3 +32,7 @@ Thumbs.db
 
 # logo candidates (local only)
 sampleimages/
+
+# test results
+test-results/
+playwright-report/

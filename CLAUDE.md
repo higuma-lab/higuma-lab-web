@@ -87,5 +87,8 @@
 | `npm run check` | 型チェック（`astro check`、.astro を含む） |
 | `npm run lint` | ESLint（TypeScript・Astro・アクセシビリティ） |
 | `npm run format` / `format:check` | Prettier（`docs/` は対象外） |
+| `npm test` | ユニットテスト（Vitest、`tests/unit/`） |
+| `npm run test:e2e` | ビルドして E2E（Playwright＋axe、`tests/e2e/`、4322 番で配信） |
+| `npm run test:links` | ビルドして内部リンクのリンク切れを確認 |
 
 <!-- TODO: Phase 7 でテストのコマンドを追加 -->

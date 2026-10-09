@@ -26,6 +26,7 @@ const description =
         <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
       </p>
       <Button href={`mailto:${SITE.email}`}>メールを作成する</Button>
+      <p class="note">メールアプリが開かない場合は、上のアドレス宛てにお送りください。</p>
       <p class="hint">
         次のことを書いていただけると、お返事がスムーズです（分かる範囲で構いません）。
       </p>
@@ -69,6 +70,12 @@ const description =
     font-size: 1.25rem;
     font-weight: 700;
     overflow-wrap: anywhere;
+  }
+
+  .note {
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
   }
 
   .hint {

@@ -9,3 +9,5 @@ src/assets/
 docs/
 .claude/
 CLAUDE.md
+test-results/
+playwright-report/
