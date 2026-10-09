@@ -258,6 +258,23 @@ design.md 2.2 の構成で導入した。バージョン固有の判断は以下
 - **E2E 用のサーバー**は astro preview を 4322 番、`--ignore-lock` で起動する（Astro 7 の preview はポートが違っても2つ目の起動を拒むため、開発用の preview と並べて動かせるようにする）。
 - `npm run test:e2e` と `npm run test:links` は、実行前にビルドする（古い `dist/` を検査しないため）。
 
+### D-036 AWS・デプロイの実装方針（2026-10-09、Phase 8）
+
+- **OIDC の信頼条件**は environment で絞る：`sub` が `repo:higuma-lab/higuma-lab-web:environment:production` と完全一致するときだけ、デプロイ用ロールを引き受けられる。
+  - **GitHub の environment `production` の Deployment branches を `main` だけに限ることが必須**（オーナーが設定。infra/README.md 手順6）。これを緩めると、他のブランチから本番にデプロイできるようになる。
+  - environment を使う理由：デプロイの履歴が GitHub に残り、後から承認者（Required reviewers）を付けられるため。
+- **環境依存の値**（ドメイン、リポジトリ名、environment 名）は `infra/.env`（コミットしない）から読む。アカウント ID は実行時のプロファイルから求める。メール用の DNS レコードは公開される値のため `infra/config/mail.ts` にコミットする（値は Zoho の登録後。今は空で、レコードを作らない）。
+- **リージョンをまたぐ参照**（ホストゾーン → us-east-1 の証明書 → CloudFront）は CDK の `crossRegionReferences` を使う。CDK が SSM パラメーターとカスタムリソースの Lambda を作る（費用はほぼ0）。手作業で ID を受け渡す手順をなくすため。証明書を作り直すときは2段階の手順が要る（infra/README.md）。
+- **GitHub の OIDC プロバイダー**は、カスタムリソースではなく CloudFormation のネイティブのリソース（`OidcProviderNative`）で作る。
+- **CloudFront Function**：apex 以外のホスト（www、`*.cloudfront.net`）は apex へ 301。`/path/` は `index.html` を読み、拡張子のない `/path` は `/path/` へ 301。リダイレクト先は常に絶対 URL（`//evil.example` のようなパスで別ドメインへ飛ばないため）。
+- **404**：OAC に ListBucket も許可し、存在しないパスを 404 として受けて `/404.html` を返す。一覧が返らないよう `defaultRootObject` も指定する。
+- **価格クラス**は PRICE_CLASS_200（日本のエッジを含む。100 は北米・欧州のみ）。無料枠内の見込みは変わらない。
+- **CSP** は自サイトと Cloudflare Web Analytics だけを許可し、`'unsafe-inline'` を使わない（D-032）。ビルド結果の全ページで違反0を確認した（解析のスクリプトを含む）。Permissions-Policy でカメラ・マイク・位置情報等を止める。
+- **キャッシュ**：`_astro/` は1年・immutable、それ以外は `max-age=0, s-maxage=86400`。デプロイ時に `/*` を無効化し、完了を待ってから古いアセットを消す。
+- **CI** は PR で実行する（design.md 7.4 の「main 以外への push」は、PR と二重に動くため外した）。E2E とリンク切れも CI に含める。deploy.yml は CI を呼び出し、通過してからデプロイする。
+- `AWS_DEPLOY_ROLE_ARN` が未設定の間は、デプロイのジョブを飛ばす（AWS の構築前に main へマージしても失敗にしない）。
+- CDK・GitHub Actions の依存はバージョンを固定する（Action はコミット SHA）。自動更新（Dependabot）は入れていない。
+
 ## TODO（未確定）
 
 - [ ] 料金の目安金額（D-010）

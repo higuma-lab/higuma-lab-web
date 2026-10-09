@@ -348,10 +348,11 @@ GitHub Actions ──OIDC──▶ IAM ロール（S3 への同期と CloudFront
 
 | ワークフロー | トリガー | 内容 |
 |---|---|---|
-| `ci.yml` | PR、main 以外への push | install → lint → typecheck → unit test → build →（E2E は承認後に追加） |
+| `ci.yml` | PR、手動実行、deploy.yml からの呼び出し | サイト：format → lint → typecheck → unit test → build → リンク切れ → E2E。インフラ：型 → テスト → synth（Phase 8 で変更、D-036） |
 | `deploy.yml` | main への push、手動実行 | CI と同じ検証 → OIDC でロールを引き受け → S3 に同期（キャッシュ設定をファイル種別で分ける）→ CloudFront 無効化 |
 
-- OIDC の信頼条件は `repo:higuma-lab/higuma-lab-web` の `main` ブランチ（または `production` environment）に限定する。
+- OIDC の信頼条件は `repo:higuma-lab/higuma-lab-web` の `production` environment に限定し、environment のデプロイ可能なブランチを `main` に限る（D-036）。
+- 実装と構築手順は `infra/README.md`。
 - バケット名・ディストリビューション ID・ロール ARN は GitHub の Variables に登録する（秘密情報ではないが、コードには書かない）。
 - サードパーティ Action はコミット SHA で固定する。
 

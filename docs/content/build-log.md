@@ -93,3 +93,20 @@
 - 問題：Astro 7 の preview は、ポートが違っても2つ目の起動を拒む。開発用の preview を動かしたままだと E2E が起動できなかった → `--ignore-lock` を付けた。
 - site-auditor の点検：要修正2・提案多数。上の preview の問題と、追加した案内文がテストされていないこと → 修正した。提案のうち、404 ページで他のリソースの 404 が隠れる書き方、`lang` を ja/en のどちらでも通す書き方、フォーカスの枠線を種類だけで判定する書き方、正規 URL を robots.txt から逆算する書き方を直し、見出しの階層・ランドマーク（axe の best-practice）、title・description の長さ、favicon、画像の寸法指定、CSS の `url()` を確認対象に加えた。
 - 手動で残したもの：外部リンクの到達、Lighthouse、WebKit（iOS Safari）。全ページのスクリーンショットを並べて目視し、崩れがないことを確認した。
+
+## Phase 8：AWS デプロイ用設定（2026-10-09）
+
+- CDK（TypeScript）で4スタックを作った：DNS（Route 53）、証明書（ACM、us-east-1）、サイト（S3＋CloudFront）、GitHub Actions 用の OIDC ロール。`infra/` はサイトとは別の `package.json`（aws-cdk-lib 2.273、CLI 2.1145）。
+- 実環境には何もデプロイしていない。AWS に接続しない `cdk synth` とテンプレートのテスト（Vitest 25 件）で確かめた。構築はオーナーが `infra/README.md` の手順で行う。
+- ドメインやリポジトリ名もコードに書かず、`infra/.env` から読むようにした。CloudFront Function のコードには、合成時にドメインを埋め込む。
+- 問題：CloudFront 用の証明書は us-east-1 にしか置けず、S3・Route 53（東京）とリージョンが分かれる → CDK の `crossRegionReferences` で受け渡した（裏で SSM と小さな Lambda が作られる）。
+- 問題：CDK の標準の OIDC プロバイダーは、裏で Lambda を使うカスタムリソースだった → CloudFormation のネイティブのリソース（`OidcProviderNative`）に替えた。
+- 問題：TypeScript の `exactOptionalPropertyTypes` を有効にすると、CDK の型と合わずにエラーになる → インフラ側だけ外した。
+- 問題：S3 の一覧（ListBucket）を許可すると、CDK が「ルートで一覧が返るおそれ」と警告する → `defaultRootObject` を指定した上で、警告を理由付きで確認済みにした。
+- CSP（`'unsafe-inline'` なし）が実際のページを壊さないかを、`dist/` を CSP 付きで配信して全 12 ページを Playwright で巡回して確かめた。解析のスクリプトを含めて違反0、メニューの開閉も動いた。Phase 4 でインラインのスクリプトを出さない設定にしておいた効果。
+- CloudFront の価格クラスは、最も安い PRICE_CLASS_100 だと日本のエッジが含まれないことに気づき、200 にした（無料枠内なので費用は変わらない見込み）。
+- infra-reviewer の点検：重大0・要修正3・提案7。
+  - スラッシュを補うリダイレクトで、`//evil.example/x` のようなパスが別ドメインへのリダイレクトになっていた（オープンリダイレクト）→ リダイレクト先を常に絶対 URL にし、テストを追加した。
+  - CloudFront のキャッシュ無効化の完了を待たずに古い CSS・JS を消していた → 完了を待つようにした。
+  - 方針（D-036）の記録漏れ、メール用レコードの手順の不足 → 追記した。
+  - 提案のうち、デプロイ用ロールから不要な `s3:GetObject` を外し、証明書を作り直すときの手順、ネームサーバー切り替えの注意（.jp の NS のキャッシュ、DNSSEC）を手順書に加えた。
