@@ -8,6 +8,7 @@
 - **次の作業：Phase 7（テスト）★**
   - Vitest（`src/lib/` の関数）、Playwright（Chromium のみ）＋ `@axe-core/playwright` で全ページをモバイル・デスクトップで巡回、リンク切れ（自作スクリプトか linkinator を選ぶ）、SEO メタ情報の検証、キーボード操作（D-018）
   - Playwright はブラウザのダウンロード（数百MB）がある
+  - あわせて対応：「メールで相談する」ボタン（CtaBanner）とお問い合わせページに「メールアプリが開かない場合は info@higuma-lab.jp へ」と書き添える（JS は使わない。2026-10-09 オーナー了承）
   - 終わったら `site-auditor` で点検し、**オーナーの承認を得てから** Phase 8 へ。ブランチは `phase-7-test`（D-033）
 - Phase 6 の PR：`phase-6-seo` → `main`（オーナーがマージする）
 - OGP 画像などを作り直すとき：`node scripts/ogp/build.mjs`（D-034）
