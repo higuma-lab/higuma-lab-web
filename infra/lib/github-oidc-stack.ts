@@ -69,7 +69,7 @@ export class GithubOidcStack extends Stack {
       new PolicyStatement({
         sid: 'SyncSiteObjects',
         effect: Effect.ALLOW,
-        actions: ['s3:GetObject', 's3:PutObject', 's3:DeleteObject'],
+        actions: ['s3:PutObject', 's3:DeleteObject'],
         resources: [bucket.arnForObjects('*')],
       }),
     );

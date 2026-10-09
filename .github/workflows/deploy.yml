@@ -92,10 +92,13 @@ jobs:
           aws s3 sync dist "s3://$BUCKET" --exclude "_astro/*" --delete
           --cache-control "public, max-age=0, s-maxage=86400, must-revalidate" --no-progress
 
+      # 無効化の完了を待ってから古いアセットを消す（エッジに残った古い HTML が、消えたアセットを参照しないように）
       - name: Invalidate CloudFront cache
-        run: >-
-          aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION_ID" --paths "/*"
-          --query 'Invalidation.Id' --output text
+        run: |
+          id=$(aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION_ID" --paths "/*" \
+            --query 'Invalidation.Id' --output text)
+          echo "Invalidation: $id"
+          aws cloudfront wait invalidation-completed --distribution-id "$DISTRIBUTION_ID" --id "$id"
 
       - name: Remove old hashed assets
         run: >-

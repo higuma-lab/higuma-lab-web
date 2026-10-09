@@ -49,7 +49,15 @@ describe('viewer-request の CloudFront Function', () => {
   it('末尾にスラッシュのない URL は 301 で付け足す', () => {
     const result = run('/about');
     expect(result).toMatchObject({ statusCode: 301 });
-    expect(location(result)).toBe('/about/');
+    expect(location(result)).toBe(`https://${DOMAIN}/about/`);
+  });
+
+  it('リダイレクト先は常に apex（`//` や `/\\` で始まるパスでも別ドメインへ飛ばない）', () => {
+    for (const uri of ['//evil.example/x', '/\\evil.example/x']) {
+      const target = location(run(uri));
+      expect(target).toBeDefined();
+      expect(new URL(target ?? '').host).toBe(DOMAIN);
+    }
   });
 
   it('www は apex へ 301 でリダイレクトする（パスとクエリを保つ）', () => {

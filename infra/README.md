@@ -85,7 +85,19 @@ npx cdk deploy HigumaLabDns --profile higuma-lab
 注意：
 
 - 切り替えると、お名前.com の DNS に設定していたレコードは使われなくなる。メールなど既存のレコードがある場合は、先に `config/mail.ts` に移して DnsStack をデプロイしてから切り替える（今はメール未設定のため影響なし）。
-- 切り替えの途中は、古い DNS と新しい DNS のどちらかが返る。メールを運用し始めた後に DNS を切り替える場合は、両方に同じ MX を置いてから切り替える（不達を防ぐ）。
+- 切り替えの途中は、古い DNS と新しい DNS のどちらかが返る。.jp の NS は最大で1日ほど古い値がキャッシュに残る。メールを運用し始めた後に DNS を切り替える場合は、両方に同じ MX を置いてから切り替える（不達を防ぐ）。
+- 切り替える前に、Route 53 で名前解決できることを確かめる：`nslookup -type=CAA higuma-lab.jp <NameServers の1つ>`
+- お名前.com で DNSSEC を有効にしている場合は、先に解除する（Route 53 側に鍵がないと名前解決できなくなる）。
+
+### メール用のレコード（Zoho Mail の登録後）
+
+1. Zoho Mail の管理画面（ドメインの設定）に表示される、所有確認の TXT・MX・SPF・DKIM の値を `config/mail.ts` に転記する。DMARC は `p=none`（監視のみ）で始め、レポートで問題がないことを確かめてから `quarantine` → `reject` と強める。
+2. `npx cdk diff HigumaLabDns` で差分を確かめ、`npx cdk deploy HigumaLabDns` でデプロイする。
+3. 反映を確かめる：`nslookup -type=MX higuma-lab.jp`、`nslookup -type=TXT zmail._domainkey.higuma-lab.jp`（セレクター名は Zoho の表示に合わせる）。Zoho の管理画面で「確認」を押す。
+
+- **Route 53 のコンソールで、レコードを手作業で作らない**。同じ名前・種類のレコードがあると、CDK のデプロイが失敗する。
+- メール用のレコードは、スタックの外で消えないよう「保持（RETAIN）」にしている。そのため `config/mail.ts` からレコードを消したり、DKIM のセレクター名を変えたりしても、古いレコードは Route 53 に残る。デプロイの後、コンソールで古いレコードを手で消す。
+- 詳しい運用は Phase 9 の `docs/operations.md` にまとめる。
 
 ### 3. 証明書（ACM）
 
@@ -116,7 +128,9 @@ npx cdk deploy HigumaLabGithubOidc --profile higuma-lab
 ### 6. GitHub の設定
 
 1. **Environment**：Settings → Environments → `production` を作る。
-   - Deployment branches and tags：**Selected branches** にして `main` だけを許可する（OIDC の信頼条件は environment で絞っているため、ここで main 以外を締め出す）。
+   - Deployment branches and tags：**Selected branches** にして `main` だけを許可する（OIDC の信頼条件は environment で絞っているため、ここで main 以外を締め出す。**必須**、D-036）。
+   - ワークフローの側でも main 以外ではデプロイのジョブを飛ばすが、ワークフローのファイルはブランチごとに書き換えられる。AWS 側の守りはこの設定が前提になるため、設定画面で `main` だけになっていることを必ず確かめる。
+   - リポジトリを公開した後は、Settings → Actions → General で、外部からの PR のワークフローの実行に承認を必要とする設定にする。
 2. **Variables**：Settings → Secrets and variables → Actions → **Variables**（Repository variables）に登録する。秘密情報ではないため Secrets でなくてよい。
    | 名前                             | 値                                                                  |
    | -------------------------------- | ------------------------------------------------------------------- |
@@ -152,8 +166,8 @@ curl -sI https://higuma-lab.jp/not-found/
 2. ビルド（本番の Variables を使う）
 3. OIDC でデプロイ用ロールを引き受ける（アクセスキーは使わない）
 4. `_astro/`（ハッシュ付き）を `max-age=1年, immutable` で、それ以外を `max-age=0, s-maxage=1日` でアップロード
-5. CloudFront のキャッシュを `/*` で無効化（月 1,000 パスまで無料。`/*` は1パスとして数える）
-6. 古いハッシュ付きアセットを削除
+5. CloudFront のキャッシュを `/*` で無効化し、完了を待つ（月 1,000 パスまで無料。`/*` は1パスとして数える）
+6. 古いハッシュ付きアセットを削除（無効化の完了後。エッジに残った古い HTML が、消えたアセットを参照しないように）
 
 `AWS_DEPLOY_ROLE_ARN` が未設定の間は、デプロイのジョブを飛ばす（AWS の構築前に main へマージしても失敗しない）。
 
@@ -162,6 +176,10 @@ curl -sI https://higuma-lab.jp/not-found/
 - 問題のある変更を `git revert` する PR を作り、`main` にマージする。デプロイが自動で走り、元の内容に戻る。
 - 急ぐ場合でも、`main` への直接の push はしない（D-033）。
 - インフラの変更を戻すときは、変更前のコミットで `npx cdk deploy <スタック>` を実行する。先に `npx cdk diff` で差分を確かめる。
+
+### 証明書を作り直すとき
+
+リージョンをまたぐ参照（`crossRegionReferences`）では、使われている間は参照の値（証明書の ARN）を変えられない。ドメインの追加などで証明書が作り直しになると、`HigumaLabCertificate` のデプロイが失敗する。その場合は2段階で行う：新しい証明書を別の ID で並べて作る → `HigumaLabSite` を新しい証明書に切り替えてデプロイ → 古い証明書をコードから消してデプロイ。
 
 ## 費用
 

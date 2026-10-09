@@ -23,7 +23,8 @@ function handler(event) {
 
   var lastSegment = uri.substring(uri.lastIndexOf('/') + 1);
   if (lastSegment.indexOf('.') === -1) {
-    return redirect(uri + '/' + serializeQuery(request.querystring));
+    // 絶対 URL で返す。相対にすると `//evil.example/x` が別ドメインへのリダイレクトになるため
+    return redirect('https://' + APEX_DOMAIN + uri + '/' + serializeQuery(request.querystring));
   }
 
   return request;
