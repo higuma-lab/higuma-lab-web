@@ -17,7 +17,7 @@
  *   dmarc: 'v=DMARC1; p=none; rua=mailto:info@<ドメイン>',
  */
 export interface MailConfig {
-  /** apex の TXT に置く所有確認の値 */
+  /** apex の TXT に置く所有確認の値（Zoho Mail、Google Search Console の `google-site-verification=...` など） */
   readonly verification: readonly string[];
   readonly mx: readonly { readonly priority: number; readonly hostName: string }[];
   /** apex の TXT に置く SPF。所有確認の値と同じ TXT レコードにまとめる */
