@@ -27,13 +27,17 @@ test('アプリ用ページ（英語）もスキップリンクで本文へ移�
 
 test('フォーカスしたリンクに枠線が表示される', async ({ page }) => {
   await page.goto('/');
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab'); // スキップリンク
+  await page.keyboard.press('Tab'); // ヘッダーのロゴ
+  await expect(page.locator('.site-header .logo')).toBeFocused();
+
   const outline = await page.evaluate(() => {
-    const el = document.activeElement;
-    return el ? getComputedStyle(el).outlineStyle : 'none';
+    const style = getComputedStyle(document.activeElement ?? document.body);
+    return { style: style.outlineStyle, width: style.outlineWidth, color: style.outlineColor };
   });
-  expect(outline).not.toBe('none');
+  expect(outline.style).not.toBe('none');
+  expect(parseFloat(outline.width)).toBeGreaterThanOrEqual(2);
+  expect(outline.color).not.toMatch(/^(transparent|rgba\(.*,\s*0\))$/);
 });
 
 test('メニュー：モバイルはキーボードで開閉でき、デスクトップは常に表示', async ({

@@ -1,9 +1,10 @@
 /**
- * dist/ の HTML を解析し、内部リンクのリンク切れを調べる（D-018）。
- * - 対象：<a href>、<link href>、<img src / srcset>、<source srcset>、<script src>、本番 URL の og:image
+ * dist/ の HTML と CSS を解析し、内部リンクのリンク切れを調べる（D-018）。
+ * - 対象：<a href>、<link href>、<img src / srcset>、<source srcset>、<script src>、og:image、CSS の url()
+ * - 本番の URL（robots.txt の Sitemap 行のドメイン）で始まるリンクも内部リンクとして調べる
  * - ページ内リンク（#id）は、移動先のページにその id があるかまで確認する
  * - 外部リンク・mailto: は対象外（外部リンクは手動で確認する）
- * 使い方：npm run build の後に `npm run test:links`
+ * 使い方：`npm run test:links`（先にビルドする）
  */
 import { existsSync, globSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -15,12 +16,17 @@ if (!existsSync(join(DIST, 'index.html'))) {
   process.exit(1);
 }
 
-// 本番のサイトの URL（robots.txt の Sitemap 行から求める）。この URL で始まるリンクも内部リンクとして扱う
 const robots = readFileSync(join(DIST, 'robots.txt'), 'utf8');
-const siteOrigin = new URL(/^Sitemap:\s*(\S+)$/m.exec(robots)?.[1] ?? 'https://higuma-lab.jp')
-  .origin;
+const sitemapUrl = /^Sitemap:\s*(\S+)$/m.exec(robots)?.[1];
+if (!sitemapUrl) {
+  console.error('robots.txt に Sitemap 行がありません。');
+  process.exit(1);
+}
+const siteOrigin = new URL(sitemapUrl).origin;
 
-const htmlFiles = globSync('**/*.html', { cwd: DIST }).map((f) => f.replaceAll('\\', '/'));
+const toPosix = (file) => file.replaceAll('\\', '/');
+const htmlFiles = globSync('**/*.html', { cwd: DIST }).map(toPosix);
+const cssFiles = globSync('**/*.css', { cwd: DIST }).map(toPosix);
 
 /** HTML 中の id の一覧（ページ内リンクの確認用） */
 const idCache = new Map();
@@ -40,35 +46,54 @@ function resolveFile(pathname) {
     : [decoded, join(decoded, 'index.html')];
   for (const candidate of candidates) {
     const full = join(DIST, candidate);
-    if (existsSync(full) && statSync(full).isFile()) return candidate.replaceAll('\\', '/');
+    if (existsSync(full) && statSync(full).isFile()) return toPosix(candidate);
   }
   return null;
 }
 
 /** HTML から確認対象の URL を取り出す */
-function extractUrls(html) {
+function extractHtmlUrls(html) {
   const urls = [];
   for (const m of html.matchAll(/<(?:a|link)\s[^>]*?href="([^"]*)"/g)) urls.push(m[1]);
   for (const m of html.matchAll(/<(?:img|script|source)\s[^>]*?src="([^"]*)"/g)) urls.push(m[1]);
   for (const m of html.matchAll(/\ssrcset="([^"]*)"/g)) {
     urls.push(...m[1].split(',').map((entry) => entry.trim().split(/\s+/)[0]));
   }
-  for (const m of html.matchAll(/<meta\s[^>]*?property="og:image"[^>]*?content="([^"]*)"/g)) {
-    urls.push(m[1]);
+  // og:image（属性の順番によらず取り出す）
+  for (const m of html.matchAll(/<meta\s[^>]*>/g)) {
+    if (!/\sproperty="og:image"/.test(m[0])) continue;
+    const content = /\scontent="([^"]*)"/.exec(m[0]);
+    if (content) urls.push(content[1]);
   }
   return urls.filter(Boolean).map((url) => url.replaceAll('&amp;', '&'));
 }
 
+/** CSS の url() を取り出す（data: は除く） */
+function extractCssUrls(css) {
+  return [...css.matchAll(/url\(\s*['"]?([^'")]+?)['"]?\s*\)/g)]
+    .map((m) => m[1])
+    .filter((url) => !url.startsWith('data:'));
+}
+
+const sources = [
+  ...htmlFiles.map((file) => ({
+    file,
+    // 404.html は任意の URL で返されるため、ルートを基準に解決する
+    base: new URL(file === '404.html' ? '/' : `/${file.replace(/index\.html$/, '')}`, siteOrigin),
+    urls: extractHtmlUrls(readFileSync(join(DIST, file), 'utf8')),
+  })),
+  ...cssFiles.map((file) => ({
+    file,
+    base: new URL(`/${file}`, siteOrigin),
+    urls: extractCssUrls(readFileSync(join(DIST, file), 'utf8')),
+  })),
+];
+
 const problems = [];
 let checked = 0;
 
-for (const file of htmlFiles) {
-  const html = readFileSync(join(DIST, file), 'utf8');
-  // 404.html は任意の URL で返されるため、ルートを基準に解決する
-  const pagePath = file === '404.html' ? '/' : `/${file.replace(/index\.html$/, '')}`;
-  const base = new URL(pagePath, siteOrigin);
-
-  for (const raw of extractUrls(html)) {
+for (const { file, base, urls } of sources) {
+  for (const raw of urls) {
     let url;
     try {
       url = new URL(raw, base);
@@ -96,4 +121,6 @@ if (problems.length > 0) {
   for (const problem of problems) console.error(`  - ${problem}`);
   process.exit(1);
 }
-console.log(`リンク切れなし（${htmlFiles.length} ページ、内部リンク ${checked} 件）`);
+console.log(
+  `リンク切れなし（${htmlFiles.length} ページ・CSS ${cssFiles.length} 件、内部リンク ${checked} 件）`,
+);

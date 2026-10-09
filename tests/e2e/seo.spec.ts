@@ -3,7 +3,7 @@
  * title・description の重複、canonical、OGP、構造化データ、sitemap、robots.txt を確認する。
  */
 import { expect, test, type Page } from '@playwright/test';
-import { NOT_FOUND_PATH, builtPages } from './pages';
+import { NOT_FOUND_PATH, SITE_ORIGIN, builtPages } from './pages';
 
 const pages = builtPages();
 
@@ -12,6 +12,7 @@ interface Meta {
   description: string | null;
   canonical: string | null;
   robots: string | null;
+  favicon: string | null;
   og: Record<string, string>;
   twitterCard: string | null;
   alternates: string[];
@@ -31,6 +32,7 @@ async function readMeta(page: Page): Promise<Meta> {
       description: attr('meta[name="description"]', 'content'),
       canonical: attr('link[rel="canonical"]', 'href'),
       robots: attr('meta[name="robots"]', 'content'),
+      favicon: attr('link[rel="icon"]', 'href'),
       og,
       twitterCard: attr('meta[name="twitter:card"]', 'content'),
       alternates: [...document.querySelectorAll('link[rel="alternate"][hreflang]')].map(
@@ -43,21 +45,14 @@ async function readMeta(page: Page): Promise<Meta> {
   });
 }
 
-/** 本番のサイトの URL（robots.txt の Sitemap 行から求める） */
-async function siteOrigin(page: Page): Promise<string> {
-  const robots = await (await page.request.get('/robots.txt')).text();
-  const match = /^Sitemap:\s*(\S+)$/m.exec(robots);
-  if (!match?.[1]) throw new Error('robots.txt に Sitemap 行がありません');
-  return new URL(match[1]).origin;
-}
-
 test('robots.txt：全体を許可し、サイトマップを示す', async ({ page }) => {
   const response = await page.request.get('/robots.txt');
   expect(response.status()).toBe(200);
   const robots = await response.text();
   expect(robots).toMatch(/^User-agent: \*$/m);
   expect(robots).not.toMatch(/^Disallow: \/$/m);
-  expect(await siteOrigin(page)).toMatch(/^https:\/\//);
+  expect(robots).toMatch(new RegExp(`^Sitemap: ${SITE_ORIGIN}/sitemap-index\\.xml$`, 'm'));
+  expect(SITE_ORIGIN).toMatch(/^https:\/\//);
 });
 
 test('sitemap：404 以外の全ページを含み、それ以外を含まない', async ({ page }) => {
@@ -65,13 +60,14 @@ test('sitemap：404 以外の全ページを含み、それ以外を含まない
   const sitemapUrls = [...index.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1] ?? '');
   expect(sitemapUrls.length).toBeGreaterThan(0);
 
-  const origin = await siteOrigin(page);
+  const origin = SITE_ORIGIN;
   const locs: string[] = [];
   for (const url of sitemapUrls) {
     const xml = await (await page.request.get(new URL(url).pathname)).text();
     locs.push(...[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1] ?? ''));
   }
   for (const loc of locs) expect(new URL(loc).origin).toBe(origin);
+  // 今は公開する全ページを載せる方針。載せないページを作るときは、ここに除外を書く
   expect(locs.map((loc) => new URL(loc).pathname).sort()).toEqual(pages);
 });
 
@@ -92,14 +88,19 @@ for (const path of pages) {
   test(`メタ情報：${path}`, async ({ page }) => {
     await page.goto(path);
     const meta = await readMeta(page);
-    const origin = await siteOrigin(page);
+    const origin = SITE_ORIGIN;
     const canonical = `${origin}${path}`;
 
+    // 検索結果で大きく省略されない長さ（目安。日本語は全角1文字を1と数える）
     expect(meta.title.length).toBeGreaterThan(0);
-    expect(meta.description?.length ?? 0, 'description が空').toBeGreaterThan(0);
+    expect(meta.title.length, 'title が長すぎる').toBeLessThanOrEqual(50);
+    expect(meta.description?.length ?? 0, 'description が短すぎる').toBeGreaterThanOrEqual(30);
+    expect(meta.description?.length ?? 0, 'description が長すぎる').toBeLessThanOrEqual(160);
+    expect(meta.favicon, 'favicon の指定がない').toBeTruthy();
     expect(meta.robots, 'noindex になっている').toBeNull();
     expect(meta.canonical).toBe(canonical);
 
+    // 今は OGP と title・description を同じ文面にしている（SeoHead.astro）
     expect(meta.og['og:title']).toBe(meta.title);
     expect(meta.og['og:description']).toBe(meta.description);
     expect(meta.og['og:url']).toBe(canonical);
