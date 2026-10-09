@@ -8,7 +8,15 @@ import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   {
-    ignores: ['dist/', '.astro/', 'node_modules/', 'infra/cdk.out/', 'sampleimages/'],
+    ignores: [
+      'dist/',
+      '.astro/',
+      'test-results/',
+      'playwright-report/',
+      'node_modules/',
+      'infra/cdk.out/',
+      'sampleimages/',
+    ],
   },
   js.configs.recommended,
   tseslint.configs.strict,
