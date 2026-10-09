@@ -1,30 +1,27 @@
 # 進捗
 
-セッションの開始時に読む。各フェーズの終わりに更新してコミットする。
+セッションの開始時に読む。各フェーズ・各作業の終わりに更新してコミットする。
 方針は [decisions.md](decisions.md)、設計は [design.md](design.md) を参照。
 
 ## 現在地
 
-- **Phase 9（README・運用手順）完了。全フェーズの実装が終わった**
-  - PR：`phase-9-docs` → `main`（オーナーがマージする）
-  - 成果：`README.md`、`docs/operations.md`、このサイトの Works の本文（`/works/higuma-lab-web/`）、ブログ1本目の下書き（`src/content/blog/building-this-site.md`、`draft: true`）
-  - content-reviewer：重大0・要修正4（すべて修正）・提案6（反映）
-- **次の作業：公開に向けたオーナーの作業**（下の「オーナー側の未完了作業」と `docs/operations.md` 9章のチェックリスト）
-  - Claude Code に頼める作業：TODO の解消（情報をもらって反映）、記事の仕上げ、1本目の公開時の RSS 追加（D-034）、公開前の site-auditor・content-reviewer の点検
-- Phase 8 で見送った提案（オーナーの判断待ち）：Dependabot、OIDC の sub に ref を含める、解析ありのビルドで E2E、CDK の推奨 feature flags
-- インフラのコマンド：`cd infra` で `npm test`・`npm run check`・`npm run synth`（AWS に接続しない。値は `infra/.env` か環境変数）
-- 実環境の作業（AWS アカウント・DNS・GitHub の設定）は行わない。オーナーが `infra/README.md` の手順で行う
-- OGP 画像などを作り直すとき：`node scripts/ogp/build.mjs`（D-034）
-- 画面に点線枠の「TODO:」が出ている箇所は、オーナーの確認・情報待ち（下の「オーナー側の未完了作業」）。公開前にすべて解消する
-- ローカル確認：`.claude/launch.json` の `astro-preview`（`npm run build` の後に使う）
+- Phase 1〜9 はすべて完了（2026-10-09）。今は公開に向けて、作業を1件ずつ片付ける段階（D-037。進め方は CLAUDE.md「Phase 9 の後の作業」）
+- 進行中：プロフィールの経歴の記載の見直し（`content/profile-wording`）
 
-## 素材の場所
+## 作業の一覧
 
-- ロゴ：`src/assets/brand/`（生成スクリプトは `scripts/brand/`、SNS 用 PNG は `docs/content/brand/`）
-- マスコット：`src/assets/mascot/`
-- NoteFlip のストア用ページ：`src/content/apps/noteflip/`（原本。更新方法は `docs/content/apps/noteflip/README.md`）
+作業が終わったら、ここを更新してコミットする。大きさ（小・中・大）は CLAUDE.md の表による。
 
-## オーナー側の未完了作業
+### Claude Code の作業
+
+- [x] プロフィールの経歴の記載を見直す（小、D-037）
+- [ ] 画面の「TODO:」の解消（小。情報が届いたものから。下の「オーナーの作業」の未確定の情報）
+- [ ] 構築記録の記事の仕上げの手伝いと、1本目の公開時の RSS の追加（中、D-016・D-034）
+- [ ] 公開前の点検：site-auditor・content-reviewer（`docs/operations.md` 9章）
+- [ ] Phase 8 で見送った提案（オーナーの判断待ち）：Dependabot、OIDC の sub に ref を含める、解析ありのビルドで E2E、CDK の推奨 feature flags
+- [ ] Works の種別で絞り込むページ（中。Works が 6〜8 件以上になったら。decisions.md の TODO）
+
+### オーナーの作業
 
 - [ ] ドメイン `higuma-lab.jp` の取得（Whois 情報公開代行の確認）
 - [ ] AWS アカウントの作成、ルートユーザーの MFA、AWS の構築（`infra/README.md` の手順0〜7）
@@ -39,8 +36,22 @@
 - [ ] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）
 - [ ] AI のクローラーを robots.txt で許可するか（今は全許可）
 - [ ] 未確定の情報：活動地域・経験年数、相談の費用・料金の目安、打ち合わせの方法、対応地域、対応できるアプリのプラットフォーム、掲載するスキル
-- [ ] プロフィールの「医療機器向け」等の記載が、勤務先の規程・守秘の範囲で問題ないかの確認
+- [ ] プロフィールの経歴の記載が、勤務先の規程・守秘の範囲で問題ないかの確認
 - [ ] NoteFlip のページ：数値（`src/content/works/noteflip.md`）を ADR と突き合わせる。ストア用ページの「販売しています」（未公開との整合）、無料試用 7 日、「数日以内にお返事」、「インターネットに接続しません」と Store・Windows の通信の書き分け、最終更新日
+
+## メモ
+
+- インフラのコマンド：`cd infra` で `npm test`・`npm run check`・`npm run synth`（AWS に接続しない。値は `infra/.env` か環境変数）
+- 実環境の作業（AWS アカウント・DNS・GitHub の設定）は行わない。オーナーが `infra/README.md` の手順で行う
+- OGP 画像などを作り直すとき：`node scripts/ogp/build.mjs`（D-034）
+- 画面に点線枠の「TODO:」が出ている箇所は、オーナーの確認・情報待ち。公開前にすべて解消する
+- ローカル確認：`.claude/launch.json` の `astro-preview`（`npm run build` の後に使う）
+
+## 素材の場所
+
+- ロゴ：`src/assets/brand/`（生成スクリプトは `scripts/brand/`、SNS 用 PNG は `docs/content/brand/`）
+- マスコット：`src/assets/mascot/`
+- NoteFlip のストア用ページ：`src/content/apps/noteflip/`（原本。更新方法は `docs/content/apps/noteflip/README.md`）
 
 ## 完了したフェーズ
 
