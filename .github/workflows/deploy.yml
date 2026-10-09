@@ -1,0 +1,103 @@
+# main への push で本番にデプロイする（docs/design.md 7.4）。CI と同じ検証を通ってから実行する
+#
+# 使う GitHub の Variables（リポジトリの Settings → Secrets and variables → Actions → Variables。秘密情報ではない）
+#   AWS_DEPLOY_ROLE_ARN             GithubOidcStack の出力 DeployRoleArn
+#   AWS_S3_BUCKET                   SiteStack の出力 BucketName
+#   AWS_CLOUDFRONT_DISTRIBUTION_ID  SiteStack の出力 DistributionId
+#   PUBLIC_SITE_URL                 正規 URL（任意。未設定なら https://higuma-lab.jp）
+#   PUBLIC_CF_ANALYTICS_TOKEN       Cloudflare Web Analytics のトークン（任意。D-006）
+# AWS_DEPLOY_ROLE_ARN が未設定の間（AWS の構築前）は、デプロイのジョブを飛ばす
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# デプロイは同時に走らせず、途中で止めない
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    name: Deploy to S3 and CloudFront
+    needs: verify
+    if: github.ref == 'refs/heads/main' && vars.AWS_DEPLOY_ROLE_ARN != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # OIDC の信頼条件（repo:<owner/repo>:environment:production）と一致させる
+    environment:
+      name: production
+      url: ${{ vars.PUBLIC_SITE_URL || 'https://higuma-lab.jp' }}
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      AWS_REGION: ap-northeast-1
+      BUCKET: ${{ vars.AWS_S3_BUCKET }}
+      DISTRIBUTION_ID: ${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
+    steps:
+      - name: Check variables
+        run: |
+          missing=0
+          for name in BUCKET DISTRIBUTION_ID; do
+            if [ -z "${!name}" ]; then
+              echo "::error::GitHub の Variables が未設定です（$name）"
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}
+
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: github-deploy-${{ github.run_id }}
+
+      # キャッシュの長さをファイル種別で分ける（docs/design.md 7.3）
+      # - _astro/（ファイル名にハッシュが入る）：1年・immutable
+      # - それ以外（HTML 等）：ブラウザは毎回確認し、CloudFront は1日保持（デプロイ時に無効化する）
+      # 新しいアセットを先に上げてから HTML を置き換え、古いアセットは最後に消す
+      - name: Upload hashed assets
+        run: >-
+          aws s3 sync dist/_astro "s3://$BUCKET/_astro"
+          --cache-control "public, max-age=31536000, immutable" --no-progress
+
+      - name: Upload pages and other files
+        run: >-
+          aws s3 sync dist "s3://$BUCKET" --exclude "_astro/*" --delete
+          --cache-control "public, max-age=0, s-maxage=86400, must-revalidate" --no-progress
+
+      - name: Invalidate CloudFront cache
+        run: >-
+          aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION_ID" --paths "/*"
+          --query 'Invalidation.Id' --output text
+
+      - name: Remove old hashed assets
+        run: >-
+          aws s3 sync dist/_astro "s3://$BUCKET/_astro" --delete
+          --cache-control "public, max-age=31536000, immutable" --no-progress
