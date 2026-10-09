@@ -110,3 +110,4 @@
   - CloudFront のキャッシュ無効化の完了を待たずに古い CSS・JS を消していた → 完了を待つようにした。
   - 方針（D-036）の記録漏れ、メール用レコードの手順の不足 → 追記した。
   - 提案のうち、デプロイ用ロールから不要な `s3:GetObject` を外し、証明書を作り直すときの手順、ネームサーバー切り替えの注意（.jp の NS のキャッシュ、DNSSEC）を手順書に加えた。
+- 問題：PR の CI で、インフラの `npm ci` が「lock ファイルと package.json が一致しない」で失敗した。`infra/package-lock.json` に、Linux・macOS 用のネイティブのバイナリ（vitest が使う lightningcss・rolldown）の記載がなかった。Windows で `npm i` を2回に分けて実行して lock を作ったため、他の OS 用の任意の依存が落ちた（npm の既知の不具合）→ `node_modules` と lock を消して1回の `npm install` で作り直した。ローカルでは気づけず、CI を Linux で動かして初めて分かった。
