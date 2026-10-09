@@ -5,12 +5,14 @@
 
 ## 現在地
 
-- **次の作業：Phase 7（テスト）★**
-  - Vitest（`src/lib/` の関数）、Playwright（Chromium のみ）＋ `@axe-core/playwright` で全ページをモバイル・デスクトップで巡回、リンク切れ（自作スクリプトか linkinator を選ぶ）、SEO メタ情報の検証、キーボード操作（D-018）
-  - Playwright はブラウザのダウンロード（数百MB）がある
-  - あわせて対応：「メールで相談する」ボタン（CtaBanner）とお問い合わせページに「メールアプリが開かない場合は info@higuma-lab.jp へ」と書き添える（JS は使わない。2026-10-09 オーナー了承）
-  - 終わったら `site-auditor` で点検し、**オーナーの承認を得てから** Phase 8 へ。ブランチは `phase-7-test`（D-033）
-- Phase 6 の PR：`phase-6-seo` → `main`（オーナーがマージする）
+- **Phase 7（テスト）★ 完了、オーナーの承認待ち**
+  - PR：`phase-7-test` → `main`（オーナーがマージする）
+  - テスト：`npm test`（Vitest）、`npm run test:e2e`（Playwright＋axe）、`npm run test:links`（リンク切れ）。後の2つは自動でビルドしてから実行する（D-035）
+  - 手動で残したもの：外部リンクの到達、Lighthouse、WebKit（iOS Safari）。公開前に確認する
+- **次の作業：Phase 8（AWS デプロイ用設定）★**
+  - CDK（infra/）、CloudFront Function、GitHub Actions。CI で lint・check・test・test:links・test:e2e を実行し、通過をマージの条件にする（D-033）
+  - 終わったら `infra-reviewer` で点検し、オーナーの承認を得る。ブランチは `phase-8-infra`
+  - 実環境の作業（AWS アカウント・DNS）は行わない
 - OGP 画像などを作り直すとき：`node scripts/ogp/build.mjs`（D-034）
 - 画面に点線枠の「TODO:」が出ている箇所は、オーナーの確認・情報待ち（下の「オーナー側の未完了作業」）。公開前にすべて解消する
 - ローカル確認：`.claude/launch.json` の `astro-preview`（`npm run build` の後に使う）
@@ -47,3 +49,4 @@
 | Phase 4 | 2026-10-08 | Astro 7 の初期化、Lint・Formatter、トークン CSS、共通レイアウト・部品、コンテンツのスキーマ（D-031、D-032） |
 | Phase 5 | 2026-10-09 | 全ページ・データ・NoteFlip のアプリ用ページ、content-reviewer の指摘を反映（D-033） |
 | Phase 6 | 2026-10-09 | サイトマップ・robots.txt・構造化データ・OGP 画像・CSS の1ファイル化、site-auditor の指摘を反映（D-034） |
+| Phase 7 | 2026-10-09 | Vitest 24件・E2E 79件（axe 含む）・リンク切れチェック、メールの案内文、site-auditor の指摘を反映（D-035） |

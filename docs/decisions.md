@@ -249,6 +249,15 @@ design.md 2.2 の構成で導入した。バージョン固有の判断は以下
 - **サイトマップ**には 404 を含めない。hreflang はページの `<link>` で示しているため、サイトマップの `xhtml:link` は付けない。
 - **noindex のページ**（404）は、canonical・og:url・構造化データを出さない。
 
+### D-035 テストの実装方針（2026-10-09、Phase 7）
+
+- **リンク切れ**は自作スクリプト（`scripts/check-links.mjs`）にした。linkinator は使わない。依存を増やさず、ページ内リンク（`#id`）の移動先の有無や、本番 URL で書かれた canonical・hreflang・og:image も `dist/` の実ファイルと突き合わせられるため。外部リンクは対象外で、手動で確認する。
+- **E2E の対象ページ**は `dist/` の `index.html` から自動で求める。ページを足してもテストの修正は要らない。
+- **スマホの幅**は 360px（Pixel 7 のエミュレーションで幅だけ狭める）。375px 以上の機種もこれで代表させる。
+- **axe** は WCAG 2.2 AA までのルールに加え、best-practice（見出しの階層、ランドマーク等）も違反0を条件にする。
+- **E2E 用のサーバー**は astro preview を 4322 番、`--ignore-lock` で起動する（Astro 7 の preview はポートが違っても2つ目の起動を拒むため、開発用の preview と並べて動かせるようにする）。
+- `npm run test:e2e` と `npm run test:links` は、実行前にビルドする（古い `dist/` を検査しないため）。
+
 ## TODO（未確定）
 
 - [ ] 料金の目安金額（D-010）
