@@ -9,7 +9,9 @@ dist/
 infra/cdk.out/
 infra/**/*.js
 infra/**/*.d.ts
-!infra/jest.config.js
+!infra/functions/*.js
+# アカウント ID 等が書き込まれるため（このアプリは lookup を使わない）
+infra/cdk.context.json
 
 # environment
 .env
