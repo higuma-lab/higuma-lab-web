@@ -15,6 +15,7 @@ export default defineConfig(
       'playwright-report/',
       'node_modules/',
       'infra/cdk.out/',
+      'infra/node_modules/',
       'sampleimages/',
     ],
   },
