@@ -232,7 +232,7 @@ Cookie を使わない無料の解析（D-006）。DNS を Cloudflare に移す�
 4. Actions → Deploy → **Run workflow** で再デプロイする。ページの HTML に `static.cloudflareinsights.com` のスクリプトが入れば完了。
 5. 翌日以降、Cloudflare の画面で閲覧数を見られる。
 
-- プライバシーポリシーには利用を記載済み（`src/content/pages/privacy.md`）。解析をやめるときは、Variable を消して再デプロイし、ポリシーの記載も直す。
+- プライバシーポリシー（`src/content/pages/privacy.md`）には、解析の利用を記載してある。サイトの公開時に解析を有効にしない場合は、記載と実態がずれるため、公開までにトークンを登録するか、ポリシーの記載を外す。解析をやめるときも、Variable を消して再デプロイし、ポリシーの記載を直す。
 - CSP で許可しているのは `static.cloudflareinsights.com`（スクリプト）と `cloudflareinsights.com`（送信先）だけ。他の解析・広告・埋め込み（YouTube 等）を追加するときは、`infra/lib/site-stack.ts` の CSP の変更が必要。
 
 ---
@@ -272,11 +272,12 @@ Cookie を使わない無料の解析（D-006）。DNS を Cloudflare に移す�
 
 ### 内容
 
-- [ ] 画面に「TODO:」が残っていない（[2.6](#26-未確定の箇所todo)）
+- [ ] 画面に「TODO:」が残っていない。front matter のコメントの TODO は画面に出ないため、`grep -rn "TODO" src` でも確かめる（[2.6](#26-未確定の箇所todo)）
 - [ ] 仮の文面（サービス・特徴・相談の流れ・FAQ・About）をオーナーが確認した
-- [ ] プロフィールの記載が、勤務先の規程・守秘義務の範囲で問題ない
+- [ ] プロフィールの記載が、勤務先の規程・守秘義務の範囲で問題ない（`src/data/profile.ts` に加えて、公開される `docs/`（progress.md 等）の記載も確かめる）
 - [ ] NoteFlip のページの数値・記載を ADR と突き合わせた
 - [ ] `content-reviewer` で点検した
+- [ ] 構築記録の記事の数値（件数・ページ数・費用）を公開時点のものにした
 
 ### 表示・品質
 
@@ -291,7 +292,7 @@ Cookie を使わない無料の解析（D-006）。DNS を Cloudflare に移す�
 - [ ] GitHub の environment `production` が `main` だけに限られている（D-036）
 - [ ] `info@`・`support@` でメールを送受信できる
 - [ ] Search Console に登録し、サイトマップを送信した
-- [ ] Cloudflare Web Analytics のトークンを登録した（使う場合）
+- [ ] Cloudflare Web Analytics のトークンを登録した。使わない場合は、プライバシーポリシーの解析の記載を外した
 
 ### リポジトリの公開（D-007）
 

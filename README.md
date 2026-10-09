@@ -7,17 +7,17 @@
 
 ## 技術構成
 
-| 用途       | 使っているもの                                                                           |
-| ---------- | ---------------------------------------------------------------------------------------- |
-| サイト     | [Astro](https://astro.build/) 7（静的サイト生成）、TypeScript（strict）                  |
-| スタイル   | 素の CSS（デザイントークンを CSS 変数で定義）。Web フォントは使わない                    |
-| コンテンツ | Markdown・YAML（Astro の Content Collections でスキーマを検証）                          |
-| 品質       | ESLint（TypeScript・Astro・アクセシビリティ）、Prettier、`astro check`                   |
-| テスト     | Vitest（ユニット）、Playwright＋axe（E2E・アクセシビリティ）、内部リンクの確認スクリプト |
-| 配信       | Amazon S3（非公開）＋ CloudFront、Route 53、ACM                                          |
-| インフラ   | AWS CDK（TypeScript、`infra/`）                                                          |
-| CI/CD      | GitHub Actions（PR で検証、`main` へのマージで自動デプロイ。AWS には OIDC で接続）       |
-| 解析       | Cloudflare Web Analytics（Cookie 不使用）                                                |
+| 用途       | 使っているもの                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------ |
+| サイト     | [Astro](https://astro.build/) 7（静的サイト生成）、TypeScript（strict）                    |
+| スタイル   | 素の CSS（デザイントークンを CSS 変数で定義）。Web フォントは使わない                      |
+| コンテンツ | Markdown・YAML（Astro の Content Collections でスキーマを検証）                            |
+| 品質       | ESLint（TypeScript・Astro・アクセシビリティ）、Prettier、`astro check`                     |
+| テスト     | Vitest（ユニット）、Playwright＋axe（E2E・アクセシビリティ）、内部リンクの確認スクリプト   |
+| 配信       | Amazon S3（非公開）＋ CloudFront、Route 53、ACM                                            |
+| インフラ   | AWS CDK（TypeScript、`infra/`）                                                            |
+| CI/CD      | GitHub Actions（PR で検証、`main` へのマージで自動デプロイする構成。AWS には OIDC で接続） |
+| 解析       | Cloudflare Web Analytics（Cookie 不使用。トークンを設定したときだけ有効）                  |
 
 クライアント側の JavaScript は、スマートフォンのメニューの開閉と解析のスクリプトだけです。
 
@@ -92,7 +92,7 @@ http://localhost:4321 で開発サーバーが動きます。
 ## 開発の進め方
 
 - `main` に直接コミットせず、ブランチを切って PR で取り込みます。CI（lint・型・テスト・ビルド・リンク切れ・E2E・インフラの合成）の通過がマージの条件です。
-- `main` へのマージで本番に自動デプロイされます。
+- `main` へのマージで本番に自動デプロイする構成です（AWS の環境を構築した後に有効になります。手順は [infra/README.md](infra/README.md)）。
 - このサイトは、設計から実装・テスト・インフラまで、Claude Code（Anthropic の AI コーディングエージェント）と一緒に作っています。作業ルールは [CLAUDE.md](CLAUDE.md)、レビュー用のサブエージェントは `.claude/agents/` にあります。
 
 ## ライセンス
