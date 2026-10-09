@@ -4,6 +4,7 @@
  * 見出しの下の情報（日付・ラベルなど）は "meta" スロット、本文の後は "after" スロットに入れる。
  */
 import PageHeader from '../components/layout/PageHeader.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
 import Prose from '../components/ui/Prose.astro';
 import type { Crumb } from '../lib/breadcrumbs';
 import BaseLayout from './BaseLayout.astro';
@@ -16,12 +17,23 @@ interface Props {
   type?: 'website' | 'article';
   /** 本文の文字サイズ（ブログは 17px） */
   size?: 'body' | 'article';
+  /** ページ固有の構造化データ（ブログ記事の BlogPosting など） */
+  jsonLd?: Record<string, unknown> | undefined;
 }
 
-const { title, description, breadcrumbs, image, type = 'article', size = 'article' } = Astro.props;
+const {
+  title,
+  description,
+  breadcrumbs,
+  image,
+  type = 'article',
+  size = 'article',
+  jsonLd,
+} = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} image={image} type={type}>
+  {jsonLd && <JsonLd slot="head" data={jsonLd} />}
   <article>
     <PageHeader title={title} breadcrumbs={breadcrumbs}>
       <slot name="meta" />

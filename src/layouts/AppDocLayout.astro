@@ -4,10 +4,10 @@
  * サイトのグローバルナビは出さず、簡易ヘッダー・フッターと日英の切り替えだけを置く。
  */
 import type { CollectionEntry } from 'astro:content';
-import favicon from '../assets/brand/favicon.svg';
 import symbol from '../assets/brand/symbol.svg';
 import SkipLink from '../components/layout/SkipLink.astro';
 import Analytics from '../components/seo/Analytics.astro';
+import HeadBase from '../components/seo/HeadBase.astro';
 import SeoHead from '../components/seo/SeoHead.astro';
 import LangSwitch from '../components/ui/LangSwitch.astro';
 import Prose from '../components/ui/Prose.astro';
@@ -39,10 +39,7 @@ const skipLabel = lang === 'ja' ? '本文へスキップ' : 'Skip to content';
 <!doctype html>
 <html lang={lang}>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href={favicon.src} type="image/svg+xml" />
-    <meta name="theme-color" content="#17325b" />
+    <HeadBase />
     <SeoHead
       title={`${title} - ${appName}`}
       description={description}

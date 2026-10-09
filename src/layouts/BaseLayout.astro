@@ -1,30 +1,32 @@
 ---
 /** 全ページ共通のレイアウト（docs/design.md 12.4）。アプリ用ページは AppDocLayout を使う */
-import favicon from '../assets/brand/favicon.svg';
 import Footer from '../components/layout/Footer.astro';
 import Header from '../components/layout/Header.astro';
 import SkipLink from '../components/layout/SkipLink.astro';
 import Analytics from '../components/seo/Analytics.astro';
+import HeadBase from '../components/seo/HeadBase.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
 import SeoHead from '../components/seo/SeoHead.astro';
 import { SITE } from '../config/site';
+import { organizationJsonLd, websiteJsonLd } from '../lib/structured-data';
 import '../styles/global.css';
 
 type SeoProps = Parameters<typeof SeoHead>[0];
 
 type Props = Omit<SeoProps, 'lang' | 'alternates'>;
+
+const site = Astro.site ?? new URL('https://higuma-lab.jp');
 ---
 
 <!doctype html>
 <html lang={SITE.lang}>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href={favicon.src} type="image/svg+xml" />
-    <meta name="theme-color" content="#17325b" />
+    <HeadBase />
     <SeoHead {...Astro.props} />
     <noscript>
       <link rel="stylesheet" href="/noscript.css" />
     </noscript>
+    {!Astro.props.noindex && <JsonLd data={[organizationJsonLd(site), websiteJsonLd(site)]} />}
     <slot name="head" />
     <Analytics />
   </head>

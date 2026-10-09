@@ -12,7 +12,7 @@ export function buildTitle(pageTitle?: string, lang: SeoLang = 'ja'): string {
   if (!pageTitle) {
     return `${SITE.fullName}| ${SITE.tagline.replace(/。$/, '')}`;
   }
-  return `${pageTitle} | ${siteNameFor(lang)}`;
+  return `${pageTitle} | ${lang === 'ja' ? SITE.name : SITE.nameEn}`;
 }
 
 /** og:site_name などに使う屋号 */
@@ -24,3 +24,14 @@ export function siteNameFor(lang: SeoLang): string {
 export function absoluteUrl(path: string, site: URL | string): string {
   return new URL(path, site).href;
 }
+
+/** OGP 共通画像（scripts/ogp/build.mjs で生成） */
+export const DEFAULT_OG_IMAGE = {
+  path: '/og/default.png',
+  width: 1200,
+  height: 630,
+  alt: {
+    ja: 'ひぐま開発室（HIGUMA LAB）のロゴとマスコット、キャッチコピー「小さな困りごとから、開発まで。」',
+    en: 'HIGUMA LAB logo and bear mascot',
+  },
+} as const;

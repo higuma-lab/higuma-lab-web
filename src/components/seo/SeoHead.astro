@@ -3,7 +3,13 @@
  * title・description・canonical・OGP・Twitter Card を一元生成する（docs/design.md 6.1）。
  */
 import { SITE } from '../../config/site';
-import { absoluteUrl, buildTitle, siteNameFor, type SeoLang } from '../../lib/seo';
+import {
+  DEFAULT_OG_IMAGE,
+  absoluteUrl,
+  buildTitle,
+  siteNameFor,
+  type SeoLang,
+} from '../../lib/seo';
 
 export interface Alternate {
   hreflang: string;
@@ -14,7 +20,7 @@ interface Props {
   /** ページ名。省略するとトップページの形式になる */
   title?: string | undefined;
   description?: string | undefined;
-  /** OGP 画像のパスまたは URL。TODO: Phase 6 で共通画像（12.8）を既定値にする */
+  /** OGP 画像のパスまたは URL。省略すると共通画像（docs/design.md 12.8） */
   image?: string | undefined;
   type?: 'website' | 'article';
   lang?: SeoLang;
@@ -37,13 +43,13 @@ const site = Astro.site ?? new URL('https://higuma-lab.jp');
 const fullTitle = buildTitle(title, lang);
 const locale = lang === 'ja' ? SITE.locale : 'en_US';
 const canonical = absoluteUrl(Astro.url.pathname, site);
-const imageUrl = image ? absoluteUrl(image, site) : undefined;
+const imageUrl = absoluteUrl(image ?? DEFAULT_OG_IMAGE.path, site);
 ---
 
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={canonical} />
-{noindex && <meta name="robots" content="noindex" />}
+{/* noindex のページ（404 など）は URL が実在しないため、canonical と og:url を出さない */}
+{noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 {alternates.map((alt) => (
   <link rel="alternate" hreflang={alt.hreflang} href={absoluteUrl(alt.href, site)} />
 ))}
@@ -52,7 +58,14 @@ const imageUrl = image ? absoluteUrl(image, site) : undefined;
 <meta property="og:site_name" content={siteNameFor(lang)} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:url" content={canonical} />
+{!noindex && <meta property="og:url" content={canonical} />}
 <meta property="og:locale" content={locale} />
-{imageUrl && <meta property="og:image" content={imageUrl} />}
-<meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+<meta property="og:image" content={imageUrl} />
+{!image && (
+  <>
+    <meta property="og:image:width" content={String(DEFAULT_OG_IMAGE.width)} />
+    <meta property="og:image:height" content={String(DEFAULT_OG_IMAGE.height)} />
+    <meta property="og:image:alt" content={DEFAULT_OG_IMAGE.alt[lang]} />
+  </>
+)}
+<meta name="twitter:card" content="summary_large_image" />
