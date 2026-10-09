@@ -5,14 +5,13 @@
 
 ## 現在地
 
-- **Phase 8（AWS デプロイ用設定）★ 完了、オーナーの承認待ち**
-  - PR：`phase-8-infra` → `main`（オーナーがマージする）。マージしても、AWS を構築して GitHub の Variables を登録するまではデプロイのジョブは飛ばされる
-  - 成果：`infra/`（CDK 4スタック、CloudFront Function、テスト 25 件）、`.github/workflows/ci.yml`・`deploy.yml`、構築手順書 `infra/README.md`（D-036）
-  - infra-reviewer：重大0・要修正3（すべて修正）・提案7（一部反映、残りは下記）
-  - 見送った提案（オーナーの判断待ち）：Dependabot で Actions・npm を自動更新、OIDC の sub に ref を含めるカスタマイズ、本番と同じ設定（解析あり）のビルドを CI で E2E、CDK の推奨 feature flags の設定
-- **次の作業：Phase 9（README・運用手順）**
-  - `README.md`、`docs/operations.md`（記事の追加、デプロイ、DNS 切り替え、メール設定、Search Console、費用アラート）。`infra/README.md` と重複させず参照する
-  - ブログ1本目（構築記録）の下書き（D-016、`docs/content/build-log.md`）
+- **Phase 9（README・運用手順）完了。全フェーズの実装が終わった**
+  - PR：`phase-9-docs` → `main`（オーナーがマージする）
+  - 成果：`README.md`、`docs/operations.md`、このサイトの Works の本文（`/works/higuma-lab-web/`）、ブログ1本目の下書き（`src/content/blog/building-this-site.md`、`draft: true`）
+  - content-reviewer：重大0・要修正4（すべて修正）・提案6（反映）
+- **次の作業：公開に向けたオーナーの作業**（下の「オーナー側の未完了作業」と `docs/operations.md` 9章のチェックリスト）
+  - Claude Code に頼める作業：TODO の解消（情報をもらって反映）、記事の仕上げ、1本目の公開時の RSS 追加（D-034）、公開前の site-auditor・content-reviewer の点検
+- Phase 8 で見送った提案（オーナーの判断待ち）：Dependabot、OIDC の sub に ref を含める、解析ありのビルドで E2E、CDK の推奨 feature flags
 - インフラのコマンド：`cd infra` で `npm test`・`npm run check`・`npm run synth`（AWS に接続しない。値は `infra/.env` か環境変数）
 - 実環境の作業（AWS アカウント・DNS・GitHub の設定）は行わない。オーナーが `infra/README.md` の手順で行う
 - OGP 画像などを作り直すとき：`node scripts/ogp/build.mjs`（D-034）
@@ -33,6 +32,9 @@
 - [ ] Zoho Mail の登録と `support@` の別名作成（Route 53 構築後、D-004・D-025）
 - [ ] NoteFlip リポジトリの更新（指示文は渡し済み、D-024）
 - [ ] 素材の用意（`docs/content/README.md` のチェックリスト）
+- [ ] 構築記録の記事の仕上げ（書き出し・感想・おわり、数値の更新）と公開
+- [ ] リポジトリのライセンスを決める（公開前。README の TODO）
+- [ ] 公開前のチェックリスト（`docs/operations.md` 9章）
 - [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
 - [ ] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）
 - [ ] AI のクローラーを robots.txt で許可するか（今は全許可）
@@ -54,3 +56,4 @@
 | Phase 6 | 2026-10-09 | サイトマップ・robots.txt・構造化データ・OGP 画像・CSS の1ファイル化、site-auditor の指摘を反映（D-034） |
 | Phase 7 | 2026-10-09 | Vitest 24件・E2E 79件（axe 含む）・リンク切れチェック、メールの案内文、site-auditor の指摘を反映（D-035） |
 | Phase 8 | 2026-10-09 | CDK 4スタック・CloudFront Function・CI/デプロイのワークフロー・構築手順書、infra-reviewer の指摘を反映（D-036） |
+| Phase 9 | 2026-10-09 | README・運用手順・Works の本文・構築記録の下書き、content-reviewer の指摘を反映 |
