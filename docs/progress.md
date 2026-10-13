@@ -6,7 +6,7 @@
 ## 現在地
 
 - Phase 1〜9 はすべて完了（2026-10-09）。今は公開に向けて、作業を1件ずつ片付ける段階（D-037。進め方は CLAUDE.md「Phase 9 の後の作業」）
-- 進行中：プロフィールの経歴の記載の見直し（`content/profile-wording`）
+- 進行中：NoteFlip のストア用ページにバックアップ機能の記述を反映（`content/noteflip-backup`）
 
 ## 作業の一覧
 
@@ -15,6 +15,7 @@
 ### Claude Code の作業
 
 - [x] プロフィールの経歴の記載を見直す（小、D-037）
+- [x] NoteFlip のストア用ページにバックアップと復元の記述を反映（小。NoteFlip `6de9ae8` の内容。サポートの FAQ 追加、プライバシーポリシーの1文と最終更新日 2026-10-13）
 - [ ] 画面の「TODO:」の解消（小。情報が届いたものから。下の「オーナーの作業」の未確定の情報）
 - [ ] 構築記録の記事の仕上げの手伝いと、1本目の公開時の RSS の追加（中、D-016・D-034）
 - [ ] 公開前の点検：site-auditor・content-reviewer（`docs/operations.md` 9章）
@@ -37,6 +38,7 @@
 - [ ] AI のクローラーを robots.txt で許可するか（今は全許可）
 - [ ] 未確定の情報：活動地域・経験年数、相談の費用・料金の目安、打ち合わせの方法、対応地域、対応できるアプリのプラットフォーム、掲載するスキル
 - [ ] プロフィールの経歴の記載が、勤務先の規程・守秘の範囲で問題ないかの確認
+- [ ] NoteFlip：2台目の PC に同じ Microsoft アカウントで入れ、購入済みとして起動するかを実機で確認（9-5 の購入テストのとき）。確認できたら、サポートと Works の「買い直し不要」の記述にある TODO コメントを消す
 - [ ] NoteFlip のページ：数値（`src/content/works/noteflip.md`）を ADR と突き合わせる。ストア用ページの「販売しています」（未公開との整合）、無料試用 7 日、「数日以内にお返事」、「インターネットに接続しません」と Store・Windows の通信の書き分け、最終更新日
 
 ## メモ
@@ -44,6 +46,7 @@
 - インフラのコマンド：`cd infra` で `npm test`・`npm run check`・`npm run synth`（AWS に接続しない。値は `infra/.env` か環境変数）
 - 実環境の作業（AWS アカウント・DNS・GitHub の設定）は行わない。オーナーが `infra/README.md` の手順で行う
 - OGP 画像などを作り直すとき：`node scripts/ogp/build.mjs`（D-034）
+- Markdown（`src/content/`）の HTML コメント（`<!-- -->`）は公開ページの HTML にそのまま出る。オーナー向けのメモや TODO は書かず、この作業の一覧で管理する（front matter の YAML コメントは出ない）
 - 画面に点線枠の「TODO:」が出ている箇所は、オーナーの確認・情報待ち。公開前にすべて解消する
 - ローカル確認：`.claude/launch.json` の `astro-preview`（`npm run build` の後に使う）
 
