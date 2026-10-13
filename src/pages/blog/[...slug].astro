@@ -7,6 +7,7 @@ import { render, type CollectionEntry } from 'astro:content';
 import PageHeader from '../../components/layout/PageHeader.astro';
 import Section from '../../components/layout/Section.astro';
 import PostList from '../../components/sections/PostList.astro';
+import Todo from '../../components/ui/Todo.astro';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { formatDate, isoDate } from '../../lib/date';
@@ -37,6 +38,9 @@ const site = Astro.site ?? new URL('https://higuma-lab.jp');
     image={props.post.data.cover?.src}
     jsonLd={blogPostingJsonLd(props.post, postPath(props.post), site)}
   >
+    {props.post.data.draft && (
+      <Todo>下書き（開発サーバーでだけ表示しています。公開されません）</Todo>
+    )}
     <p slot="meta" class="dates">
       <span>
         公開日：
