@@ -1,6 +1,6 @@
 ---
 # 下書き（D-016・D-038）。オーナーのインタビューの答えと docs/content/build-log.md の事実から Claude Code が書いた。最終的な言い回しはオーナーが直す。
-# 削る前の長い版は docs/content/blog/building-this-site-long.md（2本目以降の材料）
+# 書き直す前の版は docs/content/blog/building-this-site-long.md（2本目以降の材料）
 # TODO: 公開するときに publishedAt を公開日にし、draft を false にする。1本目の公開時に RSS も追加する（D-034）
 # TODO: 公開時に期間・数値を最新にし、AWS の構築で分かったこと（かかった時間、困ったこと、最初の請求額）を「何を作ったか」に加える
 title: このサイトの構築記録：Claude Code と一緒に作ってみた
