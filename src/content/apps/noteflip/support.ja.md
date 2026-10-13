@@ -46,6 +46,8 @@ description: NoteFlip（Windows 向け楽譜 PDF ビューアー）のお問い�
 
 <h3 id="backup">ライブラリをバックアップするには？新しい PC に移すには？</h3>
 
+Microsoft Store で購入したアプリは、Microsoft アカウントに紐付きます。購入後に新しい PC へ移すときは、購入に使ったのと同じアカウントで Microsoft Store から NoteFlip を入れれば、買い直す必要はありません。入れられる台数などの条件は [Microsoft のヘルプ](https://support.microsoft.com/ja-jp/accounts-billing/manage/manage-devices-used-with-your-microsoft-account)をご覧ください。楽譜と書き込みは、次の手順で移します。
+
 1. ライブラリの「…」メニュー →「**ライブラリをバックアップ...**」で、保存先（USB メモリや OneDrive など）を選びます。すべての楽譜が書き込みごと、フォルダ・セットリストとともに 1 つの `.zip` ファイルに入ります。
 2. 新しい PC で（または NoteFlip を入れ直した後に）、ライブラリの「…」メニュー →「**バックアップから復元...**」でそのファイルを選びます。始める前に、バックアップの中身と、追加しない楽譜が表示されます。
 

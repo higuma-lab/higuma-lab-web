@@ -38,6 +38,7 @@
 - [ ] AI のクローラーを robots.txt で許可するか（今は全許可）
 - [ ] 未確定の情報：活動地域・経験年数、相談の費用・料金の目安、打ち合わせの方法、対応地域、対応できるアプリのプラットフォーム、掲載するスキル
 - [ ] プロフィールの経歴の記載が、勤務先の規程・守秘の範囲で問題ないかの確認
+- [ ] NoteFlip：2台目の PC に同じ Microsoft アカウントで入れ、購入済みとして起動するかを実機で確認（9-5 の購入テストのとき）。確認できたら、サポートと Works の「買い直し不要」の記述にある TODO コメントを消す
 - [ ] NoteFlip のページ：数値（`src/content/works/noteflip.md`）を ADR と突き合わせる。ストア用ページの「販売しています」（未公開との整合）、無料試用 7 日、「数日以内にお返事」、「インターネットに接続しません」と Store・Windows の通信の書き分け、最終更新日
 
 ## メモ
@@ -45,6 +46,7 @@
 - インフラのコマンド：`cd infra` で `npm test`・`npm run check`・`npm run synth`（AWS に接続しない。値は `infra/.env` か環境変数）
 - 実環境の作業（AWS アカウント・DNS・GitHub の設定）は行わない。オーナーが `infra/README.md` の手順で行う
 - OGP 画像などを作り直すとき：`node scripts/ogp/build.mjs`（D-034）
+- Markdown（`src/content/`）の HTML コメント（`<!-- -->`）は公開ページの HTML にそのまま出る。オーナー向けのメモや TODO は書かず、この作業の一覧で管理する（front matter の YAML コメントは出ない）
 - 画面に点線枠の「TODO:」が出ている箇所は、オーナーの確認・情報待ち。公開前にすべて解消する
 - ローカル確認：`.claude/launch.json` の `astro-preview`（`npm run build` の後に使う）
 
