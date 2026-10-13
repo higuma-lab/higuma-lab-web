@@ -24,7 +24,7 @@ We usually reply within a few days.
 
 ### How does the free trial work?
 
-You can use every feature free for 7 days. After the trial ends, NoteFlip does not start until you buy it from the Microsoft Store. Your scores and handwriting stay on your PC and are there as before once you buy. If you uninstall the app during the trial, they are deleted.
+You can use every feature free for 7 days. After the trial ends, NoteFlip does not start until you buy it from the Microsoft Store. Your scores and handwriting stay on your PC and are there as before once you buy. If you uninstall the app during the trial, they are deleted; to keep them, [back up your library](#backup) before the trial ends.
 
 NoteFlip never stops while it is running because of the trial or the license, and it does not need an internet connection to start.
 
@@ -42,7 +42,18 @@ No. NoteFlip keeps a copy of each PDF in its own storage. Moving or deleting the
 
 ### What happens to my scores if I uninstall NoteFlip?
 
-Windows deletes the app's data, including the imported scores, handwriting, folders and set lists. To keep a score with its handwriting, export it as a PDF first (**Export PDF...** in the "…" menu of the score, or on the score in the library).
+Windows deletes the app's data, including the imported scores, handwriting, folders and set lists. [Back up your library](#backup) first; you can restore it after you install NoteFlip again. To share or print a single score with its handwriting, export it as a PDF (**Export PDF...** in the "…" menu of the score, or on the score in the library).
+
+<h3 id="backup">How do I back up my library or move it to a new PC?</h3>
+
+1. In the library, open the "…" menu and select **Back up library...**. Choose where to save the file (for example a USB drive or OneDrive). Every score, with its handwriting, and your folders and set lists go into one `.zip` file.
+2. On the new PC (or after installing NoteFlip again), open the "…" menu in the library and select **Restore from backup...**, then choose the file. Before it starts, NoteFlip shows what is in the backup and which scores it will not add.
+
+A restore only adds; it never replaces or removes anything. A score that is already in your library from this backup (for example from an earlier restore) is left as it is. If you imported the same PDF on the new PC before restoring, both copies are kept, and you can delete the one you do not need. If you cancel a restore, the scores restored so far stay, and restoring the same file again adds the rest.
+
+Settings are not in the backup: set your page turn keys, pencil and highlighter colors and widths, and language again on the new PC.
+
+You do not need to unpack the backup file. If you ever cannot use NoteFlip, you can open it in File Explorer: each score's PDF is `library\<id>\source.pdf` (without the handwriting), and `fileName` in `entry.json` in the same folder is its name, as explained in `README.txt` inside the file.
 
 ### How do I print a score with my handwriting?
 

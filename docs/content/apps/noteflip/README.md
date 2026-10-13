@@ -4,6 +4,7 @@ NoteFlip（Windows 向け楽譜 PDF ビューアー）の Microsoft Store 用ペ
 
 - 取り込み元：`higuma-lab/NoteFlip` の `docs/store/site/`（コミット `1a16e11`、2026-10-08 時点）
 - **Phase 5 でサイトのコンテンツに移した。原本は `src/content/apps/noteflip/`**（Jekyll の変数はサイトの設定値に置き換え済み。取り込み時の原稿は git の履歴にある）
+- 2026-10-13：NoteFlip `6de9ae8`（バックアップと復元、F-6f）の変更を反映。Jekyll の見出し ID の記法 `{#backup}` は Astro の Markdown では使えないため、生の `<h3 id="backup">` にした
 
 | ファイル | 内容 | URL |
 |---|---|---|

@@ -5,7 +5,7 @@ doc: privacy
 lang: en
 title: Privacy Policy
 description: Privacy policy of NoteFlip, a score PDF viewer for Windows. The app does not collect, send or share any personal information.
-updatedAt: 2026-10-07
+updatedAt: 2026-10-13
 ---
 
 This policy explains how NoteFlip (the "app"), published by HIGUMA LAB, handles your information.
@@ -24,7 +24,7 @@ The app keeps the following in its own storage folder on your PC (the app's loca
 - **Cache**: thumbnails of first pages and an index of your library, to start faster.
 - **A diagnostic log** (up to about 5 MB, the oldest part is removed automatically). It records what the app did and any errors, so that problems can be investigated. It does **not** contain the names of your scores, files, folders or set lists, or your search words; scores are recorded only by a random ID, and folder paths are masked.
 
-None of this is sent anywhere by the app. When you uninstall NoteFlip, Windows deletes all of it. PDF files you export are saved where you choose and are not deleted.
+None of this is sent anywhere by the app. When you uninstall NoteFlip, Windows deletes all of it. PDF files you export and library backups you make are saved where you choose and are not deleted.
 
 ## Sharing the log with us
 
