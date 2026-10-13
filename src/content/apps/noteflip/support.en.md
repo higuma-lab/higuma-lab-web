@@ -49,11 +49,11 @@ Windows deletes the app's data, including the imported scores, handwriting, fold
 1. In the library, open the "…" menu and select **Back up library...**. Choose where to save the file (for example a USB drive or OneDrive). Every score, with its handwriting, and your folders and set lists go into one `.zip` file.
 2. On the new PC (or after installing NoteFlip again), open the "…" menu in the library and select **Restore from backup...**, then choose the file. Before it starts, NoteFlip shows what is in the backup and which scores it will not add.
 
-A restore only adds; it never replaces or removes anything. A score that is already in your library from this backup (for example from an earlier restore) is left as it is. If you imported the same PDF on the new PC before restoring, both copies are kept, and you can delete the one you do not need. If you cancel a restore, the scores restored so far stay, and restoring the same file again adds the rest.
+A restore only adds; it never replaces or removes anything. A score that is already in your library from this backup (for example from an earlier restore) is not added again; the one in your library is left as it is. If you imported the same PDF on the new PC before restoring, both copies are kept, and you can delete the one you do not need. If you cancel a restore, the scores restored so far stay, and restoring the same file again adds the rest.
 
 Settings are not in the backup: set your page turn keys, pencil and highlighter colors and widths, and language again on the new PC.
 
-You do not need to unpack the backup file. If you ever cannot use NoteFlip, you can open it in File Explorer: each score's PDF is `library\<id>\source.pdf` (without the handwriting), and `fileName` in `entry.json` in the same folder is its name, as explained in `README.txt` inside the file.
+You do not need to unpack the backup file. If you ever cannot use NoteFlip, you can open it in File Explorer: each score's PDF is `library\<id>\source.pdf` (this PDF does not include the handwriting; restoring the backup in NoteFlip brings the handwriting back), and `fileName` in `entry.json` in the same folder is its name, as explained in `README.txt` inside the file.
 
 ### How do I print a score with my handwriting?
 
