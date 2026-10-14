@@ -20,6 +20,35 @@ export const PROFILE = {
     'ソフトウェアのテストと、その自動化',
     '開発チームでの設計・開発',
   ],
-  /** TODO: 掲載するスキルをオーナーが確認する（TypeScript・Astro・AWS はこのサイトで使用） */
-  skills: ['C/C++', 'C#', 'Python', 'TypeScript', 'Astro', 'AWS'],
+  /**
+   * 主な技術（分類ごと）。実際に使ったことがあるものだけを載せる。
+   * 少し触っただけのもの、勤務先を推測させる業界特有の規格・ツールは載せない（D-037・D-041）
+   */
+  skillGroups: [
+    { label: 'プログラミング言語', skills: ['C/C++', 'C#', 'Python', 'TypeScript', 'HTML/CSS'] },
+    {
+      label: 'Windows アプリ',
+      skills: ['.NET', 'WPF', 'WinForms', 'UWP / XAML', 'MSIX・Microsoft Store'],
+    },
+    { label: 'Web', skills: ['Astro', 'Web API'] },
+    { label: '通信・制御', skills: ['TCP/IP', 'HID', 'ZeroMQ'] },
+    {
+      label: 'テスト・CI/CD',
+      skills: [
+        'テストの自動化',
+        'Azure DevOps',
+        'GitHub Actions',
+        'Gitea',
+        'NUnit',
+        'MSTest',
+        'Playwright',
+        'Vitest',
+      ],
+    },
+    {
+      label: 'クラウド・サーバー',
+      skills: ['AWS（S3・CloudFront・Route 53）', 'AWS CDK', 'Linux'],
+    },
+    { label: 'AI', skills: ['Claude Code', 'ChatGPT', 'Devin'] },
+  ],
 } as const;
