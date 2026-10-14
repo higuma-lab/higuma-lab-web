@@ -38,8 +38,12 @@
 - [ ] リポジトリのライセンスを決める（公開前。README の TODO）
 - [ ] 公開前のチェックリスト（`docs/operations.md` 9章）
 - [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
-- [ ] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）
+- [ ] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）、プライバシーポリシー（`src/content/pages/privacy.md`）
 - [ ] AI のクローラーを robots.txt で許可するか（今は全許可）
+- [ ] SNS の URL（X・Instagram。GitHub はリポジトリの公開後。`src/config/social.ts`、D-012）
+- [ ] プライバシーポリシーの制定日と、アクセスログを保存するか（初期は保存しない設計。`src/content/pages/privacy.md`）
+- [ ] 正規 URL を apex（`https://higuma-lab.jp`）にすることの最終確認（D-003）
+- [ ] NoteFlip の公開予定時期・ストアの URL・スクリーンショット
 - [ ] 未確定の情報：対応できるアプリのプラットフォーム、掲載するスキル（対応地域・経験年数・打ち合わせの方法は D-039、料金は D-040 で確定）
 - [ ] プロフィールの経歴の記載が、勤務先の規程・守秘の範囲で問題ないかの確認
 - [ ] NoteFlip：2台目の PC に同じ Microsoft アカウントで入れ、購入済みとして起動するかを実機で確認（9-5 の購入テストのとき）。確認できたら、サポートと Works の「買い直し不要」の記述にある TODO コメントを消す
