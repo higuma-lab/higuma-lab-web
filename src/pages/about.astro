@@ -2,7 +2,6 @@
 /**
  * ひぐま開発室について（docs/design.md 4.1、requirements.md 5、D-009）。
  * 本名・顔写真・市区町村以下の住所・勤務先名・製品名は載せない。
- * TODO: 本文はオーナーの確認待ち（仮の文面）。
  */
 import { Image } from 'astro:assets';
 import mascot from '../assets/mascot/mascot-laptop.png';
@@ -10,7 +9,6 @@ import PageHeader from '../components/layout/PageHeader.astro';
 import Section from '../components/layout/Section.astro';
 import CtaBanner from '../components/sections/CtaBanner.astro';
 import ProfileFacts from '../components/ui/ProfileFacts.astro';
-import Todo from '../components/ui/Todo.astro';
 import { SITE } from '../config/site';
 import { PROFILE } from '../data/profile';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -34,9 +32,7 @@ const description =
 ---
 
 <BaseLayout title="ひぐま開発室について" description={description}>
-  <PageHeader title="ひぐま開発室について">
-    <Todo>このページの文面はオーナーの確認待ちの仮の内容（経歴の書き方を含む）</Todo>
-  </PageHeader>
+  <PageHeader title="ひぐま開発室について" />
 
   <Section narrow labelledby="profile-heading">
     <div class="intro">
@@ -45,7 +41,7 @@ const description =
         <p class="role">{PROFILE.role}</p>
         <p>
           {SITE.fullName}は、Webサイト制作、アプリ開発、IT・AI
-          のご相談を受けている個人の開発室です。
+          のご相談をお受けしている個人の開発室です。
         </p>
         <p>
           運営者は、ソフトウェア開発に長く携わってきました。Windows
@@ -53,7 +49,7 @@ const description =
           API（アプリ同士がデータをやりとりする仕組み）の開発に加え、ソフトウェアのテストとその自動化にも取り組んできました。開発チームの一員として、設計から確認まで分担しながら進める仕事にも慣れています。
         </p>
         <p>
-          仕事で身につけた「確かめながら作る」進め方を、身近な困りごとの解決にも活かしたいと考えています。
+          仕事で身につけた「確かめながら進める」やり方を、身近な困りごとの解決やご相談にも活かしたいと考えています。
         </p>
         <ProfileFacts />
       </div>
