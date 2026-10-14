@@ -26,14 +26,29 @@ export const PROFILE = {
    */
   skillGroups: [
     { label: 'プログラミング言語', skills: ['C/C++', 'C#', 'Python', 'TypeScript', 'HTML/CSS'] },
-    { label: 'Windows アプリ', skills: ['.NET', 'UWP / XAML', 'MSIX・Microsoft Store'] },
+    {
+      label: 'Windows アプリ',
+      skills: ['.NET', 'WPF', 'WinForms', 'UWP / XAML', 'MSIX・Microsoft Store'],
+    },
     { label: 'Web', skills: ['Astro', 'Web API'] },
     { label: '通信・制御', skills: ['TCP/IP', 'HID', 'ZeroMQ'] },
     {
       label: 'テスト・CI/CD',
-      skills: ['テストの自動化', 'Azure DevOps', 'GitHub Actions', 'Gitea', 'Playwright', 'Vitest'],
+      skills: [
+        'テストの自動化',
+        'Azure DevOps',
+        'GitHub Actions',
+        'Gitea',
+        'NUnit',
+        'MSTest',
+        'Playwright',
+        'Vitest',
+      ],
     },
-    { label: 'クラウド', skills: ['AWS（S3・CloudFront・Route 53）', 'AWS CDK'] },
+    {
+      label: 'クラウド・サーバー',
+      skills: ['AWS（S3・CloudFront・Route 53）', 'AWS CDK', 'Linux'],
+    },
     { label: 'AI', skills: ['Claude Code', 'ChatGPT', 'Devin'] },
   ],
 } as const;
