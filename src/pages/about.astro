@@ -35,9 +35,7 @@ const description =
 
 <BaseLayout title="ひぐま開発室について" description={description}>
   <PageHeader title="ひぐま開発室について">
-    <Todo>
-      このページの文面はオーナーの確認待ちの仮の内容（経歴の書き方・掲載するスキルを含む）
-    </Todo>
+    <Todo>このページの文面はオーナーの確認待ちの仮の内容（経歴の書き方を含む）</Todo>
   </PageHeader>
 
   <Section narrow labelledby="profile-heading">
@@ -77,11 +75,23 @@ const description =
       ))}
     </ul>
     <h3>主な技術</h3>
-    <ul class="skills">
-      {PROFILE.skills.map((skill) => (
-        <li>{skill}</li>
+    <p class="skills-lead">
+      経験のある技術の一覧です。ご相談の際は、専門用語をなるべく使わずにご説明します。
+    </p>
+    <dl class="skill-groups">
+      {PROFILE.skillGroups.map((group) => (
+        <div class="skill-group">
+          <dt>{group.label}</dt>
+          <dd>
+            <ul class="skills">
+              {group.skills.map((skill) => (
+                <li>{skill}</li>
+              ))}
+            </ul>
+          </dd>
+        </div>
       ))}
-    </ul>
+    </dl>
   </Section>
 
   <Section narrow labelledby="values-heading">
@@ -150,11 +160,45 @@ const description =
     font-size: 1.125rem;
   }
 
+  .skills-lead {
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .skill-groups {
+    display: grid;
+    gap: var(--space-4);
+    margin: var(--space-3) 0 0;
+  }
+
+  .skill-group {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 640px) {
+    .skill-group {
+      grid-template-columns: 11em 1fr;
+      align-items: baseline;
+    }
+  }
+
+  .skill-group dt {
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+    font-weight: 700;
+  }
+
+  .skill-group dd {
+    margin: 0;
+  }
+
   .skills {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    margin: var(--space-3) 0 0;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
