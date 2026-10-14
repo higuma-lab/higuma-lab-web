@@ -15,7 +15,7 @@ const services = defineCollection({
     summary: z.string(),
     description: z.string(),
     examples: z.array(z.string()).default([]),
-    /** 料金の目安。未確定の間は設定しない（D-010） */
+    /** 料金（一覧の短い表記）。詳しい内容は src/data/pricing.ts（D-040） */
     priceNote: z.string().optional(),
     order: z.number().int(),
   }),

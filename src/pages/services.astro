@@ -5,6 +5,14 @@ import PageHeader from '../components/layout/PageHeader.astro';
 import Section from '../components/layout/Section.astro';
 import CtaBanner from '../components/sections/CtaBanner.astro';
 import Todo from '../components/ui/Todo.astro';
+import {
+  APP_DEVELOPMENT,
+  PRICE_LEAD,
+  HOURLY_RATE,
+  MONITOR_OFFER,
+  PRICE_NOTES,
+  WEBSITE_PLAN,
+} from '../data/pricing';
 import { SERVICE_GROUPS } from '../data/services';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
@@ -56,8 +64,8 @@ const description =
             )}
             {service.data.priceNote && (
               <p class="price">
-                <span>料金の目安：</span>
-                {service.data.priceNote}
+                <span>料金：</span>
+                {service.data.priceNote}（<a href="#price">料金について</a>）
               </p>
             )}
           </article>
@@ -66,10 +74,74 @@ const description =
     </Section>
   ))}
 
-  <Section narrow labelledby="price-heading">
+  <Section id="price" narrow labelledby="price-heading">
     <h2 id="price-heading">料金について</h2>
-    <p class="price-note">ご相談の内容をうかがってから、お見積もりします。</p>
-    <Todo>料金の目安と、お見積もりの費用についての案内文を確定する（D-010）</Todo>
+    {PRICE_LEAD.map((text) => (
+      <p class="price-note">{text}</p>
+    ))}
+
+    <dl class="price-list">
+      <div class="price-row">
+        <dt>{HOURLY_RATE.title}</dt>
+        <dd>
+          <span class="amount">{HOURLY_RATE.price}</span>
+          {HOURLY_RATE.note && <span class="sub">{HOURLY_RATE.note}</span>}
+        </dd>
+      </div>
+      <div class="price-row">
+        <dt>{WEBSITE_PLAN.title}</dt>
+        <dd>
+          <span class="amount">{WEBSITE_PLAN.price}</span>
+          <span class="sub">{WEBSITE_PLAN.priceNote}</span>
+        </dd>
+      </div>
+      <div class="price-row">
+        <dt>{APP_DEVELOPMENT.title}</dt>
+        <dd>
+          <span class="amount">{APP_DEVELOPMENT.price}</span>
+          {APP_DEVELOPMENT.note && <span class="sub">{APP_DEVELOPMENT.note}</span>}
+        </dd>
+      </div>
+    </dl>
+
+    <h3>Webサイト制作（{WEBSITE_PLAN.price}）に含まれるもの</h3>
+    <ul class="plan-list">
+      {WEBSITE_PLAN.includes.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+    <h3>別にかかるもの</h3>
+    <ul class="plan-list">
+      {WEBSITE_PLAN.extras.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+    <p>{WEBSITE_PLAN.delivery}</p>
+
+    <div class="monitor">
+      <h3>
+        {MONITOR_OFFER.title}：{MONITOR_OFFER.price}
+      </h3>
+      {MONITOR_OFFER.open ? (
+        <>
+          <p>{MONITOR_OFFER.body}</p>
+          <ul class="plan-list">
+            {MONITOR_OFFER.conditions.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+          <p class="sub">{MONITOR_OFFER.note}</p>
+        </>
+      ) : (
+        <p>{MONITOR_OFFER.closedNote}</p>
+      )}
+    </div>
+
+    <ul class="notes">
+      {PRICE_NOTES.map((note) => (
+        <li>{note}</li>
+      ))}
+    </ul>
   </Section>
 
   <CtaBanner />
@@ -170,5 +242,82 @@ const description =
 
   .price-note {
     margin: var(--space-3) 0;
+  }
+
+  #price h3 {
+    margin-top: var(--space-8);
+    font-size: 1.0625rem;
+  }
+
+  .price-list {
+    margin: var(--space-6) 0 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .price-row {
+    display: grid;
+    gap: var(--space-1) var(--space-6);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 640px) {
+    .price-row {
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+    }
+
+    .price-row dd {
+      text-align: right;
+    }
+  }
+
+  .price-row dt {
+    font-weight: 700;
+  }
+
+  .price-row dd {
+    margin: 0;
+  }
+
+  .amount {
+    display: block;
+    color: var(--color-brand);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .sub {
+    display: block;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .plan-list {
+    margin: var(--space-2) 0 var(--space-3);
+    padding-left: 1.25em;
+  }
+
+  .plan-list li::marker {
+    color: var(--color-accent);
+  }
+
+  .monitor {
+    margin-top: var(--space-8);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+
+  .monitor h3 {
+    margin-top: 0;
+  }
+
+  .notes {
+    margin: var(--space-6) 0 0;
+    padding-left: 1.25em;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
   }
 </style>
