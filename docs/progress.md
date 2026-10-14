@@ -38,10 +38,10 @@
 - [ ] リポジトリのライセンスを決める（公開前。README の TODO）
 - [ ] 公開前のチェックリスト（`docs/operations.md` 9章）
 - [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
-- [ ] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）、プライバシーポリシー（`src/content/pages/privacy.md`）
+- [x] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）、プライバシーポリシー（`src/content/pages/privacy.md`）（2026-10-15 確定、D-042・D-043）
 - [ ] AI のクローラーを robots.txt で許可するか（今は全許可）
 - [ ] SNS の URL（X・Instagram。GitHub はリポジトリの公開後。`src/config/social.ts`、D-012）
-- [ ] プライバシーポリシーの制定日と、アクセスログを保存するか（初期は保存しない設計。`src/content/pages/privacy.md`）
+- [ ] プライバシーポリシーの制定日を公開日に入れる（`src/content/pages/privacy.md`。アクセスログは保存しないことに決定、D-043）
 - [ ] 正規 URL を apex（`https://higuma-lab.jp`）にすることの最終確認（D-003）
 - [ ] NoteFlip の公開予定時期・ストアの URL・スクリーンショット
 - [x] 未確定の情報：対応地域・経験年数・打ち合わせの方法は D-039、料金は D-040、スキルとアプリの対応プラットフォームは D-041 で確定
