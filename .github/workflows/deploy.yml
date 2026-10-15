@@ -26,9 +26,45 @@ jobs:
   verify:
     uses: ./.github/workflows/ci.yml
 
+  # ビルドは AWS の権限（id-token）を持たないジョブで行う。
+  # 依存パッケージのコード（install スクリプト、ビルド時のプラグイン）が OIDC トークンを取れないようにするため（D-044）
+  build:
+    name: Build for production
+    needs: verify
+    if: github.ref == 'refs/heads/main' && vars.AWS_DEPLOY_ROLE_ARN != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: site-dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 1
+
+  # 配信だけを行う。チェックアウトも npm も使わず、ビルド結果と AWS CLI だけで動かす
   deploy:
     name: Deploy to S3 and CloudFront
-    needs: verify
+    needs: build
     if: github.ref == 'refs/heads/main' && vars.AWS_DEPLOY_ROLE_ARN != ''
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -55,22 +91,10 @@ jobs:
           done
           exit $missing
 
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          persist-credentials: false
-
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          cache: npm
-
-      - run: npm ci
-
-      - name: Build
-        run: npm run build
-        env:
-          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
-          PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}
+          name: site-dist
+          path: dist/
 
       - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:

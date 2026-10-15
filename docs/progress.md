@@ -22,14 +22,14 @@
 - [ ] 画面の「TODO:」の解消（小。情報が届いたものから。下の「オーナーの作業」の未確定の情報）
 - [ ] 構築記録の記事（中、D-016・D-038）：インタビューをもとに書き直した下書きあり（約 2,900 文字、`draft: true`。開発サーバーで確認できる）→ サイトの公開時に数値と AWS の構築で分かったことを加えて公開、RSS を追加（D-034）
 - [ ] 公開前の点検：site-auditor・content-reviewer（`docs/operations.md` 9章）
-- [ ] Phase 8 で見送った提案（オーナーの判断待ち）：Dependabot、OIDC の sub に ref を含める、解析ありのビルドで E2E、CDK の推奨 feature flags
+- [ ] Phase 8 で見送った提案（オーナーの判断待ち）：解析ありのビルドで E2E、CDK の推奨 feature flags（Dependabot は採用、OIDC の sub に ref を含めるのは見送り。D-044）
 - [ ] Works の種別で絞り込むページ（中。Works が 6〜8 件以上になったら。decisions.md の TODO）
 
 ### オーナーの作業
 
 - [ ] ドメイン `higuma-lab.jp` の取得（Whois 情報公開代行の確認）
 - [ ] AWS アカウントの作成、ルートユーザーの MFA、AWS の構築（`infra/README.md` の手順0〜7）
-- [ ] GitHub：environment `production`（main のみ）、Variables、`main` のブランチ保護（`infra/README.md` 手順6）
+- [ ] GitHub：environment `production`（main のみ）、Variables、`main` のブランチ保護、Dependabot のセキュリティ更新（`infra/README.md` 手順6）
 - [ ] Zoho Mail の登録と `support@` の別名作成（Route 53 構築後、D-004・D-025）
 - [ ] NoteFlip リポジトリの更新（指示文は渡し済み、D-024）
 - [ ] 素材の用意（`docs/content/README.md` のチェックリスト）

@@ -143,7 +143,8 @@ npx cdk deploy HigumaLabGithubOidc --profile higuma-lab
    - Require a pull request before merging
    - Require status checks to pass：`Site (lint, check, test, build, links, e2e)`、`Infra (type check, test, synth)`
    - 直接の push と force push を禁止
-4. Actions → **Deploy** → Run workflow（`main`）で初回のデプロイを実行する。以後は `main` へのマージで自動的にデプロイされる。
+4. **Dependabot**：Settings → Code security で **Dependabot alerts** と **Dependabot security updates** を有効にする。`.github/dependabot.yml` は月1回の版の更新だけを扱い、脆弱性の修正の PR は、この設定がないと作られない（D-044）。
+5. Actions → **Deploy** → Run workflow（`main`）で初回のデプロイを実行する。以後は `main` へのマージで自動的にデプロイされる。
 
 ### 7. 確認
 
@@ -163,8 +164,8 @@ curl -sI https://higuma-lab.jp/not-found/
 ## デプロイの仕組み（.github/workflows/deploy.yml）
 
 1. CI と同じ検証（lint・型・テスト・ビルド・リンク切れ・E2E）
-2. ビルド（本番の Variables を使う）
-3. OIDC でデプロイ用ロールを引き受ける（アクセスキーは使わない）
+2. ビルド（本番の Variables を使う）。AWS の権限を持たない別のジョブで行い、結果（`dist/`）だけを次のジョブに渡す（依存パッケージのコードが OIDC トークンを取れないように。D-044）
+3. 配信のジョブ（チェックアウトも npm も使わない）で、OIDC でデプロイ用ロールを引き受ける（アクセスキーは使わない）
 4. `_astro/`（ハッシュ付き）を `max-age=1年, immutable` で、それ以外を `max-age=0, s-maxage=1日` でアップロード
 5. CloudFront のキャッシュを `/*` で無効化し、完了を待つ（月 1,000 パスまで無料。`/*` は1パスとして数える）
 6. 古いハッシュ付きアセットを削除（無効化の完了後。エッジに残った古い HTML が、消えたアセットを参照しないように）

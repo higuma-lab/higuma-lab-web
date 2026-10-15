@@ -253,16 +253,25 @@ Cookie を使わない無料の解析（D-006）。DNS を Cloudflare に移す�
 
 | 作業 | 方法 |
 |---|---|
-| サイトの依存の更新 | `npm outdated` → `npm update`（メジャー更新は変更点を読んでから個別に） |
-| インフラの依存の更新 | `cd infra` で同じ。更新後に `npm test` と `npx cdk diff` で意図しない差分がないか確かめる |
+| 依存・GitHub Actions の更新 | Dependabot が PR を作る（下の「Dependabot の PR」） |
 | Node.js | 24 LTS の最新に。CI（`.github/workflows/*.yml`）は `node-version: 24` で自動的に最新の 24 系を使う |
-| GitHub Actions | 使っている Action（checkout、setup-node、configure-aws-credentials、upload-artifact）の新しいリリースを確認し、コミット SHA とコメントのバージョンを書き換える |
-| Playwright のブラウザ | Playwright を更新したら `npx playwright install chromium` |
-| 脆弱性 | `npm audit`（サイトと `infra/` の両方） |
+| 脆弱性 | Dependabot alerts を見る。念のため `npm audit`（サイトと `infra/` の両方） |
 | 外部リンク | Works・記事・プライバシーポリシーの外部リンクが切れていないか、目で確かめる（自動のリンク確認は内部リンクだけ） |
 | 表示速度 | Chrome の開発者ツールの Lighthouse で、トップ・記事・制作物のページを測る |
 
-依存の更新は Claude Code に「依存を更新して、テストが通るか確かめて」と頼んでもよい。
+### Dependabot の PR（D-044）
+
+毎月1日ごろに、サイトの npm・`infra/` の npm・GitHub Actions の更新の PR が届く（minor・patch はそれぞれ1つにまとまり、major は1件ずつ）。脆弱性の修正の PR は、届きしだい随時。
+
+1. CI が通っていることを確かめる。通らないものはマージしない（Claude Code に「この Dependabot の PR の CI の失敗を直して」と頼んでよい）。
+2. major の更新は、PR に付くリリースノートで変更点を読んでから判断する。
+3. `infra/` の更新は、手元で `cd infra` → `npm test` と `npx cdk diff` で、意図しない差分がないか確かめる。CDK の変更は、マージしただけでは AWS に反映されない（`cdk deploy` は手で行う）。
+4. **マージすると、そのまま本番にデプロイされる**。マージの後、Actions の Deploy が成功したかを確かめる。
+   - `aws-actions/configure-aws-credentials`・`actions/download-artifact`、Deploy のビルドのジョブの `actions/upload-artifact` は、デプロイのときにしか動かない（PR の CI では試されない）。これらの更新は、特にマージ後の Deploy の結果を確かめる。失敗したら revert の PR を作り、Actions → Deploy → Run workflow で再びデプロイする。
+   - `upload-artifact` と `download-artifact` の major の更新は別々の PR で届く。片方だけ上げると受け渡しの形が合わなくなるおそれがあるので、両方の変更点を読んでからマージする。
+5. Playwright を更新したら、手元で `npx playwright install chromium` を実行する。
+
+手で依存を更新したいときは、Claude Code に「依存を更新して、テストが通るか確かめて」と頼んでもよい。
 
 ---
 
