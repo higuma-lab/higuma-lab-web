@@ -228,7 +228,7 @@ higuma-lab-web/
 | `title` | string | |
 | `kind` | `'own-product' \| 'sample' \| 'experiment' \| 'client'` | 種別ラベル（D-001）。表示名は自社プロダクト／サンプル制作／技術検証／お客様案件 |
 | `summary` | string | |
-| `status` | `'released' \| 'upcoming' \| 'in-progress'` | 「公開予定」等の表示に使う |
+| `status` | `'released' \| 'upcoming' \| 'in-progress' \| 'completed'` | 「公開予定」等の表示に使う |
 | `tech` | string[] | 使用技術 |
 | `links` | `{ label, url }[]`（任意） | ストア、GitHub 等 |
 | `cover` | image（任意） | |
@@ -591,6 +591,7 @@ GitHub Actions ──OIDC──▶ IAM ロール（S3 への同期と CloudFront
 | `released` | 公開中 |
 | `upcoming` | 公開予定 |
 | `in-progress` | 開発中 |
+| `completed` | 検証済み（技術検証で、動くものを公開していないとき。D-047） |
 
 Works カード：カバー画像（16:10。なければシンボルを置いた淡い紺の面）→ 種別・状態ラベル → タイトル（h3）→ 概要 → 使用技術（小さな文字の列挙）。
 
