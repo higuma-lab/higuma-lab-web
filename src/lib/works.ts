@@ -16,6 +16,7 @@ export const WORK_STATUS_LABELS: Record<WorkStatus, string> = {
   released: '公開中',
   upcoming: '公開予定',
   'in-progress': '開発中',
+  completed: '検証済み',
 };
 
 /** 詳細ページを作るか（本文が空なら一覧だけに載せる。docs/design.md 5.2） */

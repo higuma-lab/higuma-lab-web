@@ -100,7 +100,7 @@
    title: 制作物の名前
    kind: own-product      # own-product（自社プロダクト）/ sample（サンプル制作）/ experiment（技術検証）/ client（お客様案件）
    summary: 一覧に出る1〜2文の説明
-   status: released       # released（公開中）/ upcoming（公開予定）/ in-progress（開発中）
+   status: released       # released（公開中）/ upcoming（公開予定）/ in-progress（開発中）/ completed（検証済み。技術検証のみ）
    tech: [Astro, TypeScript]
    links:
      - label: GitHub

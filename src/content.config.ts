@@ -29,7 +29,7 @@ const works = defineCollection({
       title: z.string(),
       kind: z.enum(['own-product', 'sample', 'experiment', 'client']),
       summary: z.string(),
-      status: z.enum(['released', 'upcoming', 'in-progress']),
+      status: z.enum(['released', 'upcoming', 'in-progress', 'completed']),
       tech: z.array(z.string()).default([]),
       links: z.array(z.object({ label: z.string(), url: z.url() })).default([]),
       cover: image().optional(),
