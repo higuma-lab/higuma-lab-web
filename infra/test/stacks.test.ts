@@ -1,4 +1,5 @@
-import { App } from 'aws-cdk-lib';
+import { readFileSync } from 'node:fs';
+import { App, FeatureFlags } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import { describe, expect, it } from 'vitest';
 import { loadConfig } from '../config/env.js';
@@ -14,8 +15,15 @@ const REPOSITORY = 'owner/repo';
 
 const NO_MAIL: MailConfig = { verification: [], mx: [], dkim: [] };
 
+/** cdk.json の feature flags。本番の synth と同じ設定でテストする */
+const CDK_CONTEXT = (
+  JSON.parse(readFileSync(new URL('../cdk.json', import.meta.url), 'utf8')) as {
+    context: Record<string, unknown>;
+  }
+).context;
+
 function synth(mail: MailConfig = NO_MAIL) {
-  const app = new App();
+  const app = new App({ context: CDK_CONTEXT });
   const env = { account: ACCOUNT, region: 'ap-northeast-1' };
   const dns = new DnsStack(app, 'Dns', {
     env,
@@ -68,6 +76,14 @@ describe('設定の読み込み', () => {
 
   it('environment の既定は production', () => {
     expect(loadConfig(base).githubEnvironment).toBe('production');
+  });
+});
+
+describe('feature flags', () => {
+  it('cdk.json の推奨設定で synth している', () => {
+    const app = new App({ context: CDK_CONTEXT });
+    expect(FeatureFlags.of(app).isEnabled('@aws-cdk/core:enablePartitionLiterals')).toBe(true);
+    expect(FeatureFlags.of(app).isEnabled('@aws-cdk/aws-iam:minimizePolicies')).toBe(true);
   });
 });
 

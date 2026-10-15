@@ -22,7 +22,7 @@
 - [ ] 画面の「TODO:」の解消（小。情報が届いたものから。下の「オーナーの作業」の未確定の情報）
 - [ ] 構築記録の記事（中、D-016・D-038）：インタビューをもとに書き直した下書きあり（約 2,900 文字、`draft: true`。開発サーバーで確認できる）→ サイトの公開時に数値と AWS の構築で分かったことを加えて公開、RSS を追加（D-034）
 - [ ] 公開前の点検：site-auditor・content-reviewer（`docs/operations.md` 9章）
-- [ ] Phase 8 で見送った提案（オーナーの判断待ち）：解析ありのビルドで E2E、CDK の推奨 feature flags（Dependabot は採用、OIDC の sub に ref を含めるのは見送り。D-044）
+- [x] Phase 8 で見送った提案：Dependabot と CDK の推奨 feature flags は採用、OIDC の sub に ref を含めるのと解析ありのビルドで E2E は見送り（D-044・D-045）
 - [ ] Works の種別で絞り込むページ（中。Works が 6〜8 件以上になったら。decisions.md の TODO）
 
 ### オーナーの作業

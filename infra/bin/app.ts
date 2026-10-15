@@ -20,9 +20,13 @@ const app = new App();
 const MAIN_REGION = 'ap-northeast-1';
 const mainEnv = { account: config.account, region: MAIN_REGION };
 
+/** スタックのタグ。feature flag の explicitStackTags により、Tags.of(app) はスタックには付かないため明示する（D-045） */
+const tags = { Project: 'higuma-lab-web' };
+
 // デプロイ順：Dns → （お名前.com でネームサーバーを変更し、反映を待つ）→ Certificate → Site → GithubOidc（docs/design.md 7.2）
 const dns = new DnsStack(app, 'HigumaLabDns', {
   env: mainEnv,
+  tags,
   domainName: config.domainName,
   mail: mailConfig,
   crossRegionReferences: true,
@@ -30,6 +34,7 @@ const dns = new DnsStack(app, 'HigumaLabDns', {
 
 const certificate = new CertificateStack(app, 'HigumaLabCertificate', {
   env: { account: config.account, region: 'us-east-1' },
+  tags,
   domainName: config.domainName,
   hostedZone: dns.hostedZone,
   crossRegionReferences: true,
@@ -37,6 +42,7 @@ const certificate = new CertificateStack(app, 'HigumaLabCertificate', {
 
 const site = new SiteStack(app, 'HigumaLabSite', {
   env: mainEnv,
+  tags,
   domainName: config.domainName,
   hostedZone: dns.hostedZone,
   certificate: certificate.certificate,
@@ -45,6 +51,7 @@ const site = new SiteStack(app, 'HigumaLabSite', {
 
 new GithubOidcStack(app, 'HigumaLabGithubOidc', {
   env: mainEnv,
+  tags,
   githubRepository: config.githubRepository,
   githubEnvironment: config.githubEnvironment,
   existingProviderArn: config.githubOidcProviderArn,
@@ -52,4 +59,5 @@ new GithubOidcStack(app, 'HigumaLabGithubOidc', {
   distribution: site.distribution,
 });
 
-Tags.of(app).add('Project', 'higuma-lab-web');
+// リソースのタグ
+Tags.of(app).add('Project', tags.Project);
