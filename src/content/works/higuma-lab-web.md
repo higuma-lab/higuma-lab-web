@@ -29,7 +29,7 @@ publishedAt: 2026-10-08
 
 （ここからは開発者向けの内容です。）
 
-- **サイト**：Astro 7 ＋ TypeScript（strict）。クライアント側の JavaScript はスマートフォンのメニューの開閉だけです。Web フォントは使わず、CSS は1ファイルにまとめています。
+- **サイト**：Astro 7 ＋ TypeScript（strict）。クライアント側の JavaScript はスマートフォンのメニューの開閉だけです。Webフォントは使わず、CSS は1ファイルにまとめています。
 - **配信**：Amazon S3（非公開）を CloudFront から OAC で読み、DNS は Route 53、証明書は ACM です。www から apex への転送と、ディレクトリの URL の解決は CloudFront Functions で行っています。
 - **インフラ**：AWS CDK（TypeScript）で4つのスタックに分け、DNS とメールのレコードは、サイトのスタックを消しても残るようにしています。
 - **デプロイ**：GitHub Actions。PR で lint・型チェック・テスト・ビルド・リンク切れ・E2E を実行し、`main` へのマージで S3 に同期する構成です（AWS の環境は公開に向けて準備中）。AWS には OIDC で接続し、アクセスキーを持たせない設計です。

@@ -23,7 +23,7 @@ export const SERVICE_GROUPS: readonly ServiceGroup[] = [
   },
   {
     id: 'consulting',
-    title: 'IT・AIの相談',
+    title: 'IT・AI の相談',
     summary: '道具選びや IT 化の進め方から、AI の使いどころまで。',
   },
 ];
