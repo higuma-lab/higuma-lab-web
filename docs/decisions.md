@@ -356,6 +356,17 @@ design.md 2.2 の構成で導入した。バージョン固有の判断は以下
   - 残る危険：ビルドのジョブの中で、依存パッケージのコードが `dist/`（サイトの中身）を書き換えることは防げない。これは cooldown、CI、オーナーのレビューで抑える。
 - OIDC の信頼条件に ref（ブランチ）を含めるのは見送る。environment `production` を `main` だけに限る設定（infra/README.md 手順6）で足りるため。GitHub 側の sub の形式を変える手順が増えることに見合わない。
 
+### D-045 CDK の推奨 feature flags と、見送った提案（2026-10-15）
+
+- `infra/cdk.json` に、`aws-cdk-lib` 2.273.0 の推奨 feature flags（88 個）を入れる。もとの 3 個はそのまま。
+  - 今の構成では、テンプレートの違いは ARN の書き方（`AWS::Partition` を使わず `arn:aws:` と書く）と、IAM ポリシーの並び順だけ。作り直されるリソースや、権限・設定の変化はない（入れる前と後の synth を比べて確認）。
+  - テンプレートの外の違いが2つある。1つ目：`explicitStackTags` により、`Tags.of(app)` のタグがスタックに付かなくなる。スタックとカスタムリソースの Lambda 等から Project タグが外れないよう、`bin/app.ts` で各スタックに `tags` を明示する（infra-reviewer の指摘）。
+  - 2つ目：`enableAdditionalMetadataCollection` により、CDK が AWS に送る利用状況（使った部品とプロパティの名前。値は伏せられる）が増える。秘密情報は含まれないため、推奨値のままにする。
+  - **理由**：将来、Lambda などの部品を足したときに、古い既定値で作られないようにするため。AWS の構築の前なら、入れても失うものがない。
+  - CDK のテストも `cdk.json` の設定で synth する（本番の synth と食い違わないように）。
+  - `aws-cdk-lib` を更新したら、`npx cdk flags --unstable=flags` で新しい推奨設定を確かめる（docs/operations.md 8 章）。
+- 解析ありのビルドで E2E を実行する案は見送る。CSP は CloudFront が付けるため、E2E では効いておらず、トークンを入れて実行しても CSP の違反は見つからない。公開後に手で確かめる手順（infra/README.md 手順7、docs/operations.md 3 章）で足りる。
+
 ## TODO（未確定）
 
 - [x] 料金の目安金額 → D-040

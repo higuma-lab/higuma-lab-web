@@ -265,7 +265,7 @@ Cookie を使わない無料の解析（D-006）。DNS を Cloudflare に移す�
 
 1. CI が通っていることを確かめる。通らないものはマージしない（Claude Code に「この Dependabot の PR の CI の失敗を直して」と頼んでよい）。
 2. major の更新は、PR に付くリリースノートで変更点を読んでから判断する。
-3. `infra/` の更新は、手元で `cd infra` → `npm test` と `npx cdk diff` で、意図しない差分がないか確かめる。CDK の変更は、マージしただけでは AWS に反映されない（`cdk deploy` は手で行う）。
+3. `infra/` の更新は、手元で `cd infra` → `npm test` と `npx cdk diff` で、意図しない差分がないか確かめる。CDK の変更は、マージしただけでは AWS に反映されない（`cdk deploy` は手で行う）。`aws-cdk-lib` を更新したときは、`npx cdk flags --unstable=flags` で新しい推奨設定が増えていないか確かめ、増えていれば `cdk.json` に足すかを決める（D-045）。`cdk diff` に、crossRegionReferences 用のカスタムリソースの Lambda のランタイムの変更が出るのは、CDK の版に合わせた想定どおりの変化。
 4. **マージすると、そのまま本番にデプロイされる**。マージの後、Actions の Deploy が成功したかを確かめる。
    - `aws-actions/configure-aws-credentials`・`actions/download-artifact`、Deploy のビルドのジョブの `actions/upload-artifact` は、デプロイのときにしか動かない（PR の CI では試されない）。これらの更新は、特にマージ後の Deploy の結果を確かめる。失敗したら revert の PR を作り、Actions → Deploy → Run workflow で再びデプロイする。
    - `upload-artifact` と `download-artifact` の major の更新は別々の PR で届く。片方だけ上げると受け渡しの形が合わなくなるおそれがあるので、両方の変更点を読んでからマージする。
