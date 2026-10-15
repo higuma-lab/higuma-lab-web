@@ -4,7 +4,6 @@ import { getCollection } from 'astro:content';
 import PageHeader from '../components/layout/PageHeader.astro';
 import Section from '../components/layout/Section.astro';
 import CtaBanner from '../components/sections/CtaBanner.astro';
-import Todo from '../components/ui/Todo.astro';
 import {
   APP_DEVELOPMENT,
   PRICE_LEAD,
@@ -30,7 +29,6 @@ const description =
     title="サービス"
     lead="Webサイト、アプリ開発、IT・AI のご相談の3つに分けてご案内します。どれに当てはまるか分からない場合も、そのままご相談ください。"
   >
-    <Todo>各サービスの説明文はオーナーの確認待ちの仮の内容</Todo>
     <nav class="toc" aria-label="このページの内容">
       <ul>
         {groups.map((group) => (
