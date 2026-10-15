@@ -6,7 +6,7 @@
   "description": "ひぐま開発室（HIGUMA LAB）の事業用Webサイト",
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24"
   },
   "scripts": {
     "dev": "astro dev",
