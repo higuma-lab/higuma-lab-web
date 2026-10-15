@@ -1,0 +1,52 @@
+# 依存の更新の PR を自動で作る（D-044）。マージはオーナーが CI の通過を確かめてから行う
+# - 月1回。minor・patch は種類ごとに1つの PR にまとめ、major は1件ずつ（変更点を読んで判断するため）
+# - 公開から14日たった版だけを提案する（公開直後の版の不具合・乗っ取りを避けるため。セキュリティの更新は対象外）
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 14
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      site-minor-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Node.js の版は 24 LTS に合わせる（D-031）
+      - dependency-name: '@types/node'
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: npm
+    directory: /infra
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 14
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      infra-minor-patch:
+        update-types: [minor, patch]
+    ignore:
+      - dependency-name: '@types/node'
+        update-types: [version-update:semver-major]
+
+  # Action はコミット SHA で固定している（D-036）。Dependabot は SHA と版のコメントをまとめて更新する
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 14
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      actions:
+        patterns: ['*']
+        update-types: [minor, patch]
