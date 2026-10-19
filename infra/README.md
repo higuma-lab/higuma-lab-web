@@ -27,8 +27,8 @@
 | `npm run check`             | 型チェック                                                          |
 | `npm test`                  | テスト（テンプレートの検証、CloudFront Function の動作）            |
 | `npm run synth`             | CloudFormation テンプレートを `cdk.out/` に出力（AWS に接続しない） |
-| `npx cdk diff <スタック>`   | 実環境との差分（AWS に接続する）                                    |
-| `npx cdk deploy <スタック>` | デプロイ（AWS に接続する）                                          |
+| `npx cdk diff <スタック>`   | 実環境との差分（AWS に接続する。`--profile higuma-lab` を付ける）   |
+| `npx cdk deploy <スタック>` | デプロイ（AWS に接続する。`--profile higuma-lab` を付ける）         |
 
 ## 設定
 
@@ -165,7 +165,7 @@ npx cdk deploy HigumaLabDns --profile higuma-lab
 ### メール用のレコード（Zoho Mail の登録後）
 
 1. Zoho Mail のドメインの所有確認の方法は **TXT** を選ぶ（CNAME は `config/mail.ts` に欄がなく、HTML のアップロードはサイトの公開前には使えない）。Zoho Mail の管理画面（ドメインの設定）に表示される、所有確認の TXT・MX・SPF・DKIM の値を `config/mail.ts` に転記する。DMARC は `p=none`（監視のみ）で始め、レポートで問題がないことを確かめてから `quarantine` → `reject` と強める。
-2. `npx cdk diff HigumaLabDns` で差分を確かめ、`npx cdk deploy HigumaLabDns` でデプロイする。
+2. `npx cdk diff HigumaLabDns --profile higuma-lab` で差分を確かめ、`npx cdk deploy HigumaLabDns --profile higuma-lab` でデプロイする。
 3. 反映を確かめる：`nslookup -type=MX higuma-lab.jp`、`nslookup -type=TXT zmail._domainkey.higuma-lab.jp`（セレクター名は Zoho の表示に合わせる）。Zoho の管理画面で「確認」を押す。
 
 - **Route 53 のコンソールで、レコードを手作業で作らない**。同じ名前・種類のレコードがあると、CDK のデプロイが失敗する。
@@ -177,7 +177,7 @@ npx cdk deploy HigumaLabDns --profile higuma-lab
 サンプルサイト（Cloudflare Pages）を `<名前>.sample.<ドメイン>` で公開する。値は `config/samples.ts` に書く。
 
 1. Cloudflare の Pages のプロジェクトの **Custom domains** で、サブドメイン（例：`komugi-to-yuge.sample.higuma-lab.jp`）を足す。Cloudflare が「CNAME を作る」よう案内するが、DNS は Route 53 なので、次の 2 で作る。
-2. `npx cdk diff HigumaLabDns` で差分を確かめる。`[+]` が `SampleCaa` と `Sample-*` だけで、`[-]`・`[~]` がないこと。`npx cdk deploy HigumaLabDns` でデプロイすると、CNAME と、`sample.<ドメイン>` の CAA（Cloudflare が使う認証局を許す）ができる。**Route 53 のコンソールで CNAME を作らない**（同じ名前があると CDK のデプロイが失敗する）。
+2. `npx cdk diff HigumaLabDns --profile higuma-lab` で差分を確かめる。`[+]` が `SampleCaa` と `Sample-*` だけで、`[-]`・`[~]` がないこと。`npx cdk deploy HigumaLabDns --profile higuma-lab` でデプロイすると、CNAME と、`sample.<ドメイン>` の CAA（Cloudflare が使う認証局を許す）ができる。**Route 53 のコンソールで CNAME を作らない**（同じ名前があると CDK のデプロイが失敗する）。
 3. Pages の Custom domains の状態が **Active** になるのを待つ（証明書の発行に数分〜数十分。DNS より先に 1 を行ったときは、存在しないという結果が最大 15 分ほど覚えられていて、Pending が続くことがある）。`https://<サブドメイン>/` が開けることを確かめる。Works のリンクの差し替えは、ここまで確かめてから行う。
 4. 管理画面のログインのため、認証の中継の `ALLOWED_DOMAINS` に新しいホスト名を入れる。サンプルのリポジトリ側の作業（サイトの URL の差し替え）は、`site-template` の `docs/publish-sample.md` の 6 章。
 
@@ -270,7 +270,7 @@ curl -sI https://higuma-lab.jp/not-found/
 
 - 問題のある変更を `git revert` する PR を作り、`main` にマージする。デプロイが自動で走り、元の内容に戻る。
 - 急ぐ場合でも、`main` への直接の push はしない（D-033）。
-- インフラの変更を戻すときは、変更前のコミットで `npx cdk deploy <スタック>` を実行する。先に `npx cdk diff` で差分を確かめる。
+- インフラの変更を戻すときは、変更前のコミットで `npx cdk deploy <スタック> --profile higuma-lab` を実行する。先に `npx cdk diff <スタック> --profile higuma-lab` で差分を確かめる。
 
 ### 証明書を作り直すとき
 
