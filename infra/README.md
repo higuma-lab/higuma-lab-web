@@ -132,7 +132,7 @@
 
 ### 1. CDK の初期設定（bootstrap）
 
-ap-northeast-1 と us-east-1 の両方に必要（証明書を us-east-1 に置くため）。`infra/` で実行する。`<アカウントID>` は手順 0 の 4 の `aws sts get-caller-identity` の `Account`（12 桁）。サインインの期限が切れていたら、先に `aws sso login --profile higuma-lab` を実行する（以降の手順も同じ）。
+ap-northeast-1 と us-east-1 の両方に必要（証明書を us-east-1 に置くため）。`infra/` で実行する。`<アカウントID>` は **12 桁の数字に置き換える**（プロファイル名の `higuma-lab` ではない）。`aws sts get-caller-identity --profile higuma-lab` の `Account` の値（`--profile` を付けないと「Unable to locate credentials」になる）。取り違えると「Need to perform AWS calls for account higuma-lab」で止まる。サインインの期限が切れていたら、先に `aws sso login --profile higuma-lab` を実行する（以降の手順も同じ）。
 
 ```bash
 npx cdk bootstrap aws://<アカウントID>/ap-northeast-1 aws://<アカウントID>/us-east-1 --profile higuma-lab
