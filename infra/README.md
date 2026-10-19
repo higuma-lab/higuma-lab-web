@@ -177,12 +177,17 @@ npx cdk deploy HigumaLabDns --profile higuma-lab
 サンプルサイト（Cloudflare Pages）を `<名前>.sample.<ドメイン>` で公開する。値は `config/samples.ts` に書く。
 
 1. Cloudflare の Pages のプロジェクトの **Custom domains** で、サブドメイン（例：`komugi-to-yuge.sample.higuma-lab.jp`）を足す。Cloudflare が「CNAME を作る」よう案内するが、DNS は Route 53 なので、次の 2 で作る。
-2. `npx cdk diff HigumaLabDns` で差分を確かめ、`npx cdk deploy HigumaLabDns` でデプロイする。CNAME と、`sample.<ドメイン>` の CAA（Cloudflare が使う認証局を許す）ができる。
-3. Pages の Custom domains の状態が **Active** になるのを待つ（証明書の発行に数分〜数十分）。`https://<サブドメイン>/` が開けることを確かめる。
+2. `npx cdk diff HigumaLabDns` で差分を確かめる。`[+]` が `SampleCaa` と `Sample-*` だけで、`[-]`・`[~]` がないこと。`npx cdk deploy HigumaLabDns` でデプロイすると、CNAME と、`sample.<ドメイン>` の CAA（Cloudflare が使う認証局を許す）ができる。**Route 53 のコンソールで CNAME を作らない**（同じ名前があると CDK のデプロイが失敗する）。
+3. Pages の Custom domains の状態が **Active** になるのを待つ（証明書の発行に数分〜数十分。DNS より先に 1 を行ったときは、存在しないという結果が最大 15 分ほど覚えられていて、Pending が続くことがある）。`https://<サブドメイン>/` が開けることを確かめる。Works のリンクの差し替えは、ここまで確かめてから行う。
 4. 管理画面のログインのため、認証の中継の `ALLOWED_DOMAINS` に新しいホスト名を入れる。サンプルのリポジトリ側の作業（サイトの URL の差し替え）は、`site-template` の `docs/publish-sample.md` の 6 章。
 
 - apex の CAA は Amazon だけを許している。`sample.<ドメイン>` に CAA を置かずにサブドメインを付けると、Cloudflare が証明書を取れず、Custom domains が有効にならない。
-- サンプルを消すときは、`config/samples.ts` から消してデプロイする（レコードは保持にしていないので消える）。
+- **サンプルを消すときは、この順で行う**（逆にすると、空いた `<名前>.pages.dev` を第三者が作り、このサブドメインを乗っ取られるおそれがある）。Pages のプロジェクトの名前を変えるときも同じ。
+  1. Works のリンクを外し、サイトをデプロイする
+  2. `config/samples.ts` から消し、`cdk diff` で CNAME（最後の 1 件なら CAA も）の削除だけであることを確かめてデプロイする（レコードは保持にしていないので消える）
+  3. `nslookup -type=CNAME <サブドメイン> 8.8.8.8` で返らないことを確かめる（TTL の 1 時間を待つ）
+  4. Pages の Custom domains からサブドメインを外す
+  5. 最後に Pages のプロジェクトを消す（消さずに残す方が安全）
 
 ### 3. 証明書（ACM）
 

@@ -85,12 +85,17 @@ export class DnsStack extends Stack {
       );
     }
 
-    // サンプルサイト（Cloudflare Pages）のサブドメイン。親の CAA で Cloudflare の認証局だけを許す
+    // サンプルサイト（Cloudflare Pages）のサブドメイン。親の CAA で Cloudflare の認証局だけを許す。
+    // メールと違って保持（RETAIN）にしない：残った CNAME はサブドメインの乗っ取りの原因になるため、設定から消したら確実に消す
     if (samples.sites.length > 0) {
       new CaaRecord(this, 'SampleCaa', {
         zone,
         recordName: samples.parent,
-        values: samples.caaIssuers.map((value) => ({ flag: 0, tag: CaaTag.ISSUE, value })),
+        values: [
+          ...samples.caaIssuers.map((value) => ({ flag: 0, tag: CaaTag.ISSUE, value })),
+          // Pages は個別の名前の証明書しか使わないので、ワイルドカードは誰にも出させない
+          { flag: 0, tag: CaaTag.ISSUEWILD, value: ';' },
+        ],
         ttl: Duration.hours(1),
       });
     }

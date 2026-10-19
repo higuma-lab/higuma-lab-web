@@ -4,7 +4,7 @@ import { Match, Template } from 'aws-cdk-lib/assertions';
 import { describe, expect, it } from 'vitest';
 import { loadConfig } from '../config/env.js';
 import type { MailConfig } from '../config/mail.js';
-import type { SampleSitesConfig } from '../config/samples.js';
+import { sampleSitesConfig, type SampleSitesConfig } from '../config/samples.js';
 import { CertificateStack } from '../lib/certificate-stack.js';
 import { DnsStack } from '../lib/dns-stack.js';
 import { GithubOidcStack } from '../lib/github-oidc-stack.js';
@@ -151,7 +151,7 @@ describe('DnsStack', () => {
     dns.hasResourceProperties('AWS::Route53::RecordSet', {
       Name: `sample.${DOMAIN}.`,
       Type: 'CAA',
-      ResourceRecords: ['0 issue "ca.example"', '0 issue "ca2.example"'],
+      ResourceRecords: ['0 issue "ca.example"', '0 issue "ca2.example"', '0 issuewild ";"'],
     });
     // サイト本体（apex）の CAA は Amazon のまま
     dns.hasResourceProperties('AWS::Route53::RecordSet', {
@@ -159,6 +159,19 @@ describe('DnsStack', () => {
       Type: 'CAA',
       ResourceRecords: Match.arrayWith([Match.stringLikeRegexp('amazon')]),
     });
+  });
+
+  it('サンプルの設定の値が正しい（打ち間違いで他人の pages.dev を指さない）', () => {
+    const label = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
+    expect(sampleSitesConfig.parent).toMatch(label);
+    expect(sampleSitesConfig.caaIssuers.length).toBeGreaterThan(0);
+    const names = sampleSitesConfig.sites.map((site) => site.name);
+    expect(new Set(names).size).toBe(names.length);
+    for (const { name, target } of sampleSitesConfig.sites) {
+      expect(name).toMatch(label);
+      // Pages のプロジェクト名とサブドメインの名前を同じにする（D-051）
+      expect(target).toBe(`${name}.pages.dev`);
+    }
   });
 });
 

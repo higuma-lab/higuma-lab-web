@@ -1,5 +1,5 @@
 ---
-# サンプル制作（D-047・D-048・D-050）。院・施術・料金はすべて架空。URL はサブドメイン（infra/config/samples.ts、D-051）
+# サンプル制作（D-047・D-048・D-050）。院・施術・料金はすべて架空。サブドメイン（higuma-lab.jp）の準備ができたら links の URL を差し替える
 title: 架空の整体院「からだ休符」のサイト（基本デザインのサンプル 2 件目）
 kind: sample
 summary: パン屋のサンプルで作った「基本デザイン」を、別の業種（整体院）に差し替えて使い回せるかを確かめたサンプルです。決めておいた 15 か所の差し替えを中心に、色・文字・ロゴ・料金表の形の違うサイトになりました。院・施術・写真はすべて架空です。
@@ -13,7 +13,7 @@ tech:
 publishedAt: 2026-10-18
 links:
   - label: サンプルサイトを見る
-    url: https://karada-kyufu.sample.higuma-lab.jp/
+    url: https://karada-kyufu.pages.dev/
 ---
 
 ## 課題
