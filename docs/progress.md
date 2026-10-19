@@ -34,7 +34,9 @@
 ### オーナーの作業
 
 - [x] ドメイン `higuma-lab.jp` の取得（2026-10-19。`higuma-lab.com` も合わせて取得）
-- [ ] `higuma-lab.com` の扱いを決める（`.jp` への転送か、持っておくだけか）。両ドメインの更新の料金を確かめる（取得はキャンペーンの価格だった）
+- [x] `higuma-lab.com` の扱い：転送せず持っておくだけ（2026-10-19、D-054）
+- [ ] `higuma-lab.com` のなりすまし対策：お名前.com の DNS に null MX（`0 .`）・SPF（`v=spf1 -all`）・DMARC（`_dmarc` に `v=DMARC1; p=reject`）を置く（D-054）
+- [ ] 両ドメインの更新の料金を確かめる（取得はキャンペーンの価格だった）。`.com` を更新するかは更新の時期に決める
 - [ ] AWS の構築（`infra/README.md` の手順0〜7）：手順0〜5 は完了（2026-10-19。証明書・S3・CloudFront・デプロイ用のロールまで。バケットは空）。手順6 の 1・3・4 は進めてよい。**手順6 の 2（Variables）と 5（初回のデプロイ）は、公開前の点検の後**（登録すると `main` へのマージで公開される）
 - [ ] GitHub：environment `production`（main のみ）、Variables、`main` のブランチ保護、Dependabot のセキュリティ更新（`infra/README.md` 手順6）
 - [x] Zoho Mail の登録と `support@` の別名作成（2026-10-19。所有確認・MX・SPF・DKIM は `infra/config/mail.ts`、表示名と署名は事業の名前、D-004・D-025）
