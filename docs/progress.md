@@ -35,7 +35,7 @@
 
 - [x] ドメイン `higuma-lab.jp` の取得（2026-10-19。`higuma-lab.com` も合わせて取得）
 - [x] `higuma-lab.com` の扱い：転送せず持っておくだけ（2026-10-19、D-054）
-- [ ] `higuma-lab.com` のなりすまし対策：お名前.com の DNS に null MX（`0 .`）・SPF（`v=spf1 -all`）・DMARC（`_dmarc` に `v=DMARC1; p=reject`）を置く（D-054）
+- [x] `higuma-lab.com` のなりすまし対策：お名前.com の DNS に null MX（`0 .`）・SPF（`v=spf1 -all`）・DMARC（`_dmarc` に `v=DMARC1; p=reject`）を置いた（2026-10-20、公開の DNS で反映を確認。D-054）
 - [ ] 両ドメインの更新の料金を確かめる（取得はキャンペーンの価格だった）。`.com` を更新するかは更新の時期に決める
 - [ ] AWS の構築（`infra/README.md` の手順0〜7）：手順0〜5 は完了（2026-10-19。証明書・S3・CloudFront・デプロイ用のロールまで。バケットは空）。手順6 の 1・3・4 は進めてよい。**手順6 の 2（Variables）と 5（初回のデプロイ）は、公開前の点検の後**（登録すると `main` へのマージで公開される）
 - [ ] GitHub：environment `production`（main のみ）、Variables、`main` のブランチ保護、Dependabot のセキュリティ更新（`infra/README.md` 手順6）
