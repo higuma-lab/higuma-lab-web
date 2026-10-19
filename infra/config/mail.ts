@@ -29,7 +29,7 @@ export interface MailConfig {
 }
 
 export const mailConfig: MailConfig = {
-  verification: [],
+  verification: ['zoho-verification=zb97858742.zmverify.zoho.jp'],
   mx: [],
   dkim: [],
 };
