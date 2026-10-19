@@ -8,7 +8,7 @@
 - Phase 1〜9 はすべて完了（2026-10-09）。今は公開に向けて、作業を1件ずつ片付ける段階（D-037。進め方は CLAUDE.md「Phase 9 の後の作業」）
 - 基本デザインの 1 件目（サンプルサイト）を仮の URL で公開し、Works と料金のページに反映した（D-049）
 - 2 件目のサンプル（架空の整体院）を公開し、基本デザインをテンプレートにした。Works に追加し、作業時間の見込みを直した（D-050）
-- ドメインを取得し、AWS の構築を手順2（Route 53）まで終えた。Zoho Mail で `info@`・`support@` の送受信ができる（2026-10-19）
+- ドメインを取得し、AWS の構築を手順5（デプロイ用のロール）まで終えた。Zoho Mail で `info@`・`support@` の送受信ができる（2026-10-19）
 
 ## 作業の一覧
 
@@ -35,7 +35,7 @@
 
 - [x] ドメイン `higuma-lab.jp` の取得（2026-10-19。`higuma-lab.com` も合わせて取得）
 - [ ] `higuma-lab.com` の扱いを決める（`.jp` への転送か、持っておくだけか）。両ドメインの更新の料金を確かめる（取得はキャンペーンの価格だった）
-- [ ] AWS の構築（`infra/README.md` の手順0〜7）：手順0〜2 は完了（2026-10-19）。手順3〜5 と手順6 の 1・3・4 は進めてよい。**手順6 の 2（Variables）と 5（初回のデプロイ）は、公開前の点検の後**（登録すると `main` へのマージで公開される）
+- [ ] AWS の構築（`infra/README.md` の手順0〜7）：手順0〜5 は完了（2026-10-19。証明書・S3・CloudFront・デプロイ用のロールまで。バケットは空）。手順6 の 1・3・4 は進めてよい。**手順6 の 2（Variables）と 5（初回のデプロイ）は、公開前の点検の後**（登録すると `main` へのマージで公開される）
 - [ ] GitHub：environment `production`（main のみ）、Variables、`main` のブランチ保護、Dependabot のセキュリティ更新（`infra/README.md` 手順6）
 - [x] Zoho Mail の登録と `support@` の別名作成（2026-10-19。所有確認・MX・SPF・DKIM は `infra/config/mail.ts`、表示名と署名は事業の名前、D-004・D-025）
 - [ ] DMARC の監視（`p=none` で開始。レポートで問題がなければ `quarantine` → `reject` に強める）
@@ -48,7 +48,7 @@
 - [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
 - [x] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）、プライバシーポリシー（`src/content/pages/privacy.md`）（2026-10-15 確定、D-042・D-043）
 - [ ] AI のクローラーを robots.txt で許可するか（今は全許可）
-- [ ] SNS の URL（X・Instagram。GitHub はリポジトリの公開後。`src/config/social.ts`、D-012）
+- [x] SNS の URL：X・Instagram は設定済み（2026-10-15、`src/config/social.ts`、D-012）。GitHub はリポジトリの公開後
 - [ ] プライバシーポリシーの制定日を公開日に入れる（`src/content/pages/privacy.md`。アクセスログは保存しないことに決定、D-043）
 - [ ] 正規 URL を apex（`https://higuma-lab.jp`）にすることの最終確認（D-003）
 - [ ] NoteFlip の公開予定時期・ストアの URL・スクリーンショット
