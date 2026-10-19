@@ -49,13 +49,40 @@
 ### 0. 準備
 
 1. AWS アカウントを作り、ルートユーザーに MFA を設定する。日常の作業にはルートユーザーを使わない。
-2. IAM Identity Center で作業用のユーザー（管理者権限、MFA 必須）を作る。
-3. AWS CLI v2 を入れ、`aws configure sso` でプロファイルを作る（例：`higuma-lab`）。
+2. **AWS Budgets で月額の予算アラートを作る**（例：月 $5 を超えそうなときにメール）。Budgets は2件まで無料。次の手順で有料プランに切り替わるので、その前に作る。
+3. IAM Identity Center を有効にし、作業用のユーザーを作る。
+   - **有効にすると、無料プランのアカウントは有料プランに自動で切り替わり、無料のクレジットは失効する**（AWS Organizations が作られるため）。このサイトの費用は月 100 円前後で、無料プランには期限（6 か月）があるため、受け入れる。
+   - リージョン：アジアパシフィック（東京）。
+   - インスタンス設定：**単一リージョンインスタンス**。マルチリージョンインスタンスはカスタマーマネージドキー（KMS）が必須で、鍵の料金がサイトの費用より大きくなる。東京のリージョンが止まっても、止まるのは CDK のデプロイだけで、公開中のサイトとメールには影響しない。
+   - 設定の表で、「アクセス許可セット」が有効で、保存時の暗号化に追加の料金がかからないことを確かめる。
+   - ユーザーを作り、MFA を必須にする。許可セット `AdministratorAccess` を作り、このアカウントでそのユーザーに割り当てる。
+   - ダッシュボードの「AWS アクセスポータルの URL」（`https://d-xxxxxxxxxx.awsapps.com/start` の形）を控える。
+4. AWS CLI v2 を入れ、`aws configure sso` でプロファイルを作る。
+
    ```bash
-   aws sso login --profile higuma-lab
+   aws configure sso
    ```
-4. **AWS Budgets で月額の予算アラートを作る**（例：月 $5 を超えそうなときにメール）。Budgets は2件まで無料。
+
+   | 聞かれること                | 入れるもの                                                                           |
+   | --------------------------- | ------------------------------------------------------------------------------------ |
+   | `SSO session name`          | 好きな名前（例：`higuma-lab`）                                                       |
+   | `SSO start URL`             | 手順 3 で控えたアクセスポータルの URL                                                |
+   | `SSO region`                | `ap-northeast-1`                                                                     |
+   | `SSO registration scopes`   | 何も入れずに Enter                                                                   |
+   | （ブラウザが開く）          | 手順 3 の作業用のユーザーでサインインし、アクセスを許可する                          |
+   | アカウントとロール          | このアカウントと `AdministratorAccess`                                               |
+   | `Default client Region`     | `ap-northeast-1`                                                                     |
+   | `CLI default output format` | `json`                                                                               |
+   | `Profile name`              | **`higuma-lab`**（この手順書のコマンドの `--profile` と同じ名前。PC の中だけの名前） |
+   - ログインには期限がある（既定で 8 時間程度）。切れたら、次のコマンドで作業用のユーザーとしてサインインし直す。
+     ```bash
+     aws sso login --profile higuma-lab
+     ```
+   - アクセスポータルの URL とアカウント ID は、このリポジトリに書かない（公開する予定のため）。
+
 5. Node.js 24 LTS を入れ、`infra/` で `npm ci` を実行する。`infra/.env` を作る。
+
+- コマンドはすべて自分の PC のターミナル（`infra/` フォルダー）で実行する。Windows PowerShell 5.1 では `curl` が別のコマンドの別名なので、手順 7 では `curl.exe` と書くか Git Bash を使う。
 
 ### 1. CDK の初期設定（bootstrap）
 
