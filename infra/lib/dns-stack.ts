@@ -1,6 +1,9 @@
 import { CfnOutput, Duration, Fn, RemovalPolicy, Stack, type StackProps } from 'aws-cdk-lib';
 import {
   CaaAmazonRecord,
+  CaaRecord,
+  CaaTag,
+  CnameRecord,
   MxRecord,
   PublicHostedZone,
   TxtRecord,
@@ -8,10 +11,12 @@ import {
 } from 'aws-cdk-lib/aws-route53';
 import type { Construct } from 'constructs';
 import type { MailConfig } from '../config/mail.js';
+import type { SampleSitesConfig } from '../config/samples.js';
 
 export interface DnsStackProps extends StackProps {
   readonly domainName: string;
   readonly mail: MailConfig;
+  readonly samples: SampleSitesConfig;
 }
 
 /**
@@ -24,7 +29,7 @@ export class DnsStack extends Stack {
   constructor(scope: Construct, id: string, props: DnsStackProps) {
     super(scope, id, { ...props, terminationProtection: true });
 
-    const { domainName, mail } = props;
+    const { domainName, mail, samples } = props;
 
     const zone = new PublicHostedZone(this, 'HostedZone', {
       zoneName: domainName,
@@ -78,6 +83,24 @@ export class DnsStack extends Stack {
           ttl: Duration.hours(1),
         }),
       );
+    }
+
+    // サンプルサイト（Cloudflare Pages）のサブドメイン。親の CAA で Cloudflare の認証局だけを許す
+    if (samples.sites.length > 0) {
+      new CaaRecord(this, 'SampleCaa', {
+        zone,
+        recordName: samples.parent,
+        values: samples.caaIssuers.map((value) => ({ flag: 0, tag: CaaTag.ISSUE, value })),
+        ttl: Duration.hours(1),
+      });
+    }
+    for (const { name, target } of samples.sites) {
+      new CnameRecord(this, `Sample-${name}`, {
+        zone,
+        recordName: `${name}.${samples.parent}`,
+        domainName: target,
+        ttl: Duration.hours(1),
+      });
     }
 
     // お名前.com に登録するネームサーバー

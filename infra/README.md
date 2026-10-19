@@ -172,6 +172,18 @@ npx cdk deploy HigumaLabDns --profile higuma-lab
 - メール用のレコードは、スタックの外で消えないよう「保持（RETAIN）」にしている。そのため `config/mail.ts` からレコードを消したり、DKIM のセレクター名を変えたりしても、古いレコードは Route 53 に残る。デプロイの後、コンソールで古いレコードを手で消す。
 - 詳しい運用は Phase 9 の `docs/operations.md` にまとめる。
 
+### サンプルサイトのサブドメイン（D-051）
+
+サンプルサイト（Cloudflare Pages）を `<名前>.sample.<ドメイン>` で公開する。値は `config/samples.ts` に書く。
+
+1. Cloudflare の Pages のプロジェクトの **Custom domains** で、サブドメイン（例：`komugi-to-yuge.sample.higuma-lab.jp`）を足す。Cloudflare が「CNAME を作る」よう案内するが、DNS は Route 53 なので、次の 2 で作る。
+2. `npx cdk diff HigumaLabDns` で差分を確かめ、`npx cdk deploy HigumaLabDns` でデプロイする。CNAME と、`sample.<ドメイン>` の CAA（Cloudflare が使う認証局を許す）ができる。
+3. Pages の Custom domains の状態が **Active** になるのを待つ（証明書の発行に数分〜数十分）。`https://<サブドメイン>/` が開けることを確かめる。
+4. 管理画面のログインのため、認証の中継の `ALLOWED_DOMAINS` に新しいホスト名を入れる。サンプルのリポジトリ側の作業（サイトの URL の差し替え）は、`site-template` の `docs/publish-sample.md` の 6 章。
+
+- apex の CAA は Amazon だけを許している。`sample.<ドメイン>` に CAA を置かずにサブドメインを付けると、Cloudflare が証明書を取れず、Custom domains が有効にならない。
+- サンプルを消すときは、`config/samples.ts` から消してデプロイする（レコードは保持にしていないので消える）。
+
 ### 3. 証明書（ACM）
 
 ```bash

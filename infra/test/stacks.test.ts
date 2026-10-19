@@ -4,6 +4,7 @@ import { Match, Template } from 'aws-cdk-lib/assertions';
 import { describe, expect, it } from 'vitest';
 import { loadConfig } from '../config/env.js';
 import type { MailConfig } from '../config/mail.js';
+import type { SampleSitesConfig } from '../config/samples.js';
 import { CertificateStack } from '../lib/certificate-stack.js';
 import { DnsStack } from '../lib/dns-stack.js';
 import { GithubOidcStack } from '../lib/github-oidc-stack.js';
@@ -14,6 +15,7 @@ const DOMAIN = 'example.jp';
 const REPOSITORY = 'owner/repo';
 
 const NO_MAIL: MailConfig = { verification: [], mx: [], dkim: [] };
+const NO_SAMPLES: SampleSitesConfig = { parent: 'sample', caaIssuers: ['ca.example'], sites: [] };
 
 /** cdk.json の feature flags。本番の synth と同じ設定でテストする */
 const CDK_CONTEXT = (
@@ -22,13 +24,14 @@ const CDK_CONTEXT = (
   }
 ).context;
 
-function synth(mail: MailConfig = NO_MAIL) {
+function synth(mail: MailConfig = NO_MAIL, samples: SampleSitesConfig = NO_SAMPLES) {
   const app = new App({ context: CDK_CONTEXT });
   const env = { account: ACCOUNT, region: 'ap-northeast-1' };
   const dns = new DnsStack(app, 'Dns', {
     env,
     domainName: DOMAIN,
     mail,
+    samples,
     crossRegionReferences: true,
   });
   const certificate = new CertificateStack(app, 'Certificate', {
@@ -125,6 +128,36 @@ describe('DnsStack', () => {
     dns.hasResourceProperties('AWS::Route53::RecordSet', {
       Name: `_dmarc.${DOMAIN}.`,
       Type: 'TXT',
+    });
+  });
+
+  it('サンプルがなければ、サンプル用のレコードを作らない', () => {
+    templates.dns.resourcePropertiesCountIs('AWS::Route53::RecordSet', { Type: 'CNAME' }, 0);
+    // apex の CAA（Amazon だけ）の 1 件だけ
+    templates.dns.resourcePropertiesCountIs('AWS::Route53::RecordSet', { Type: 'CAA' }, 1);
+  });
+
+  it('サンプルのサブドメインを CNAME で向け、親にだけ別の認証局を許す', () => {
+    const { dns } = synth(NO_MAIL, {
+      parent: 'sample',
+      caaIssuers: ['ca.example', 'ca2.example'],
+      sites: [{ name: 'shop', target: 'shop.pages.example' }],
+    });
+    dns.hasResourceProperties('AWS::Route53::RecordSet', {
+      Name: `shop.sample.${DOMAIN}.`,
+      Type: 'CNAME',
+      ResourceRecords: ['shop.pages.example'],
+    });
+    dns.hasResourceProperties('AWS::Route53::RecordSet', {
+      Name: `sample.${DOMAIN}.`,
+      Type: 'CAA',
+      ResourceRecords: ['0 issue "ca.example"', '0 issue "ca2.example"'],
+    });
+    // サイト本体（apex）の CAA は Amazon のまま
+    dns.hasResourceProperties('AWS::Route53::RecordSet', {
+      Name: `${DOMAIN}.`,
+      Type: 'CAA',
+      ResourceRecords: Match.arrayWith([Match.stringLikeRegexp('amazon')]),
     });
   });
 });

@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { App, Tags } from 'aws-cdk-lib';
 import { loadConfig } from '../config/env.js';
 import { mailConfig } from '../config/mail.js';
+import { sampleSitesConfig } from '../config/samples.js';
 import { CertificateStack } from '../lib/certificate-stack.js';
 import { DnsStack } from '../lib/dns-stack.js';
 import { GithubOidcStack } from '../lib/github-oidc-stack.js';
@@ -29,6 +30,7 @@ const dns = new DnsStack(app, 'HigumaLabDns', {
   tags,
   domainName: config.domainName,
   mail: mailConfig,
+  samples: sampleSitesConfig,
   crossRegionReferences: true,
 });
 
