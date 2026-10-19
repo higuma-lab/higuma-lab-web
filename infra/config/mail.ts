@@ -2,8 +2,8 @@
  * メール用の DNS レコード（D-004）。Zoho Mail の管理画面に表示される値を、ここに転記する。
  * どれも DNS で公開される値のため、秘密情報ではない。名前はドメインからの相対で書く（ドメイン自体は .env）。
  *
- * TODO: Zoho Mail の登録後に値を入れる（Route 53 の構築後、D-004・D-025）。
- *       空のままなら、メール用のレコードは作らない。
+ * 空の項目は、メール用のレコードを作らない。
+ * TODO: DMARC（`p=none` で始める。infra/README.md「メール用のレコード」）。
  *
  * 記入例（値は必ず Zoho の管理画面で確認する。データセンターが日本の場合の例）：
  *   verification: ['zoho-verification=zb00000000.zmverify.zoho.jp'],
@@ -30,6 +30,17 @@ export interface MailConfig {
 
 export const mailConfig: MailConfig = {
   verification: ['zoho-verification=zb97858742.zmverify.zoho.jp'],
-  mx: [],
-  dkim: [],
+  mx: [
+    { priority: 10, hostName: 'mx.zoho.jp' },
+    { priority: 20, hostName: 'mx2.zoho.jp' },
+    { priority: 50, hostName: 'mx3.zoho.jp' },
+  ],
+  spf: 'v=spf1 include:zohomail.jp ~all',
+  dkim: [
+    {
+      selector: 'zmail',
+      value:
+        'v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCjcdnq5ADBIKafydCubMnlK2yZ9Q4OXW+hgvxwp9V0L8m+bnX3lpLFfvZAHGm3mxi3a1DuDkz2HUXVHiR3japJiGv5MFzsSkDTT+Mh730eDbYJzqaWzU9lbPDoRaPPZ0bI99sEO7/BeYl0W1GWim5Omu3T8ym04EvcOkuuUWlE+QIDAQAB',
+    },
+  ],
 };
