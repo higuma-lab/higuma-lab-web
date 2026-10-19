@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 
 /**
  * robots.txt（docs/design.md 6.1）。すべてのクローラーを許可し、サイトマップの場所を示す。
- * AI のクローラー（GPTBot など）も許可している。TODO: 許可するかをオーナーが最終確認する（decisions.md の TODO）
+ * AI のクローラー（学習用・検索用とも）も許可する（D-052）。
  */
 export const GET: APIRoute = ({ site }) => {
   const sitemap = new URL('sitemap-index.xml', site).href;
