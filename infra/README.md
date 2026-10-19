@@ -78,9 +78,9 @@
      4. 許可セット `AdministratorAccess` を選び、「次へ」→「送信」。
      5. アカウントの中にロールが作られる（数十秒〜数分）。状態が完了になったら、アクセスポータルに作業用のユーザーでサインインし、アカウントの下に `AdministratorAccess` が出ることを確かめる。
      - 割り当ての前に手順 4 の `aws configure sso` を実行すると、アカウントが見つからない。割り当ての後に実行する。
-   - ダッシュボードの「AWS アクセスポータルの URL」（`https://d-xxxxxxxxxx.awsapps.com/start` の形）を控える。
+   - 「AWS アクセスポータルの URL」（`https://d-xxxxxxxxxx.awsapps.com/start` の形）を控える。Identity Center の左のメニューの「ダッシュボード」→「設定の概要」にある。「設定」→「アイデンティティソース」タブや、ユーザーの招待メールにも書かれている。見つからないときは、右上のリージョンが東京になっているか確かめる。
    - 以後はルートユーザーからサインアウトし、アクセスポータルから作業用のユーザーで入る。ルートユーザーは、請求とアカウントの設定のときだけ使う。
-4. AWS CLI v2 を入れ、`aws configure sso` でプロファイルを作る。
+4. AWS CLI v2 を入れ、`aws configure sso` でプロファイルを作る。Windows では AWS の公式の文書（「AWS CLI の最新バージョンのインストール」）にあるインストーラー（MSI）を使い、入れた後に新しいターミナルで `aws --version` が `aws-cli/2.` で始まることを確かめる。
 
    ```bash
    aws configure sso
@@ -109,13 +109,30 @@
      aws sso login --profile higuma-lab
      ```
 
+   - 途中や最後に「Configure AWS skills and the AWS MCP server for your AI coding agent(s)?」と聞かれたら、**`n`（いいえ）**にする。AI のエージェントが、このプロファイル（管理者の権限）で AWS を直接操作できるようになるため。AWS の操作はこの手順書でオーナーが行う（CLAUDE.md）。
    - アクセスポータルの URL とアカウント ID は、このリポジトリに書かない（公開する予定のため）。
 
-5. Node.js 24 LTS を入れ、`infra/` で `npm ci` を実行する。`infra/.env` を作る。
+5. Node.js 24 LTS（24.16 以上。D-031）を入れ、`infra/` で `npm ci` を実行する。
+6. `infra/` で、見本を写して `infra/.env` を作り、値を入れて保存する（`.gitignore` に入っているのでコミットされない）。このファイルがないと、`cdk` のコマンドが「環境変数 DOMAIN_NAME が未設定です」で止まる。
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   PowerShell では `Copy-Item .env.example .env`。
+
+   | 変数                        | 値                                                             |
+   | --------------------------- | -------------------------------------------------------------- |
+   | `DOMAIN_NAME`               | `higuma-lab.jp`                                                |
+   | `DEPLOY_GITHUB_REPOSITORY`  | `higuma-lab/higuma-lab-web`                                    |
+   | `DEPLOY_GITHUB_ENVIRONMENT` | 空のまま（既定の `production`）                                |
+   | `GITHUB_OIDC_PROVIDER_ARN`  | 空のまま（アカウントに GitHub の OIDC プロバイダーがないとき） |
+
+   アカウント ID は書かない（実行するときのプロファイルから決まる）。
 
 ### 1. CDK の初期設定（bootstrap）
 
-ap-northeast-1 と us-east-1 の両方に必要（証明書を us-east-1 に置くため）。
+ap-northeast-1 と us-east-1 の両方に必要（証明書を us-east-1 に置くため）。`infra/` で実行する。`<アカウントID>` は手順 0 の 4 の `aws sts get-caller-identity` の `Account`（12 桁）。サインインの期限が切れていたら、先に `aws sso login --profile higuma-lab` を実行する（以降の手順も同じ）。
 
 ```bash
 npx cdk bootstrap aws://<アカウントID>/ap-northeast-1 aws://<アカウントID>/us-east-1 --profile higuma-lab
@@ -147,7 +164,7 @@ npx cdk deploy HigumaLabDns --profile higuma-lab
 
 ### メール用のレコード（Zoho Mail の登録後）
 
-1. Zoho Mail の管理画面（ドメインの設定）に表示される、所有確認の TXT・MX・SPF・DKIM の値を `config/mail.ts` に転記する。DMARC は `p=none`（監視のみ）で始め、レポートで問題がないことを確かめてから `quarantine` → `reject` と強める。
+1. Zoho Mail のドメインの所有確認の方法は **TXT** を選ぶ（CNAME は `config/mail.ts` に欄がなく、HTML のアップロードはサイトの公開前には使えない）。Zoho Mail の管理画面（ドメインの設定）に表示される、所有確認の TXT・MX・SPF・DKIM の値を `config/mail.ts` に転記する。DMARC は `p=none`（監視のみ）で始め、レポートで問題がないことを確かめてから `quarantine` → `reject` と強める。
 2. `npx cdk diff HigumaLabDns` で差分を確かめ、`npx cdk deploy HigumaLabDns` でデプロイする。
 3. 反映を確かめる：`nslookup -type=MX higuma-lab.jp`、`nslookup -type=TXT zmail._domainkey.higuma-lab.jp`（セレクター名は Zoho の表示に合わせる）。Zoho の管理画面で「確認」を押す。
 
@@ -182,6 +199,8 @@ npx cdk deploy HigumaLabGithubOidc --profile higuma-lab
 - 出力の `DeployRoleArn` を控える。
 
 ### 6. GitHub の設定
+
+> **注意**：2 の `AWS_DEPLOY_ROLE_ARN` を登録すると、それ以降の `main` へのマージで自動的にデプロイされ、その時点の `main` の内容が公開される。画面に「TODO:」が残っている間に登録しない。公開前の点検（`docs/operations.md` 9章）を済ませてから 2 以降に進む（1・3・4 は先に行ってよい）。
 
 1. **Environment**：Settings → Environments → `production` を作る。
    - Deployment branches and tags：**Selected branches** にして `main` だけを許可する（OIDC の信頼条件は environment で絞っているため、ここで main 以外を締め出す。**必須**、D-036）。
