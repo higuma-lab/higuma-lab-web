@@ -418,6 +418,18 @@ design.md 2.2 の構成で導入した。バージョン固有の判断は以下
 - 次のお客様の作業時間の見込みを、約 11.5〜14 時間から **約 9〜11.5 時間** に直した（`site-template` の docs/time-log.md）。**料金は変えない**（D-040 のまま）。差し替えは短くなったが、お客様とのやり取り（聞き取り・修正の対応・引き渡しの付き添い）の時間は、まだ測っていないため。
 - お店の方が自分で更新できる仕組みをプランに含めるかは、D-049 のまま未定。
 
+### D-051 サンプルサイトのサブドメイン（2026-10-19）※D-048〜D-050 を受けて
+
+- サンプルの URL を `<店名>.sample.higuma-lab.jp` にする（`komugi-to-yuge.sample.higuma-lab.jp`・`karada-kyufu.sample.higuma-lab.jp`）。Cloudflare Pages のプロジェクト名・Works の名前と同じにし、同じ業種のサンプルが増えても名前がぶつからないようにする（オーナーが選択）。
+- Route 53 の CNAME で Pages の `<プロジェクト名>.pages.dev` に向ける。値は `infra/config/samples.ts` に書き、DnsStack で作る（コンソールで手作業で作らない）。
+- apex の CAA は Amazon だけに証明書の発行を許しているため、そのままでは Cloudflare が証明書を取れない。親の `sample.higuma-lab.jp` にだけ、Cloudflare Pages の文書にある認証局（Let's Encrypt・Google Trust Services・SSL.com）を許す CAA を置く。サイト本体（apex・www）は Amazon のまま。
+  - 理由：CAA は名前の木を上にたどって最初に見つかったものが効くため、親に置けばサンプルだけに効く。apex に足すと、サイト本体にも別の認証局が証明書を出せるようになる。
+- ワイルドカードの証明書は誰にも出させない（`issuewild ";"`）。Pages は個別の名前の証明書しか使わない。
+- サンプルのレコードは保持（RETAIN）にしない。`samples.ts` から消せばレコードも消える。
+  - 理由：残った CNAME はサブドメインの乗っ取りの原因になる。Pages のプロジェクトを消すと `<名前>.pages.dev` が空き、第三者が同じ名前で作ってこのサブドメインを付けられる。
+  - **Pages のプロジェクト名を変える・消す前に、必ず CNAME を先に消す**（順序は `infra/README.md`）。
+- Works のリンクは、Custom domains が有効になったのを確かめてから、別の PR で差し替える（DNS より先にリンクが公開されないように）。
+
 ## TODO（未確定）
 
 - [x] 料金の目安金額 → D-040
