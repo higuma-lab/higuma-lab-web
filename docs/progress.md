@@ -47,7 +47,7 @@
 - [ ] 公開前のチェックリスト（`docs/operations.md` 9章）
 - [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
 - [x] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）、プライバシーポリシー（`src/content/pages/privacy.md`）（2026-10-15 確定、D-042・D-043）
-- [ ] AI のクローラーを robots.txt で許可するか（今は全許可）
+- [x] AI のクローラーを robots.txt で許可するか：全部許可（2026-10-19、D-052）
 - [x] SNS の URL：X・Instagram は設定済み（2026-10-15、`src/config/social.ts`、D-012）。GitHub はリポジトリの公開後
 - [ ] プライバシーポリシーの制定日を公開日に入れる（`src/content/pages/privacy.md`。アクセスログは保存しないことに決定、D-043）
 - [ ] 正規 URL を apex（`https://higuma-lab.jp`）にすることの最終確認（D-003）
