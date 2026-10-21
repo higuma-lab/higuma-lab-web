@@ -16,13 +16,13 @@ Partner Center の登録を待たずに、サイトを先に公開する（D-056
 
 1. **並行して進めるもの**（順番は問わない）
    - [x] オーナー：GitHub の設定のうち、手順6 の 1（environment）・3（ブランチ保護）・4（Dependabot）（2026-10-21）
-   - オーナー：決めること（ライセンス、正規 URL を apex にすることの最終確認、Cloudflare Web Analytics を使うか）
+   - オーナー：決めること（正規 URL を apex にすることの最終確認、Cloudflare Web Analytics を使うか）
    - オーナー：NoteFlip のページの突き合わせ（数値・「販売しています」の文言・最終更新日）。直す文面が決まったら Claude Code が反映する
    - オーナー：SNS のプロフィールのうち、サイトの URL 以外（アイコンは `docs/content/brand/`、名前、紹介文）。勤務先や経歴を推測させる内容は書かない
    - Claude Code：情報が届いたものから「TODO:」を消す
 2. **構築記録の記事を仕上げる**：オーナーが下書きを自分の言葉に直す → AWS の構築で分かったこと（手順0〜5 の分）を加える。数値は 4 で公開時点のものにする
 3. **点検**（文面を固めてから）：content-reviewer、site-auditor、外部リンクを手で開く、Lighthouse、iPhone の Safari。指摘を直す
-4. **公開の PR**（Claude Code）：プライバシーポリシーの制定日、記事を `draft: false` にして公開日と数値を入れる、RSS の追加、ライセンスを README に書く、履歴に個人情報・秘密情報がないことの確認。オーナーがマージする（Variables を登録する前なので、まだデプロイされない）
+4. **公開の PR**（Claude Code）：プライバシーポリシーの制定日、記事を `draft: false` にして公開日と数値を入れる、RSS の追加、履歴に個人情報・秘密情報がないことの確認。オーナーがマージする（Variables を登録する前なので、まだデプロイされない）
 5. **公開の当日**（オーナー）
    1. リポジトリを Public にし、外部からの PR のワークフローに承認を必要とする設定にする。`main` のルールと environment の制限が効いていることを確かめる（無料のプランでは、非公開のリポジトリでは効かないため、公開してから効く）
    2. 手順6 の 2（Variables）→ 5（初回のデプロイ）
@@ -69,7 +69,7 @@ Partner Center の登録を待たずに、サイトを先に公開する（D-056
 - [ ] 素材の用意（`docs/content/README.md` のチェックリスト）
 - [ ] 構築記録の記事：下書きの言い回しを自分の言葉に直す（インタビューは回答済み、D-038）
 - [ ] AWS の構築作業のメモ：手順0〜2 とメールの分は `build-log.md` に記録済み。残りは手順3〜7 と、最初の請求額
-- [ ] リポジトリのライセンスを決める（公開前。README の TODO）
+- [x] リポジトリのライセンス：All rights reserved（2026-10-21、D-057。`LICENSE` と README）
 - [ ] 公開前のチェックリスト（`docs/operations.md` 9章）
 - [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
 - [x] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）、プライバシーポリシー（`src/content/pages/privacy.md`）（2026-10-15 確定、D-042・D-043）
