@@ -34,7 +34,7 @@
 - DNS管理：Route 53（お名前.com のネームサーバーを Route 53 に変更）。
 - ホスティング：S3（非公開バケット、ap-northeast-1）+ CloudFront（OAC）。
 - 証明書：ACM（CloudFront 用に us-east-1 で発行、DNS検証）。
-- 正規URL：`https://higuma-lab.jp`（apex）。`www` は apex へリダイレクト。※Phase 2 で最終確認
+- 正規URL：`https://higuma-lab.jp`（apex）。`www` は apex へリダイレクト。（2026-10-21 オーナーが確定）
 - デプロイ：GitHub Actions（OIDC で AWS ロールを引き受け、アクセスキーは使わない）。
 - IaC：AWS CDK（TypeScript）。
 
@@ -486,7 +486,7 @@ design.md 2.2 の構成で導入した。バージョン固有の判断は以下
 - [x] 活動地域・経験年数 → D-039（所在地は載せず「全国（オンライン・メールで対応）」、経験は「15年以上」）
 - [ ] NoteFlip の公開予定時期・ストアURL・スクリーンショット（名称・概要は docs/content/apps/noteflip/ にあり）
 - [x] 各SNSのURL：X・Instagram を設定（2026-10-15）。GitHub はリポジトリの公開後
-- [ ] apex / www のどちらを正規URLにするか最終確認（D-003）
+- [x] apex / www のどちらを正規URLにするか → apex で確定（2026-10-21、D-003）
 - [x] AIクローラー（GPTBot 等）を robots.txt で許可するか → D-052（全部許可）
 - [ ] Works が増えたら（目安 6〜8 件以上）、種別で絞り込むページ（例：`/works/own-product/`）を静的に追加する。並べ替えは JS が必要になるため入れない（2026-10-09 オーナー了承）
 - [x] キャッチコピー → D-028

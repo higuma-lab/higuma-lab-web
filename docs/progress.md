@@ -16,7 +16,7 @@ Partner Center の登録を待たずに、サイトを先に公開する（D-056
 
 1. **並行して進めるもの**（順番は問わない）
    - [x] オーナー：GitHub の設定のうち、手順6 の 1（environment）・3（ブランチ保護）・4（Dependabot）（2026-10-21）
-   - オーナー：決めること（正規 URL を apex にすることの最終確認、Cloudflare Web Analytics を使うか）
+   - オーナー：決めること（Cloudflare Web Analytics を使うか）
    - オーナー：NoteFlip のページの突き合わせ（数値・「販売しています」の文言・最終更新日）。直す文面が決まったら Claude Code が反映する
    - オーナー：SNS のプロフィールのうち、サイトの URL 以外（アイコンは `docs/content/brand/`、名前、紹介文）。勤務先や経歴を推測させる内容は書かない
    - Claude Code：情報が届いたものから「TODO:」を消す
@@ -76,7 +76,7 @@ Partner Center の登録を待たずに、サイトを先に公開する（D-056
 - [x] AI のクローラーを robots.txt で許可するか：全部許可（2026-10-19、D-052）
 - [x] SNS の URL：X・Instagram は設定済み（2026-10-15、`src/config/social.ts`、D-012）。GitHub はリポジトリの公開後
 - [ ] プライバシーポリシーの制定日を公開日に入れる（`src/content/pages/privacy.md`。アクセスログは保存しないことに決定、D-043）
-- [ ] 正規 URL を apex（`https://higuma-lab.jp`）にすることの最終確認（D-003）
+- [x] 正規 URL は apex（`https://higuma-lab.jp`）で確定（2026-10-21、D-003）
 - [ ] NoteFlip の公開予定時期・ストアの URL・スクリーンショット
   - 順番：サイトを公開（審査でプライバシーポリシーの URL が開ける必要がある。D-024。DUNS の取得を待つ間に先に公開する）→ Partner Center で名前を予約（Store ID が決まる。予約には期限があるので確認する）→ 提出（公開のしかたは「手動」か「日時の指定」）→ 審査 → Store に公開。サイトの公開から Store への公開までの間、Store のリンクは出さない
 - [x] 未確定の情報：対応地域・経験年数・打ち合わせの方法は D-039、料金は D-040、スキルとアプリの対応プラットフォームは D-041 で確定
