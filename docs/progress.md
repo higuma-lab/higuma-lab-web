@@ -15,7 +15,7 @@
 Partner Center の登録を待たずに、サイトを先に公開する（D-056）。NoteFlip の提出までにプライバシーポリシーの URL が開ければよい（D-024）。各項目の詳細は下の「作業の一覧」と `docs/operations.md` 9章。
 
 1. **並行して進めるもの**（順番は問わない）
-   - オーナー：GitHub の設定のうち、手順6 の 1（environment）・3（ブランチ保護）・4（Dependabot）
+   - [x] オーナー：GitHub の設定のうち、手順6 の 1（environment）・3（ブランチ保護）・4（Dependabot）（2026-10-21）
    - オーナー：決めること（ライセンス、正規 URL を apex にすることの最終確認、Cloudflare Web Analytics を使うか）
    - オーナー：NoteFlip のページの突き合わせ（数値・「販売しています」の文言・最終更新日）。直す文面が決まったら Claude Code が反映する
    - オーナー：SNS のプロフィールのうち、サイトの URL 以外（アイコンは `docs/content/brand/`、名前、紹介文）。勤務先や経歴を推測させる内容は書かない
@@ -61,8 +61,8 @@ Partner Center の登録を待たずに、サイトを先に公開する（D-056
 - [x] `higuma-lab.com` の扱い：転送せず持っておくだけ（2026-10-19、D-054）
 - [x] `higuma-lab.com` のなりすまし対策：お名前.com の DNS に null MX（`0 .`）・SPF（`v=spf1 -all`）・DMARC（`_dmarc` に `v=DMARC1; p=reject`）を置いた（2026-10-20、公開の DNS で反映を確認。D-054）
 - [ ] 両ドメインの更新の料金を確かめる（取得はキャンペーンの価格だった）。`.com` を更新するかは更新の時期に決める
-- [ ] AWS の構築（`infra/README.md` の手順0〜7）：手順0〜5 は完了（2026-10-19。証明書・S3・CloudFront・デプロイ用のロールまで。バケットは空）。手順6 の 1・3・4 は進めてよい。**手順6 の 2（Variables）と 5（初回のデプロイ）は、公開前の点検の後**（登録すると `main` へのマージで公開される）
-- [ ] GitHub：environment `production`（main のみ）、Variables、`main` のブランチ保護、Dependabot のセキュリティ更新（`infra/README.md` 手順6）
+- [ ] AWS の構築（`infra/README.md` の手順0〜7）：手順0〜5 は完了（2026-10-19。証明書・S3・CloudFront・デプロイ用のロールまで。バケットは空）。手順6 の 1・3・4 は完了（2026-10-21）。**手順6 の 2（Variables）と 5（初回のデプロイ）は、公開前の点検の後**（登録すると `main` へのマージで公開される）
+- [ ] GitHub：environment `production`（main のみ）・`main` のルール（Rulesets）・Dependabot の alerts とセキュリティ更新は設定済み（2026-10-21）。無料のプランのため、ルールと environment の制限はリポジトリを Public にしてから効く。残りは Variables（`infra/README.md` 手順6 の 2）
 - [x] Zoho Mail の登録と `support@` の別名作成（2026-10-19。所有確認・MX・SPF・DKIM は `infra/config/mail.ts`、表示名と署名は事業の名前、D-004・D-025）
 - [ ] DMARC の監視（`p=none` で開始。レポートで問題がなければ `quarantine` → `reject` に強める）
 - [ ] NoteFlip リポジトリの更新（指示文は渡し済み、D-024）
