@@ -19,7 +19,7 @@ Partner Center の登録を待たずに、サイトを先に公開する（D-056
    - [x] オーナー：決めること（ライセンス → D-057、正規 URL → apex で確定、Cloudflare Web Analytics → 使う。D-006）（2026-10-21）
    - オーナー：Cloudflare の Web Analytics に `higuma-lab.jp` を追加し（JS スニペットの方式）、トークンを控える
    - オーナー：NoteFlip のページの突き合わせ（数値・「販売しています」の文言・最終更新日）。直す文面が決まったら Claude Code が反映する
-   - オーナー：SNS のプロフィールのうち、サイトの URL 以外（アイコンは `docs/content/brand/`、名前、紹介文）。勤務先や経歴を推測させる内容は書かない
+   - オーナー：SNS のプロフィールのうち、サイトの URL 以外（アイコンと X のヘッダーは `docs/content/brand/`、名前、紹介文）。勤務先や経歴を推測させる内容は書かない
    - Claude Code：情報が届いたものから「TODO:」を消す
 2. **構築記録の記事を仕上げる**：オーナーが下書きを自分の言葉に直す → AWS の構築で分かったこと（手順0〜5 の分）を加える。数値は 4 で公開時点のものにする
 3. **点検**（文面を固めてから）：content-reviewer、site-auditor、外部リンクを手で開く、Lighthouse、iPhone の Safari。指摘を直す
@@ -96,7 +96,7 @@ Partner Center の登録を待たずに、サイトを先に公開する（D-056
 
 ## 素材の場所
 
-- ロゴ：`src/assets/brand/`（生成スクリプトは `scripts/brand/`、SNS 用 PNG は `docs/content/brand/`）
+- ロゴ：`src/assets/brand/`（生成スクリプトは `scripts/brand/`、SNS 用 PNG は `docs/content/brand/`。X のヘッダーは `scripts/sns/x-header.mjs`）
 - マスコット：`src/assets/mascot/`
 - NoteFlip のストア用ページ：`src/content/apps/noteflip/`（原本。更新方法は `docs/content/apps/noteflip/README.md`）
 
