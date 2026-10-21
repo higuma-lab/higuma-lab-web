@@ -10,6 +10,31 @@
 - 2 件目のサンプル（架空の整体院）を公開し、基本デザインをテンプレートにした。Works に追加し、作業時間の見込みを直した（D-050）
 - ドメインを取得し、AWS の構築を手順5（デプロイ用のロール）まで終えた。Zoho Mail で `info@`・`support@` の送受信ができる（2026-10-19）
 
+## 公開までの順番
+
+Partner Center の登録を待たずに、サイトを先に公開する（D-056）。NoteFlip の提出までにプライバシーポリシーの URL が開ければよい（D-024）。各項目の詳細は下の「作業の一覧」と `docs/operations.md` 9章。
+
+1. **並行して進めるもの**（順番は問わない）
+   - [x] オーナー：GitHub の設定のうち、手順6 の 1（environment）・3（ブランチ保護）・4（Dependabot）（2026-10-21）
+   - [x] オーナー：決めること（ライセンス → D-057、正規 URL → apex で確定、Cloudflare Web Analytics → 使う。D-006）（2026-10-21）
+   - オーナー：Cloudflare の Web Analytics に `higuma-lab.jp` を追加し（JS スニペットの方式）、トークンを控える
+   - オーナー：NoteFlip のページの突き合わせ（数値・「販売しています」の文言・最終更新日）。直す文面が決まったら Claude Code が反映する
+   - オーナー：SNS のプロフィールのうち、サイトの URL 以外（アイコンは `docs/content/brand/`、名前、紹介文）。勤務先や経歴を推測させる内容は書かない
+   - Claude Code：情報が届いたものから「TODO:」を消す
+2. **構築記録の記事を仕上げる**：オーナーが下書きを自分の言葉に直す → AWS の構築で分かったこと（手順0〜5 の分）を加える。数値は 4 で公開時点のものにする
+3. **点検**（文面を固めてから）：content-reviewer、site-auditor、外部リンクを手で開く、Lighthouse、iPhone の Safari。指摘を直す
+4. **公開の PR**（Claude Code）：プライバシーポリシーの制定日、記事を `draft: false` にして公開日と数値を入れる、RSS の追加、履歴に個人情報・秘密情報がないことの確認。オーナーがマージする（Variables を登録する前なので、まだデプロイされない）
+5. **公開の当日**（オーナー）
+   1. リポジトリを Public にし、外部からの PR のワークフローに承認を必要とする設定にする。`main` のルールと environment の制限が効いていることを確かめる（無料のプランでは、非公開のリポジトリでは効かないため、公開してから効く）
+   2. 手順6 の 2（Variables。`PUBLIC_CF_ANALYTICS_TOKEN` も登録する）→ 5（初回のデプロイ）
+   3. 手順7 の確認（ステータス・リダイレクト・ヘッダー・404・CSP）、`info@`・`support@` の送受信
+   4. Search Console に登録し、サイトマップを送る
+   5. SNS のプロフィールにサイトの URL を入れ、1 回目の告知（サイトの公開、できること、モニター募集、構築記録の記事）
+6. **公開の後**
+   - Claude Code：GitHub のリンクを `src/config/social.ts` と Works に入れる PR、Works から構築記録の記事へのリンク
+   - オーナー：AWS の構築作業のメモの残り（手順6〜7、最初の請求額）
+7. **NoteFlip**（DUNS の取得の後）：Partner Center の登録 → 名前の予約 → 提出 → 審査 → Store に公開。Store の公開後に、ストアの URL・スクリーンショットを Works に入れて、SNS で 2 回目の告知
+
 ## 作業の一覧
 
 作業が終わったら、ここを更新してコミットする。大きさ（小・中・大）は CLAUDE.md の表による。
@@ -37,24 +62,24 @@
 - [x] `higuma-lab.com` の扱い：転送せず持っておくだけ（2026-10-19、D-054）
 - [x] `higuma-lab.com` のなりすまし対策：お名前.com の DNS に null MX（`0 .`）・SPF（`v=spf1 -all`）・DMARC（`_dmarc` に `v=DMARC1; p=reject`）を置いた（2026-10-20、公開の DNS で反映を確認。D-054）
 - [ ] 両ドメインの更新の料金を確かめる（取得はキャンペーンの価格だった）。`.com` を更新するかは更新の時期に決める
-- [ ] AWS の構築（`infra/README.md` の手順0〜7）：手順0〜5 は完了（2026-10-19。証明書・S3・CloudFront・デプロイ用のロールまで。バケットは空）。手順6 の 1・3・4 は進めてよい。**手順6 の 2（Variables）と 5（初回のデプロイ）は、公開前の点検の後**（登録すると `main` へのマージで公開される）
-- [ ] GitHub：environment `production`（main のみ）、Variables、`main` のブランチ保護、Dependabot のセキュリティ更新（`infra/README.md` 手順6）
+- [ ] AWS の構築（`infra/README.md` の手順0〜7）：手順0〜5 は完了（2026-10-19。証明書・S3・CloudFront・デプロイ用のロールまで。バケットは空）。手順6 の 1・3・4 は完了（2026-10-21）。**手順6 の 2（Variables）と 5（初回のデプロイ）は、公開前の点検の後**（登録すると `main` へのマージで公開される）
+- [ ] GitHub：environment `production`（main のみ）・`main` のルール（Rulesets）・Dependabot の alerts とセキュリティ更新は設定済み（2026-10-21）。無料のプランのため、ルールと environment の制限はリポジトリを Public にしてから効く。残りは Variables（`infra/README.md` 手順6 の 2）
 - [x] Zoho Mail の登録と `support@` の別名作成（2026-10-19。所有確認・MX・SPF・DKIM は `infra/config/mail.ts`、表示名と署名は事業の名前、D-004・D-025）
 - [ ] DMARC の監視（`p=none` で開始。レポートで問題がなければ `quarantine` → `reject` に強める）
 - [ ] NoteFlip リポジトリの更新（指示文は渡し済み、D-024）
 - [ ] 素材の用意（`docs/content/README.md` のチェックリスト）
 - [ ] 構築記録の記事：下書きの言い回しを自分の言葉に直す（インタビューは回答済み、D-038）
 - [ ] AWS の構築作業のメモ：手順0〜2 とメールの分は `build-log.md` に記録済み。残りは手順3〜7 と、最初の請求額
-- [ ] リポジトリのライセンスを決める（公開前。README の TODO）
+- [x] リポジトリのライセンス：All rights reserved（2026-10-21、D-057。`LICENSE` と README）
 - [ ] 公開前のチェックリスト（`docs/operations.md` 9章）
 - [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
 - [x] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）、プライバシーポリシー（`src/content/pages/privacy.md`）（2026-10-15 確定、D-042・D-043）
 - [x] AI のクローラーを robots.txt で許可するか：全部許可（2026-10-19、D-052）
 - [x] SNS の URL：X・Instagram は設定済み（2026-10-15、`src/config/social.ts`、D-012）。GitHub はリポジトリの公開後
 - [ ] プライバシーポリシーの制定日を公開日に入れる（`src/content/pages/privacy.md`。アクセスログは保存しないことに決定、D-043）
-- [ ] 正規 URL を apex（`https://higuma-lab.jp`）にすることの最終確認（D-003）
+- [x] 正規 URL は apex（`https://higuma-lab.jp`）で確定（2026-10-21、D-003）
 - [ ] NoteFlip の公開予定時期・ストアの URL・スクリーンショット
-  - 順番：Partner Center で名前を予約（Store ID が決まる。予約には期限があるので確認する）→ サイトを公開（審査でプライバシーポリシーの URL が開ける必要がある。D-024）→ 提出（公開のしかたは「手動」か「日時の指定」）→ 審査 → Store に公開。サイトの公開から Store への公開までの間、Store のリンクは出さない
+  - 順番：サイトを公開（審査でプライバシーポリシーの URL が開ける必要がある。D-024。DUNS の取得を待つ間に先に公開する）→ Partner Center で名前を予約（Store ID が決まる。予約には期限があるので確認する）→ 提出（公開のしかたは「手動」か「日時の指定」）→ 審査 → Store に公開。サイトの公開から Store への公開までの間、Store のリンクは出さない
 - [x] 未確定の情報：対応地域・経験年数・打ち合わせの方法は D-039、料金は D-040、スキルとアプリの対応プラットフォームは D-041 で確定
 - [x] プロフィールの経歴の記載が、勤務先の規程・守秘の範囲で問題ないかの確認（2026-10-15 確認済み）
 - [ ] NoteFlip：2台目の PC に同じ Microsoft アカウントで入れ、購入済みとして起動するかを実機で確認（9-5 の購入テストのとき）。確認できたら、サポートと Works の「買い直し不要」の記述にある TODO コメントを消す
