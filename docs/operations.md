@@ -292,7 +292,7 @@ Cookie を使わない無料の解析（D-006）。DNS を Cloudflare に移す�
 
 - [ ] `site-auditor` で点検した
 - [ ] 外部リンクを手で開いて確かめた
-- [ ] Lighthouse（トップ・制作物・About）
+- [ ] Lighthouse（トップ・制作物・About）。`npm run build` の後に `npm run preview -- --port 4323` で配信して測る（番号を指定しないと、4321 番が開発サーバーで使われているときに 4322 番＝E2E の番号になる）
 - [ ] iPhone の Safari で表示を確かめた（E2E は Chromium のみ）
 
 ### 本番環境
