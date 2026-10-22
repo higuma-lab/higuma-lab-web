@@ -46,7 +46,7 @@ Windows deletes the app's data, including the imported scores, handwriting, fold
 
 <h3 id="backup">How do I back up my library or move it to a new PC?</h3>
 
-Apps bought from the Microsoft Store are linked to your Microsoft account. When you move to a new PC after buying NoteFlip, install it from the Microsoft Store with the same account you used to buy it, and you do not need to buy it again. For how many devices you can use and other conditions, see [Microsoft's help](https://support.microsoft.com/en-us/accounts-billing/manage/manage-devices-used-with-your-microsoft-account). To move your scores and handwriting:
+Apps bought from the Microsoft Store are linked to your Microsoft account. When you move to a new PC, install NoteFlip from the Microsoft Store with the same account you used to buy it. For how many devices you can use with one account and other conditions, see [Microsoft's help](https://support.microsoft.com/en-us/accounts-billing/manage/manage-devices-used-with-your-microsoft-account). To move your scores and handwriting:
 
 1. In the library, open the "…" menu and select **Back up library...**. Choose where to save the file (for example a USB drive or OneDrive). Every score, with its handwriting, and your folders and set lists go into one `.zip` file.
 2. On the new PC (or after installing NoteFlip again), open the "…" menu in the library and select **Restore from backup...**, then choose the file. Before it starts, NoteFlip shows what is in the backup and which scores it will not add.

@@ -19,7 +19,7 @@ export const SERVICE_GROUPS: readonly ServiceGroup[] = [
   {
     id: 'app',
     title: 'アプリ開発',
-    summary: 'Windows や Android のアプリを、作る・作るのを手伝う。',
+    summary: 'Windows のアプリを中心に、作る・作るのを手伝う。',
   },
   {
     id: 'consulting',
