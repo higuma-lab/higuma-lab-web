@@ -217,7 +217,8 @@ design.md 2.2 の構成で導入した。バージョン固有の判断は以下
 - アクセシビリティの lint は `eslint-plugin-jsx-a11y` ではなく **`eslint-plugin-jsx-a11y-x`**（MIT、es-tooling の後継版）。元のパッケージは ESLint 10 に未対応で、`eslint-plugin-astro` 3.x が後継版を正式にサポートしているため。
 - `@types/node` を追加。`astro.config.ts` で `process` を使うため（型のみ。出力には含まれない）。
 - `@astrojs/sitemap`・`@astrojs/rss` は Phase 6 で導入する。
-- `eslint-plugin-astro` 3.x は Node 24.16 以上を要求する（現在のローカルは 24.7。警告は出るが動作は確認済み）。オーナーが Node を最新の 24 LTS に更新する。CI は Phase 8 で 24 LTS を指定する。
+- `eslint-plugin-astro` 3.x は Node 24.16 以上を要求する。ローカルは 24.22.1 に更新した（2026-10-23。lint・型チェック・テスト・ビルドが通ることを確認）。CI は Phase 8 で 24 LTS を指定する。
+- Node 26（2026 年 10 月末に LTS）へはすぐには上げない（2026-10-23）。LTS になった直後で、依存の対応も確かめられていないため。24 のサポートは 2028 年 4 月末まで。移行の時期は `docs/progress.md` の作業の一覧。
 
 すべて無料のオープンソース。
 

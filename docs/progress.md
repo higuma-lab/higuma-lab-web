@@ -55,6 +55,7 @@ Partner Center の登録を待たずに、サイトを先に公開する（D-056
 - [ ] 公開前の点検：site-auditor・content-reviewer（`docs/operations.md` 9章）
 - [x] Phase 8 で見送った提案：Dependabot と CDK の推奨 feature flags は採用、OIDC の sub に ref を含めるのと解析ありのビルドで E2E は見送り（D-044・D-045）
 - [ ] Works の種別で絞り込むページ（中。Works が 6〜8 件以上になったら。decisions.md の TODO）
+- [ ] Node.js 26 への移行（中、`chore/...`。2027 年春ごろ、主な依存が 26 を推奨・24 のサポートをやめたとき、24 のサポート終了（2028-04-30）の半年前のどれかで。D-031）：CI・デプロイのワークフローの `node-version`、`engines`、手元を一度にそろえ、ビルドと E2E で確かめる
 
 ### オーナーの作業
 
@@ -72,7 +73,7 @@ Partner Center の登録を待たずに、サイトを先に公開する（D-056
 - [ ] AWS の構築作業のメモ：手順0〜2 とメールの分は `build-log.md` に記録済み。残りは手順3〜7 と、最初の請求額
 - [x] リポジトリのライセンス：All rights reserved（2026-10-21、D-057。`LICENSE` と README）
 - [ ] 公開前のチェックリスト（`docs/operations.md` 9章）
-- [ ] Node.js を最新の 24 LTS（24.16 以上）に更新（D-031）
+- [x] Node.js を最新の 24 LTS に更新（2026-10-23、24.22.1。D-031）：winget の `OpenJS.NodeJS.LTS` の 24.22.1 に入れ替え、`winget pin` で 24 系統に固定する（`winget uninstall --id OpenJS.NodeJS` → `winget install --id OpenJS.NodeJS.LTS --version 24.22.1` → `winget pin add --id OpenJS.NodeJS.LTS --version "24.*"`。今の `OpenJS.NodeJS` のまま上げると 26 になる）
 - [x] 仮の文面の確認：サービス6件（`src/content/services/`）、特徴・ご相談の流れ・FAQ（`src/data/home.ts`）、About（`src/pages/about.astro`、`src/data/profile.ts`）、プライバシーポリシー（`src/content/pages/privacy.md`）（2026-10-15 確定、D-042・D-043）
 - [x] AI のクローラーを robots.txt で許可するか：全部許可（2026-10-19、D-052）
 - [x] SNS の URL：X・Instagram は設定済み（2026-10-15、`src/config/social.ts`、D-012）。GitHub はリポジトリの公開後
