@@ -1,7 +1,7 @@
 ---
-# TODO: サイトの公開日に、制定日（establishedAt）を入れる
 title: プライバシーポリシー
 description: ひぐま開発室（HIGUMA LAB）の Webサイトにおける、個人情報とアクセス情報の取り扱いについて。
+establishedAt: 2026-10-29
 ---
 
 ひぐま開発室（HIGUMA LAB。以下「当事業者」）は、この Webサイト（higuma-lab.jp、以下「本サイト」）における個人情報とアクセス情報の取り扱いを、次のとおり定めます。

@@ -54,6 +54,13 @@ const imageUrl = absoluteUrl(image ?? DEFAULT_OG_IMAGE.path, site);
   <link rel="alternate" hreflang={alt.hreflang} href={absoluteUrl(alt.href, site)} />
 ))}
 
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={`${SITE.fullName} ブログ`}
+  href={absoluteUrl('/rss.xml', site)}
+/>
+
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content={siteNameFor(lang)} />
 <meta property="og:title" content={fullTitle} />
