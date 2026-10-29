@@ -231,7 +231,7 @@ npx cdk deploy HigumaLabGithubOidc --profile higuma-lab
 1. **Environment**：Settings → Environments → `production` を作る。
    - Deployment branches and tags：**Selected branches** にして `main` だけを許可する（OIDC の信頼条件は environment で絞っているため、ここで main 以外を締め出す。**必須**、D-036）。
    - ワークフローの側でも main 以外ではデプロイのジョブを飛ばすが、ワークフローのファイルはブランチごとに書き換えられる。AWS 側の守りはこの設定が前提になるため、設定画面で `main` だけになっていることを必ず確かめる。
-   - リポジトリを公開した後は、Settings → Actions → General で、外部からの PR のワークフローの実行に承認を必要とする設定にする。
+   - リポジトリを公開した後は、Settings → Actions → General で、外部からの PR のワークフローの実行に承認を必要とする設定にする（「Approval for running fork pull request workflows from contributors」で「Require approval for all external contributors」）。
 2. **Variables**：Settings → Secrets and variables → Actions → **Variables**（Repository variables）に登録する。秘密情報ではないため Secrets でなくてよい。
    | 名前                             | 値                                                                  |
    | -------------------------------- | ------------------------------------------------------------------- |

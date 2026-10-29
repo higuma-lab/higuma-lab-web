@@ -1,5 +1,4 @@
 ---
-# TODO: GitHub リポジトリのリンクを追加する（D-007。リポジトリを Public にした後）
 title: ひぐま開発室 Webサイト
 kind: own-product
 summary: このサイトです。Astro で静的サイトとして作り、AWS（S3・CloudFront）で公開する構成にしています。設計から運用手順まで、AI コーディングエージェント（Claude Code）と一緒に作っています。
@@ -44,4 +43,5 @@ publishedAt: 2026-10-08
 
 ## 関連ページ
 
+- [GitHub のリポジトリ（higuma-lab/higuma-lab-web）](https://github.com/higuma-lab/higuma-lab-web)
 - [このサイトの構築記録：Claude Code と一緒に作ってみた](/blog/building-this-site/)

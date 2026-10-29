@@ -158,3 +158,13 @@
 - 数値：Lighthouse（モバイル、ローカルのビルド結果）は、トップ・制作物・About の 3 ページとも Performance・Accessibility・Best Practices・SEO の 4 項目すべて 100 点。本番ではアクセス解析のスクリプトとセキュリティのヘッダーが加わるので、公開後に測り直す。
 - 判断：NoteFlip の「別の PC でも買い直さずに使えます」は、2 台目の PC で確かめていないため、仕組みの説明にとどめた（D-059）。サービスの範囲も、オーナーが使ったことのある方法に絞った（D-058。Android は「相談のうえ」に）。
 - 問題：`npm run preview` を番号を指定せずに実行したら、4321 番を開発サーバーが使っていたため 4322 番（E2E の番号）で起動した → 手順書に `--port 4323` を書いた。
+
+## サイトの公開（2026-10-29）
+
+- 数値：公開の PR（#46）から公開まで、オーナーの作業で約 2 時間の見込みで始めた。公開時点で 17 ページ（RSS を含む）、内部リンク 450 件でリンク切れなし。
+- 問題：`cdk diff` が「Unable to resolve AWS account to use」で止まった → `--profile` は付いていたが、IAM Identity Center のサインイン（既定で 8 時間）が切れていた。`aws sso login --profile higuma-lab` で解消。
+- 問題：初回のデプロイが「Could not assume role with OIDC: Not authorized to perform sts:AssumeRoleWithWebIdentity」で失敗した。GitHub の OIDC のトークンの `sub` が、不変の ID 付きの形式（`repo:<owner>@<ID>/<repo>@<ID>:environment:production`）になっていた（リポジトリの設定 `use_immutable_subject: true`）。ロールの信頼条件は `repo:<owner>/<repo>:...` だったため一致しなかった → 設定で ID 付きの形を受け付けるようにし（#49）、`cdk deploy HigumaLabGithubOidc` で信頼条件を書き換えた。手順書は Phase 8 で書いたが、`sub` の形式までは確かめていなかった。原因は `gh api repos/<owner>/<repo>/actions/oidc/customization/sub` で分かった。
+- 問題：ブラウザでは、デプロイの失敗中に S3 の `NoSuchKey`（`404.html`）の XML が見えた。バケットが空のときの表示で、デプロイが通ると消えた。
+- 問題：Search Console の「ドメイン」プロパティでは、サイトマップの欄に URL を全部（`https://higuma-lab.jp/sitemap-index.xml`）入れる必要があった。
+- 判断：外部の PR のワークフローは「Require approval for all external contributors」（毎回の承認）にした。一人で運用しているので負担がない。
+- 確認：ステータス・リダイレクト・セキュリティのヘッダー・404・CSP の違反なし・アクセス解析の送信を、本番で確かめた。

@@ -309,7 +309,7 @@ Cookie を使わない無料の解析（D-006）。DNS を Cloudflare に移す�
 - [ ] 履歴に個人情報・秘密情報が含まれていない（`infra-reviewer` の秘密情報の確認、`git log --all -p` で個人のメールアドレス・本名を検索）
 - [ ] ライセンスを決めて README に書いた
 - [ ] リポジトリを Public にする（Settings → General → Danger Zone）
-- [ ] Settings → Actions → General で、外部からの PR のワークフローの実行に承認を必要とする設定にした
+- [ ] Settings → Actions → General で、外部からの PR のワークフローの実行に承認を必要とする設定（Require approval for all external contributors）にした
 - [ ] `src/config/social.ts` と Works（このサイト）に GitHub のリンクを入れた
 
 ---
