@@ -283,7 +283,7 @@ Cookie を使わない無料の解析（D-006）。DNS を Cloudflare に移す�
 
 - [ ] 画面に「TODO:」が残っていない。front matter のコメントの TODO は画面に出ないため、`grep -rn "TODO" src` でも確かめる（[2.6](#26-未確定の箇所todo)）
 - [ ] 仮の文面（サービス・特徴・相談の流れ・FAQ・About）をオーナーが確認した
-- [ ] プロフィールの記載が、勤務先の規程・守秘義務の範囲で問題ない（`src/data/profile.ts` に加えて、公開される `docs/`（progress.md 等）の記載も確かめる）
+- [ ] プロフィールの記載が、公開してよい範囲に収まっている（`src/data/profile.ts` に加えて、公開される `docs/`（progress.md 等）の記載も確かめる）
 - [ ] NoteFlip のページの数値・記載を ADR と突き合わせた
 - [ ] `content-reviewer` で点検した
 - [ ] 構築記録の記事の数値（件数・ページ数・費用）を公開時点のものにした

@@ -29,7 +29,11 @@ export interface MailConfig {
 }
 
 export const mailConfig: MailConfig = {
-  verification: ['zoho-verification=zb97858742.zmverify.zoho.jp'],
+  verification: [
+    'zoho-verification=zb97858742.zmverify.zoho.jp',
+    // Google Search Console のドメインの所有確認（docs/operations.md 5 章）
+    'google-site-verification=ENhx0z37DJ0muI6fkS_8xCXGXQ5Uj6cEmGTXkSS9-18',
+  ],
   mx: [
     { priority: 10, hostName: 'mx.zoho.jp' },
     { priority: 20, hostName: 'mx2.zoho.jp' },
