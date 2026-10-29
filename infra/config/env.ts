@@ -7,7 +7,7 @@ export interface InfraConfig {
   readonly account: string | undefined;
   /** サイトのドメイン（apex） */
   readonly domainName: string;
-  /** デプロイを許可する GitHub リポジトリ（owner/repo） */
+  /** デプロイを許可する GitHub リポジトリ（owner/repo、または owner@<ID>/repo@<ID>） */
   readonly githubRepository: string;
   /** デプロイを許可する GitHub の environment 名 */
   readonly githubEnvironment: string;
@@ -16,7 +16,10 @@ export interface InfraConfig {
 }
 
 const DOMAIN_PATTERN = /^(?!-)[a-z0-9-]+(\.[a-z0-9-]+)+$/;
-const REPOSITORY_PATTERN = /^[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$/;
+// owner/repo か、GitHub の不変の ID 付きの形式（owner@<数字>/repo@<数字>）。
+// リポジトリが不変の ID の sub を使う設定（use_immutable_subject）のときは後者にする
+const REPOSITORY_PATTERN =
+  /^(?:[A-Za-z0-9-]+\/[A-Za-z0-9._-]+|[A-Za-z0-9-]+@[0-9]+\/[A-Za-z0-9._-]+@[0-9]+)$/;
 const ENVIRONMENT_PATTERN = /^[A-Za-z0-9._-]+$/;
 
 function required(env: NodeJS.ProcessEnv, name: string): string {
@@ -41,7 +44,7 @@ export function loadConfig(env: NodeJS.ProcessEnv): InfraConfig {
   const githubRepository = required(env, 'DEPLOY_GITHUB_REPOSITORY');
   if (!REPOSITORY_PATTERN.test(githubRepository)) {
     throw new Error(
-      `DEPLOY_GITHUB_REPOSITORY は owner/repo の形式で指定してください：${githubRepository}`,
+      `DEPLOY_GITHUB_REPOSITORY は owner/repo か owner@<ID>/repo@<ID> の形式で指定してください：${githubRepository}`,
     );
   }
 
