@@ -34,12 +34,12 @@
 
 環境によって変わる値は `infra/.env` に書く（コミットしない）。`.env.example` をコピーして使う。
 
-| 変数                        | 内容                                                           |
-| --------------------------- | -------------------------------------------------------------- |
-| `DOMAIN_NAME`               | サイトのドメイン（apex）。`www.` は apex へ 301                |
-| `DEPLOY_GITHUB_REPOSITORY`  | デプロイを許可するリポジトリ（`owner/repo`）                   |
-| `DEPLOY_GITHUB_ENVIRONMENT` | デプロイを許可する GitHub の environment（既定 `production`）  |
-| `GITHUB_OIDC_PROVIDER_ARN`  | アカウントに GitHub の OIDC プロバイダーが既にあるときだけ指定 |
+| 変数                        | 内容                                                                                        |
+| --------------------------- | ------------------------------------------------------------------------------------------- |
+| `DOMAIN_NAME`               | サイトのドメイン（apex）。`www.` は apex へ 301                                             |
+| `DEPLOY_GITHUB_REPOSITORY`  | デプロイを許可するリポジトリ（`owner/repo`、または不変の ID 付きの `owner@<ID>/repo@<ID>`） |
+| `DEPLOY_GITHUB_ENVIRONMENT` | デプロイを許可する GitHub の environment（既定 `production`）                               |
+| `GITHUB_OIDC_PROVIDER_ARN`  | アカウントに GitHub の OIDC プロバイダーが既にあるときだけ指定                              |
 
 - AWS アカウントは、実行時のプロファイル（`AWS_PROFILE`）から決まる。アカウント ID はファイルに書かない。
 - メール用のレコードは `config/mail.ts` に書く（DNS で公開される値のため、コミットしてよい）。空の間はレコードを作らない。
@@ -121,14 +121,23 @@
 
    PowerShell では `Copy-Item .env.example .env`。
 
-   | 変数                        | 値                                                             |
-   | --------------------------- | -------------------------------------------------------------- |
-   | `DOMAIN_NAME`               | `higuma-lab.jp`                                                |
-   | `DEPLOY_GITHUB_REPOSITORY`  | `higuma-lab/higuma-lab-web`                                    |
-   | `DEPLOY_GITHUB_ENVIRONMENT` | 空のまま（既定の `production`）                                |
-   | `GITHUB_OIDC_PROVIDER_ARN`  | 空のまま（アカウントに GitHub の OIDC プロバイダーがないとき） |
+   | 変数                        | 値                                                                     |
+   | --------------------------- | ---------------------------------------------------------------------- |
+   | `DOMAIN_NAME`               | `higuma-lab.jp`                                                        |
+   | `DEPLOY_GITHUB_REPOSITORY`  | 下の注意を参照（`higuma-lab/higuma-lab-web` か、不変の ID 付きの形式） |
+   | `DEPLOY_GITHUB_ENVIRONMENT` | 空のまま（既定の `production`）                                        |
+   | `GITHUB_OIDC_PROVIDER_ARN`  | 空のまま（アカウントに GitHub の OIDC プロバイダーがないとき）         |
 
    アカウント ID は書かない（実行するときのプロファイルから決まる）。
+
+   - `DEPLOY_GITHUB_REPOSITORY` は、GitHub が発行する OIDC のトークンの `sub` の `repo:` の後ろと同じ形にする。リポジトリが不変の ID を使う設定になっていると、`sub` は `repo:higuma-lab@<数字>/higuma-lab-web@<数字>:environment:production` の形になり、`higuma-lab/higuma-lab-web` では一致しない（デプロイが「Not authorized to perform sts:AssumeRoleWithWebIdentity」で失敗する）。次のコマンドの `sub_claim_prefix` の `repo:` の後ろをそのまま入れる。`use_immutable_subject` が `false` なら `owner/repo` の形でよい。
+
+     ```bash
+     gh api repos/higuma-lab/higuma-lab-web/actions/oidc/customization/sub
+     ```
+
+   - ID は名前を変えても変わらないので、名前を変えた後に同じ名前で作られた別のリポジトリやアカウントは、このロールを引き受けられない。ただし `sub` には名前も含まれるため、自分のリポジトリやアカウントの名前を変えたときは、`DEPLOY_GITHUB_REPOSITORY` を新しい `sub_claim_prefix` に合わせて `cdk deploy HigumaLabGithubOidc` をやり直す。
+   - `use_default` が `false`（`sub` の形を独自に変えている）ときは、この形にならない。
 
 ### 1. CDK の初期設定（bootstrap）
 

@@ -77,6 +77,18 @@ describe('設定の読み込み', () => {
     expect(() => loadConfig({ ...base, DEPLOY_GITHUB_ENVIRONMENT: '*' })).toThrow();
   });
 
+  it('不変の ID 付きの形式を受け付ける', () => {
+    const repository = 'owner@123/repo@456';
+    expect(loadConfig({ ...base, DEPLOY_GITHUB_REPOSITORY: repository }).githubRepository).toBe(
+      repository,
+    );
+    expect(() => loadConfig({ ...base, DEPLOY_GITHUB_REPOSITORY: 'owner@*/repo@456' })).toThrow();
+    expect(() => loadConfig({ ...base, DEPLOY_GITHUB_REPOSITORY: 'owner@/repo' })).toThrow();
+    // ID は両方に付くか、どちらにも付かない（片方だけの sub はないので、書き間違いとして止める）
+    expect(() => loadConfig({ ...base, DEPLOY_GITHUB_REPOSITORY: 'owner@123/repo' })).toThrow();
+    expect(() => loadConfig({ ...base, DEPLOY_GITHUB_REPOSITORY: 'owner/repo@456' })).toThrow();
+  });
+
   it('environment の既定は production', () => {
     expect(loadConfig(base).githubEnvironment).toBe('production');
   });

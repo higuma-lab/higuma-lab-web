@@ -12,7 +12,7 @@ import type { IBucket } from 'aws-cdk-lib/aws-s3';
 import type { Construct } from 'constructs';
 
 export interface GithubOidcStackProps extends StackProps {
-  /** owner/repo */
+  /** owner/repo、または不変の ID 付きの owner@<ID>/repo@<ID>（OIDC の sub の repo: の後ろと同じ形） */
   readonly githubRepository: string;
   /** デプロイのジョブが使う environment 名 */
   readonly githubEnvironment: string;

@@ -68,7 +68,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && vars.AWS_DEPLOY_ROLE_ARN != ''
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # OIDC の信頼条件（repo:<owner/repo>:environment:production）と一致させる
+    # OIDC の信頼条件（repo:<owner/repo>:environment:production。不変の ID 付きの形式のこともある。infra/README.md 手順0）と一致させる
     environment:
       name: production
       url: ${{ vars.PUBLIC_SITE_URL || 'https://higuma-lab.jp' }}
