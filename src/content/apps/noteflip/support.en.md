@@ -72,3 +72,14 @@ Hold the side button of the pen and touch a stroke, or choose an eraser on the t
 ### Can I open a PDF from File Explorer?
 
 Yes. Right-click a PDF, select **Open with** > **NoteFlip**. The file is added to the top of your library and opened.
+
+### Can I drag PDFs in from File Explorer?
+
+Yes. Select one or more PDFs in File Explorer and drop them onto NoteFlip's library screen. They are imported where you drop them:
+
+- On a folder tile, or on the list inside a folder: into that folder.
+- On the top-level list, on **Library** (the bookshelf icon) inside a folder, or on the list while searching: into the top of your library.
+
+NoteFlip imports them but does not open them, and the result appears in a notice at the bottom of the list. The original files stay where they are. Folders and files that are not PDFs are not imported. Drops are not accepted while an import is running, while a set list is shown, or while a dialog is open (the pointer shows a not-allowed mark). The row with the tabs and buttons at the top does not accept drops either.
+
+While viewing a score, drop a PDF on the page to import it into the top of your library and open it. In performance mode or while playing a set list, it is only imported; select **Open** in the notice to open it.
